@@ -1,0 +1,153 @@
+import express from "express";
+import bcrypt, { hash } from "bcryptjs";
+import connect from "../db.js";
+import tableDataFetch from "../services/tableDataFetch.js";
+import userSchema from "../Models/users.models.js";
+import jwt from "jsonwebtoken"
+
+export const getAllUserController= async (req, res)=>{
+  
+  const data=await tableDataFetch("users");
+  return res.json(data)
+}
+
+export const getloginUserController= async (req, res) => {
+  const {email, password}=req.body;
+  try {
+    if(!email || !password){
+      return res.status(401).json({message: "Please Enter a Message and Password"})
+    }
+    const {rowCount, rows}= await connect.query("select * from users where email=$1", [email]);
+    if(rowCount===0){
+      return res.status(401).json({message: "Please Enter Correct Email Id."});
+    }
+    const saltPassword=await bcrypt.compare(password, rows[0].password);
+    if(!saltPassword){
+      return res.status(404).json({message: "Please Enter a Correct Password."})
+    }
+    const {uid, role, company_id}=rows[0];
+    if(!role)role='guest'
+    const storeJwt=jwt.sign({uid, role, company_id}, process.env.JSON_SECRET_KEY, {expiresIn: "1d"})
+    res.cookie('token', storeJwt, {
+      httpOnly: true,
+      secure: false,
+      maxAge: 1000*60*60
+    })
+    return res.status(200).json(rows[0]);
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({message: error.message}) 
+  }
+};
+
+
+export const getParticularUserController=  async (req, res) => {
+  const {id}=req.params;
+  try {
+    const { rows } = await connect.query("select * from users where uid=$1", [id]);
+    if(!rows) return res.json({message: "Please Enter Correct Uid"})
+      return res.json(rows[0]);
+  } catch (error) {
+    return res.json(error)
+  }
+};
+
+
+
+
+export const postSignupUserController= async (req, res) => {
+  try {
+    const { fname, lname, education, email, password} = req.body;
+    const allUser={fname, lname, education, email, password}
+    const validateuser=userSchema.safeParse(allUser);
+    if(!validateuser.success){
+      const message=validateuser.error.issues.map(m=>m.message);
+      return res.json(message)
+    }
+    if (!fname || !lname || !education || !email || !password) {
+      return res.json({ message: "Please Enter All Values such as, fname, lname, education, email, password" });
+    }
+
+    const {rowCount}=await connect.query("select * from users where email=$1", [email]);
+    if(rowCount>0){
+      return res.status(401).json({message: `The User with same email of: ${email} already exist.`})
+    }
+    const hashPassword=await bcrypt.hash(password, 12);
+    const {rows}=await connect.query(
+      "insert into users (fname, lname, education, email, password) values ($1, $2, $3, $4, $5) returning *",
+      [fname, lname, education, email, hashPassword],
+    );
+    const data=await tableDataFetch('users')
+    const {uid, role}=rows[0]
+    const storeJwt=jwt.sign({uid, role}, JSON_SECRET_KEY, {expiresIn: "1d"})
+    res.cookie('token', storeJwt, {
+      httpOnly: true,
+      secure: false,
+      maxAge: 1000*60*60
+    })
+    return res.status(201).json(data);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ error: error.message });
+  }
+};
+
+
+export const deleteUserController= async (req, res) => {
+  const { id } = req.params;
+  try {
+    await connect.query("delete from users where uid=$1", [id]);
+    const data=await tableDataFetch('users')
+    return res.json(data);
+  } catch (error) {
+    console.log(error);
+    res.json(error);
+  }
+};
+
+export const putUserController= async(req, res) => {
+   const {id}=req.params;
+
+  const {fname, lname, education, email, password }=req.body;
+   const allUser={fname, lname, education, email, password}
+    const validateuser=userSchema.safeParse(allUser);
+    if(!validateuser.success){
+      const message=validateuser.error.issues.map(m=>m.message);
+      return res.status(404).json(message)
+    }
+   if(!fname || !lname || !education || !email || !password){
+    return res.json({message: "Please Enter a value"})
+  }
+  try {
+    await connect.query("update users set fname=$1, lname=$2, education=$3, email=$4 where uid=$5", [fname, lname, education, email, id, password])
+    const data=await tableDataFetch('users')
+    console.log(data)
+    res.status(200).json(data)
+  } catch (error) {
+    console.log(error)
+    res.json(error)
+  }
+};
+
+
+
+// const ALLOWED_BODY = ['fname', 'lname', 'education', 'email', 'password'];
+
+
+export const patchUserController= async(req, res)=>{
+  const {id}=req.params;
+  if(!id){
+    return res.status(404).json({message: "Please Enter the Id"})
+  }
+  try {
+    const fields = Object.keys(req.body);
+    const values = Object.values(req.body);
+    const setClause = fields.map((f, i) => `${f} = $${i + 1}`)
+    const length=fields.length+1;
+    await connect.query(`UPDATE users SET ${setClause} WHERE uid = $${length}`, [...values, id]);
+    const {rows}=await connect.query(`select * from users WHERE uid=$1`, [id]);
+    return res.json(rows[0])
+  } catch (error) {
+    return res.status(402).json({message: "Please Enter Correct UUid."})
+  }
+}
