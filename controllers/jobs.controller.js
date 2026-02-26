@@ -1,16 +1,20 @@
 import express from "express"
 import client from "../db.js"
-import tableDataFetch from "../services/tableDataFetch.js";
+import tableDataFetch from "../utils/tableDataFetch.js";
 import listingSchema from "../Models/jobs.models.js";
-const DATALIST=["uid", "title", "description", "salary", "job_type", "is_job_open", "created_by"];
+const DATALIST=["uid", "title", "description", "salary", "job_type", "is_job_open", "created_by", "created_at", "skills", "total_job_views"];
 const router=express.Router();
 
 export const getAllListingController=async (req, res) => {
-  let {page, limit}=req.query;
+  let {page, limit, sortby}=req.query;
   limit=limit??5
   page=page??1;
-  const {rows}=await client.query("SELECT * FROM jobs limit $1 offset $2", [limit, page])
-  res.status(200).json({message: rows, limit, page})
+  sortby=sortby??'created_at'
+  if(!DATALIST.includes(sortby)){
+    return res.status(401).json({message: "Please Add Only Avaible column list"});
+  }
+  const {rows}=await client.query(`SELECT * FROM jobs where is_job_open<>'closed' order by ${sortby} desc limit $1 offset $2`, [limit, page])
+  return res.status(200).json({message: rows, limit, page})
 };  
 
 export const searchJobsListing=async (req, res) => {
@@ -39,20 +43,21 @@ export const getListingController= async (req, res) => {
     return res.status(404).json({message: "Please Enter Id For Get a information"})
   }
   try {
+    await client.query("update jobs set total_job_views=(total_job_views+1) where uid=$1", [id]);
     const {rows}=await client.query("SELECT * FROM jobs where uid=$1", [id])
     if(!rows){
       return res.status(504).json({message: "Add Correct information to get the id info."})
     }
-    res.status(200).json(rows[0])
+    return res.status(200).json(rows[0])
   } catch (error) {
-    res.status(400).json({message: error.message})
+    return res.status(400).json({message: error.message})
   }
 };
 
 export const postListingController= async (req, res) => {
-  const {Title, Description, Job_Type, Salary}=req.body;
-  const {company_id}=req.user;
-   const allListing={Title, Description, Job_Type, Salary}
+  const {Title, Description, Job_Type, Salary, skills}=req.body;
+  const {company_id, uid}=req.user;
+   const allListing={Title, Description, Job_Type, Salary, skills}
     const validateListing=listingSchema.safeParse(allListing);
     if(!validateListing.success){
       const message=validateListing.error.issues.map(m=>m.message);
@@ -62,12 +67,13 @@ export const postListingController= async (req, res) => {
     return res.json({message: "Enter Value to Insert output"})
   }
   try {
-    await client.query("Insert into Jobs (Title, Description, Salary, Job_Type, company_id, updated_at) values ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)", [Title, Description, Salary, Job_Type, company_id ])
-    const data= await tableDataFetch('jobs')
-    res.status(200).json({data})
+    // await client.query("Insert into Jobs (Title, Description, Salary, Job_Type, company_id, updated_at) values ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)", [Title, Description, Salary, Job_Type, company_id ])
+    const {rows}=await client.query("Insert into Jobs (Title, Description, Salary, Job_Type, company_id, created_by, skills) values ($1, $2, $3, $4, $5, $6, $7) returning *", [Title, Description, Salary, Job_Type, company_id , uid,  skills])
+    const {title, description, salary, job_type, is_job_open, skills:userSkills}=rows[0];
+   return res.status(200).json({title, description, salary, job_type, is_job_open, skills:userSkills})
   } catch (error) {
-    console.log(error)
-    res.json({message: error.message})
+    console.log('here', error)
+   return res.json({message: error.message})
   }
 };
 
@@ -80,10 +86,10 @@ export const deleteListingController= async (req, res) => {
         return res.json({message: "Id Doesn't exist"})
     }
     const data= await tableDataFetch('jobs')
-    res.status(200).json({data})
+   return res.status(200).json({data})
   } catch (error) {
     console.log(error)
-    res.json({message: error.message})
+    return res.json({message: error.message})
   }
 };
 
@@ -95,7 +101,7 @@ export const putListingController= async (req, res) => {
     return res.json({message: "Please Enter a value"})
   }
   try {
-    await client.query("update jobs set Title=$1, Description=$2, Job_Type=$3, Salary=$4, company_name=$6 where uid=$5", [Title, Description, Job_Type, Salary, id, company_name])
+    await client.query("update jobs set Title=$1, Description=$2, Job_Type=$3, Salary=$4, company_name=$5 where uid=$6", [Title, Description, Job_Type, Salary, company_name, id])
     const {rows}=await client.query("select * from jobs where uid=$1", [id])
     if(!rows){
       return res.status(404).json({message: "Please Enter Id For Get a information"})

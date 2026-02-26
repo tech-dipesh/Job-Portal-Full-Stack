@@ -1,5 +1,4 @@
 import express from "express"
-import tableDataFetch from "../services/tableDataFetch.js"
 import connect from "../db.js"
 import applicationSchema from "../Models/applications.models.js";
 
@@ -14,10 +13,9 @@ export const applyJobApplicationController=async (req, res)=>{
     }
     const {uid: user_id}=req.user;
     const {rowCount, rows: appliedList}=await connect.query("select job_id, status from applications where user_id=$1 and job_id=$2", [user_id, job_id])
-    if(appliedList[0].status==status){
+    if(rowCount>0 && appliedList[0].status==status){
       return res.status(402).json({message: "You've Already Applied"})
     }
-    console.log('rowCount', rowCount, appliedList)
     if(rowCount>0){
       await connect.query("update applications set status=$1 where user_id=$2 and job_id=$3", [status, user_id, job_id])
       return res.status(401).json({message: "Application Status Updated Successfully"});

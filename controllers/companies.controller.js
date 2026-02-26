@@ -1,7 +1,7 @@
 import express from "express";
 import bcrypt, { hash } from "bcryptjs";
 import connect from "../db.js";
-import tableDataFetch from "../services/tableDataFetch.js";
+import tableDataFetch from "../utils/tableDataFetch.js";
 import companySchema from "../Models/companies.models.js";
 import jwt from "jsonwebtoken";
 
@@ -83,3 +83,28 @@ export const putCompanyController= async(req, res) => {
   }
 };
 
+
+export const getAllEmployeesList=async (req, res)=>{
+  // - List of all users where `users.company_id` = current company
+// - Fields: name, email, role, join date
+  const {company_id}=req.user;
+  const {rows}=await connect.query("select lname, education, fname, email, role, resume_url, profile_pic_url from users where company_id=$1", [company_id])
+  res.status(200).json({message: rows})
+}
+export const getAllJobsList=async (req, res)=>{
+  const {company_id}=req.user;
+  const {rows}=await connect.query("select title, description, salary, job_type, company_name, is_job_open, created_by from jobs where company_id=$1", [company_id])
+  res.status(200).json({message: rows})
+}
+
+
+export const getallApplicationsList=async (req, res)=>{
+  const {company_id}=req.user;
+  try {
+    const {rows}=await connect.query("SELECT a.uid AS application_id,  a.status, u.resume_url,   j.title AS job_title, j.total_job_views  u.uid AS applicant_id FROM applications a JOIN users u ON a.user_id = u.uid JOIN jobs j ON a.job_id = j.uid where j.company_id=$1", [company_id])
+   return res.status(200).json({message: rows})
+  } catch (error) {
+    res.status(401).json({message: error.message})
+    
+  }
+}
