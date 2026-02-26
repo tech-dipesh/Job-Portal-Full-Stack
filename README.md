@@ -1,7 +1,14 @@
 # Job Portal project:
-## Project Started: 2026/Feb/19i
+## Project Started: 2026/Feb/19
 - Phase 1:
   Backend:
+
+## All Api Endpoints: 2025/feb/26
+- applications: `lists, id/apply, id/withdraw, `
+- companies: `/, id/dashbaord, id/employees, id/jobs, id/applications, id: get company all, id: post new company, / delete company, /id put new company`
+- jobs: `saved_jobs/list, id/bookmark_job, id/remove_from_bookmar, /: all listing, /search, id/ particular listing jobs, id: new jobs, id/ deelete, /id update`
+- users: `/logout, /login, /signup, /: all user, /:id individual user details, /skills add the user skills, /id, delete a user, /put, update user, /patch, update particular list, /forget-password, /forget-password-verify, /email-verify, /email-verify/resend, /upload-resume, /upload-profile-picture`
+
 
 ## Project Timeline:
 - Basic Routing Setup
@@ -200,3 +207,153 @@ for allow all teh credentiants now work.
 - i can directly add a query like this: `($1:*)` which is not valid instead: `($1), ['${title};*']` for text searching
 
 >:warning: the problem that i've faced is for searching it's not able to iplement a validation.
+
+## Saved Jobs:
+- for the saved jobs i've create data with: `saved_job_id, company_id, jobs_id, createdAt`
+- with saved jobs only show to the user not the admin also not the company.
+- which for the saved_jobs i've create three routes with save or bookmark jobs remove jobs and also oen to show all list of bookmark list.
+- with simple database intercation i achieved with easily
+
+
+## Security Feature: 2026/02/25
+- for better security to safe from attacker i'lll be using some basic security for make more secure webiste.
+- by default `helmet` js add 12 response header and remove one for better security purpose: `
+- which remove: `"x-powered-by"` that express is shown which become attacker to know which system it developed
+- it add 12 response headers such as: `content-security-policiy, x-xss-protection, strict and etc.`
+
+### Rate Limit:
+- the rate limit will slow down the user activity to maintain a stablity and also secure from hacker.
+- with we only allow user to per minute can only send 30 request else it'll send a throw errror.,
+- we also can use custom message but not will add as by default it've.
+
+
+- I've also add add skills section with array, with also setup that feature.
+  - with on the array can show the `array`
+
+- 
+
+>:warning: As utils mean reusable small code while lib mean big block of code so which previously tableData add on the services, the services should have the business logic.
+
+
+
+### Companies Dashboard:
+- now company will have a option to see all their emploee list,
+- also a all jobs list.
+- now i add on applications oof primary key uid to identify by that primar key
+
+
+
+## Other features:
+- now i'm trying to improve a new jobs with addinga a new array with list of skills that user will add, and also change on our code
+- with also create one user for the testing which i find many bug that i fix.
+- i've to make sure that skills should be added of both jbos and the users.
+- also i make sure that skills only user can add that they've not added prevoiusly with append skills not create new
+- add the feature of the total job views by on the each request it'll count how many total job_views there.
+- i've make sure add the dashboard feature only a authorized that owned company have access.
+
+
+
+## Node Cron Task:
+- i will implement the features of teh application will be expired if the date is exceeded.
+- `node-cron` for schedule task.
+- `"* * * * * *",` with 6 param mean it's running on the every second: `*/2 * * * *` like it'll running on the every 2 second.
+- with for run the every new day we can set: `0 0 * * * `
+- now i'm using a command to show: `select * from jobs where is_job_open<>'closed';` only which are not closed.
+- nwo node cron will update if date exceed make a active to closed.
+
+
+
+## Versioning and the cors:
+- also i make sure that it've cors configuration to the client side.
+-  with: `cors` libraray i make sure it work cors configuration.
+
+
+
+- on the every request i've correct status code with suitable res message that i make sure work with every middleware and on every routes and the methods
+
+## Other Features:
+- i've add a experience_year on the both jobs and the users so we can make relate or better data.
+- my server is not running the problem is: i'm calling a cors like this: `cors` which causing a problem not runing.
+- as postgres doesn't allow parameter placeholder i can't do: `order by $1 desc` which doesn't consider.
+  - which i've to make the template literal
+- i've implement the custom sort by now i will be implmenet a filter with any sort by based on the title.
+
+
+
+## Future Features that i migh implmenet in coming days:
+- applicatin status_history log with on the table every status create a log report.
+- with recommendation system features.
+- add the totalCount of how many applications list.
+- i've add the `analytics` api where i will count total applicant on teh company, this week applicant with: `where date_applied>=trunc('week' now())`
+- and totalStatus, with using a formula of: `total/sum` of each list, shows as a percentage list.
+- this api is protected only for the company employee.
+
+
+## Email verification:
+- for the user email verification i'll be using a nodemailer which use the smtp service to send the mail, which is the encyprted version.
+- i've create a one function that for generate random number which is on the utils now i can use this number.
+2026/02/26
+- with i've take random 6 digit number with `Math.random` with sent to their email which i also store on my db to verify whether user enter correct password or not.
+- create the new table of named: `email_verified` with list of such as: `uid, userid, type, email_verify, expired, is_used, and created_at`
+- we've to use the: `interval` for manipulate our time.
+- both: `now(), current_timestamp` are the same method to get the current time.- i on
+- we've to make sure to do: `date=new Date().toIsoString, allDate=new Date(date)` which make sure to convert to the object.
+- i make sure to send on the: `error` with implment a rate limit on the response.
+- i've done if user is already verified don't need to logged in again user.
+
+
+## forget Password:
+- i've use almost same logic for the forget password.
+- with sending a unique password code to the db and send that code to the db and validate user from another routes then only allow
+- with create a two routes where first for send a request for the forget password.
+- with every edge case i check whether a token is expired or not, whehter that token is already used or not, whetehr a email correct or not.
+- with i'm updating on the both users table of password and also for the email_verified table.
+- i can say it's realted to the reset password system.
+
+
+
+- i've also make sure if already user is logged in don't allow them again go to the `signup/login` page.
+
+
+## Implementation:
+  - for the email verification after cretaing a table i confused whether should i wait a user till response or instantly response but that will not store the key value.
+
+  - add the constraint of `on delete cascade of foriegn relation to the user.`
+  
+
+- resend teh verification code:
+
+
+- i've also add the logout feature with just clear a cookie from the server that's it, with the authentication.
+
+
+## Packages I use:
+1. Express
+2. pg
+3. zod
+4. bcryptjs
+5. cookie-parser
+6. jsonwebtoken
+7. dotenv
+8.  @supabase/supabase-js
+9. helmet.js
+10. express-rate-limit
+12. node-cron
+13. nodemailer
+
+
+- i also make sure to add the feature of the logout, and also if user is already logged in, don't show a option of signup login.
+
+
+
+- how can i make sure that only print a enum i've try: `select * from application_enum`;
+
+
+
+
+- on: 2026/02/22 i've not write any single code due to litte bit of illness.
+
+
+
+
+

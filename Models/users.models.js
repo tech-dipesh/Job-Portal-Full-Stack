@@ -18,7 +18,7 @@ const userSchema=z.object({
     ,
   email:z
     .string({required_error: "Please Enter a Email"})
-    .regex(z.regexes.email, "Please Match the Email Type"),
+    .regex(z.regexes.email, "Please Match the Email Format Type"),
   password:z
     .string({required_error: "Please Enter a Password"})
     .regex(passRegex, "Please Match the Password Format")

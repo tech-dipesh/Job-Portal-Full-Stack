@@ -14,19 +14,21 @@ const transporter = nodemailer.createTransport({
 });
 
 const Title="Job Portal"
-const sendMail=async(uid, firstName, lastName, userEmail)=>{
+const sendMail=async(uid, firstName, lastName, userEmail, type)=>{
   const random6DigitNumber=generateRandomNumber();
-  const content=`<div><h1>Dear ${firstName} ${lastName} Thanks for Signup on our platform</h1><h2>Below is your verification code!</h2><h3>${random6DigitNumber}</h3><p>Remember This Verification will be expired after 15 minutes</p></div>`
+  const content=`<div><h1>Dear ${firstName} ${lastName} Thanks for ${type=='verify'?'Signup': 'Forget'} on our platform</h1><h2>Below is your verification code!</h2><h3>${random6DigitNumber}</h3><p>Remember This Verification will be expired after 15 minutes</p>${type=='reset'?"<h1>If you've not try a forget password you can skip it</h1>":''}</div>`
   try {
     const info = await transporter.sendMail({
     from: `${Title} <${email}>`,
     to: userEmail,
-    subject: "Please Verify Your Email!",
+    subject: `Please ${type} Your Email!}`,
     html: content,
   });
-  await connect.query("insert into email_verified(user_id, verified_type, verified_code)  values($1, 'verify_mail', $2)",[uid, random6DigitNumber])
+  {type=='verify'?
+    await connect.query("insert into email_verified(user_id, verified_type, verified_code)  values($1, 'verify_mail', $2)",[uid, random6DigitNumber]):
+    await connect.query("insert into email_verified(user_id, verified_type, verified_code)  values($1, 'forget_password', $2)",[uid, random6DigitNumber])
+  }
   console.log(info)
-  console.log(info.response);
 } catch (error) {
   console.log(error)
   return error;
