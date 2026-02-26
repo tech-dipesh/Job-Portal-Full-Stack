@@ -6,15 +6,20 @@ import usersListingRouter from "./routes/users.routes.js"
 import companyRouter from "./routes/companies.routes.js"
 import applicationRouter from "./routes/applications.routes.js"
 import "dotenv/config"
+import "./services/cron-task.js"
+// import "./services/email-verification.js"
 
 
 import cookieParser from "cookie-parser";
 import isAdminMIddleware from "./Middleware/isAdmin.js";
 import authUserMiddleware from "./Middleware/isLoggedIn.js";
 import rateLimit from "express-rate-limit";
+import cors from "cors";
+import "./services/email-verification.js"
+import generateRandomNumber from "./utils/generateRandom6DigitNumber.js";
+import { userLoggedOutcontroller } from "./controllers/users.controller.js";
 const app = express();
 const port = 3000;
-
 
 const limitUser=rateLimit({
   windowMs: 1000*60,
@@ -22,6 +27,7 @@ const limitUser=rateLimit({
 })
 
 app.use(limitUser);
+app.use(cors());
 app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
@@ -46,6 +52,7 @@ app.use((err, req, res, next)=>{
     return res.status(401).json({message: "Please Enter Correct file name of: resume"})
   }
   if(err){
+    console.log(err)
     return res.status(500).json({message:err.message})
   }
 });

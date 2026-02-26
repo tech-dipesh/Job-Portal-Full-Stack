@@ -1,5 +1,5 @@
-import "dotenv/config"
 import { Client } from "pg";
+import "dotenv/config"
 
 const client = new Client({
   user: process.env.USER,
@@ -12,7 +12,8 @@ const client = new Client({
 await client.connect().then(t=>{
   console.log('connected to database');
 })
-.catch(()=>{
+.catch((err)=>{
+  console.log(err)
   console.log('unable to connect')
 })
 
