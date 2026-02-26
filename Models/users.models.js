@@ -14,7 +14,7 @@ const userSchema=z.object({
   education:z 
     // .string({required_error: "Please Add a education"})
     // .enum(allAvaibleEducationtype, {error: "Please Enter All Values such as, Basic, Matrix, High School, Undergraduation, Postgraduation"}),
-    .enum(allAvaibleEducationtype, {error: "Please Only Enter a Avaible Option such as, Onsite, Remote, Hybrid"})
+    .enum(allAvaibleEducationtype, {error: "Please Only Enter a Avaible Option such as, Basic, Matrix, High School, Undergraduation, Postgraduation"})
     ,
   email:z
     .string({required_error: "Please Enter a Email"})
