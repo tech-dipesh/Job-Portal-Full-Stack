@@ -1,10 +1,13 @@
 import express from "express";
 import bcrypt, { hash } from "bcryptjs";
 import connect from "../db.js";
-import tableDataFetch from "../services/tableDataFetch.js";
+import tableDataFetch from "../utils/tableDataFetch.js";
 import userSchema from "../Models/users.models.js";
 import jwt from "jsonwebtoken"
-
+import generateRandom6DigitNumber from "../utils/generateRandom6DigitNumber.js"
+import { AuthImplicitGrantRedirectError } from "@supabase/supabase-js";
+import sendMail from "../services/email-verification.js";
+import isUserVerifiedEmail from "../utils/isUserEmailVerified.js";
 export const getAllUserController= async (req, res)=>{
   
   const data=await tableDataFetch("users");
@@ -59,6 +62,7 @@ export const postSignupUserController= async (req, res) => {
   try {
     const { fname, lname, education, email, password} = req.body;
     const allUser={fname, lname, education, email, password}
+    console.log('user db', allUser)
     const validateuser=userSchema.safeParse(allUser);
     if(!validateuser.success){
       const message=validateuser.error.issues.map(m=>m.message);
@@ -77,15 +81,18 @@ export const postSignupUserController= async (req, res) => {
       "insert into users (fname, lname, education, email, password) values ($1, $2, $3, $4, $5) returning *",
       [fname, lname, education, email, hashPassword],
     );
-    const data=await tableDataFetch('users')
-    const {uid, role}=rows[0]
-    const storeJwt=jwt.sign({uid, role}, JSON_SECRET_KEY, {expiresIn: "1d"})
+    const {uid, role, fname:firstName, lname:lastName, email:userEmail}=rows[0]
+    const response=await sendMail(uid, firstName, lastName, userEmail)
+    const userVerified=await isUserVerifiedEmail(uid)
+    console.log('verify code', userVerified)
+    const storeJwt=jwt.sign({uid, role, userVerified}, process.env.JSON_SECRET_KEY, {expiresIn: "1d"})
     res.cookie('token', storeJwt, {
       httpOnly: true,
       secure: false,
       maxAge: 1000*60*60
     })
-    return res.status(201).json(data);
+    return res.status(201).json({message: "Succssfully Signed Up, Verification Code have been sent to your mail"})
+    // return res.status(201).json({message: "User Succssfully Signup", firstName, lastName, userEmail});
   } catch (error) {
     console.log(error);
     return res.status(400).json({ error: error.message });
@@ -104,6 +111,19 @@ export const deleteUserController= async (req, res) => {
     res.json(error);
   }
 };
+
+
+export const addUserSkills=async (req, res)=>{
+  const {uid}=req.user;
+  const {skills}=req.body;
+  const {rows: ifExist, rowCount}=await connect.query("select skills from users where uid=$1", [uid])
+  const {skills: doesSkillExist}=ifExist[0];
+  if(doesSkillExist!=null && doesSkillExist.includes(skills)){
+    return res.status(200).json({message: "Skills Already Exist"});
+  }
+  const {rows}=await connect.query("update users set skills=array_append(skills, $1) where uid=$2 returning *", [skills, uid])
+  res.send({message: rows[0]})
+}
 
 export const putUserController= async(req, res) => {
    const {id}=req.params;

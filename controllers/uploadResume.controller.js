@@ -1,35 +1,28 @@
 import {createClient} from "@supabase/supabase-js"
 import connect from "../db.js"
+import { application } from "express";
 const supabase=createClient(process.env.URL_SUPABASE_CONNECT, process.env.ANON_KEY_SUPABASE)
 const uploadResume=  async (req, res)=>{
   const {uid: userId}=req.user;
-  const {buffer}=req.file
-  const {fieldname, originalname}=req.file;
-  const wow="8b48e19b-9efb-47a6-940b-03edd6f760eb";
-
+  const {fieldname, originalname, buffer}=req.file;
   try {
     // const {rows: doesExist}=await connect.query("SELECT EXISTS (SELECT resume_url FROM users WHERE uid=$1)", [userId]);
     const {rows: doesExist, rowCount}=await connect.query("SELECT resume_url FROM users WHERE uid=$1", [userId]);
-    const { data:r } = await supabase.storage.from('resume').list('');
- console.log(r.map(f => f.name)); 
- 
-    if(rowCount && doesExist[0].resume_url){
+    if(rowCount){
       const {resume_url: resumeUrl}=doesExist[0];
       const splitWorld=resumeUrl.split("/")
       const removetoPath=`upload/${splitWorld[splitWorld.length-1]}`
-      console.log(removetoPath)
-     const {data:result, error}= await supabase.storage.from('resume').remove([removetoPath])
-    //  const {data:list, error: dataerror}= await supabase.storage.from('resume').list('upload')
-    //  console.log('list', list, dataerror)
-    //  console.log('error', error)
-    //  console.log('result', result)
+     const {error}= await supabase.storage.from('resume').remove([removetoPath])
+     if(error){
+      return res.status(401).json({message: error.message})
      }
+     }
+
     const randomUUID=crypto.randomUUID()
     const {data, error}=await supabase.storage.from('resume').upload(`upload/${randomUUID}-${originalname}`, buffer, {contentType: 'application/pdf'})
     if(error){
       return res.status(502).json({message: error.message})
     }
-    console.log(error)
     const {path}=data;
     const {data: getOutputUrl}=supabase.storage.from('resume').getPublicUrl(path)
     const {publicUrl}=getOutputUrl
@@ -37,13 +30,37 @@ const uploadResume=  async (req, res)=>{
    return res.status(201).json({message: rows[0]})
   } catch (error) {
     console.log(error)
-    res.status(401).json({message: error.message})
+    // res.status(401).json({message: error.message})
+    return res.status(401).json({message: "Please only add less than 2mb file and Must be a pdf file type"})
   }
 }
 
 
 
 const uploadProfilePicture=async (req, res)=>{
-
+  const {uid}=req.user;
+  // console.log(req.file)
+  const {originalname, buffer, mimetype}=req.file;
+  try {
+    const {rows, rowCount}=await connect.query("SELECT profile_pic_url FROM users WHERE uid=$1", [uid]);
+    if(rowCount){
+        
+    }
+    const randomUUID=crypto.randomUUID()
+   const {data, error}= await supabase.storage.from("profile_pic").upload(`${randomUUID}-${originalname}`, buffer, {contentType: mimetype})
+   
+   if(error){
+      return res.json(401).json({message: "Please Enter below 2mb and only image type."})
+   }
+   
+   const {data: getOutputUrl, error: errorOutputUrl}= supabase.storage.from("profile_pic").getPublicUrl(data.path)
+   if(errorOutputUrl){
+      return res.json(401).json({message: errorOutputUrl.message})
+   }
+  const {rows:finalOutput}= await connect.query("update  users set profile_pic_url=$1 where uid=$2 returning *", [getOutputUrl.publicUrl, uid])
+    return res.status(201).json({message: finalOutput})
+  } catch (error) {
+    return res.status(201).json({message: error.message})
+  }
 }
 export {uploadResume, uploadProfilePicture};
