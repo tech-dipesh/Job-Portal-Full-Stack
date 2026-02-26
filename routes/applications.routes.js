@@ -1,7 +1,7 @@
 import express from "express"
 import isAdminMIddleware from "../Middleware/isAdmin.js"
 import isOwnerMiddleware from "../Middleware/isLoggedIn.js"
-import tableDataFetch from "../services/tableDataFetch.js"
+import tableDataFetch from "../utils/tableDataFetch.js"
 import connect from "../db.js"
 import applicationSchema from "../Models/applications.models.js";
 import { applyJobApplicationController, withdrawJobApplicationController } from "../controllers/applications.controller.js";

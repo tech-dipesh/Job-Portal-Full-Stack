@@ -82,7 +82,7 @@ export const postSignupUserController= async (req, res) => {
       [fname, lname, education, email, hashPassword],
     );
     const {uid, role, fname:firstName, lname:lastName, email:userEmail}=rows[0]
-    const response=await sendMail(uid, firstName, lastName, userEmail)
+    const response=await sendMail(uid, firstName, lastName, userEmail, 'verify')
     const userVerified=await isUserVerifiedEmail(uid)
     console.log('verify code', userVerified)
     const storeJwt=jwt.sign({uid, role, userVerified}, process.env.JSON_SECRET_KEY, {expiresIn: "1d"})
@@ -170,4 +170,10 @@ export const patchUserController= async(req, res)=>{
   } catch (error) {
     return res.status(402).json({message: "Please Enter Correct UUid."})
   }
+}
+
+
+export const userLoggedOutcontroller=async(req, res)=>{
+  res.clearCookie("token");
+  return res.status(200).json({message: 'Logged Out Succssfully'});
 }

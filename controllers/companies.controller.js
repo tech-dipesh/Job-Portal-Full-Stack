@@ -85,12 +85,16 @@ export const putCompanyController= async(req, res) => {
 
 
 export const getAllEmployeesList=async (req, res)=>{
-  // - List of all users where `users.company_id` = current company
-// - Fields: name, email, role, join date
   const {company_id}=req.user;
-  const {rows}=await connect.query("select lname, education, fname, email, role, resume_url, profile_pic_url from users where company_id=$1", [company_id])
-  res.status(200).json({message: rows})
+  const {rows}=await connect.query(`SELECT COUNT(*) FROM applications a JOIN jobs j ON a.job_id = j.uid WHERE j.company_id = '${company_id}';`,);
+  const {rows:rows1}=await connect.query("select count(*)  from applications where applied_at >= date_trunc('week', NOW());")
+
+  const {count: totalApplications}=rows[0];
+  const {count:  thisWeekapplications}=rows1[0];
+  const {rows: totalStatus}=await connect.query("select status, round(100.0 * COUNT(*) / SUM(COUNT(*)) OVER(),2) as percentage from applications group by status;")
+  res.status(200).json({totalApplications, thisWeekapplications, totalStatus})
 }
+
 export const getAllJobsList=async (req, res)=>{
   const {company_id}=req.user;
   const {rows}=await connect.query("select title, description, salary, job_type, company_name, is_job_open, created_by from jobs where company_id=$1", [company_id])
@@ -107,4 +111,17 @@ export const getallApplicationsList=async (req, res)=>{
     res.status(401).json({message: error.message})
     
   }
+}
+
+
+export const companyDashBoard=async (req, res)=>{
+  try {
+    const {company_id}=req.user;
+    const {rows}=await connect.query( `select *, count(*) over() as totalCount from jobs join applications on jobs.uid = applications.job_id 
+      where jobs.company_id = $1`,
+      [company_id])
+      res.status(200).json({rows})
+    } catch (error) {
+      return res.status(401).json({message: error.message})
+    }
 }
