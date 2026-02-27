@@ -6,6 +6,9 @@ const supabase=createClient(process.env.URL_SUPABASE_CONNECT, process.env.ANON_K
 const uploadResume=  async (req, res)=>{
   const {uid: userId}=req.user;
   const {fieldname, originalname, buffer}=req.file;
+  if(!originalname){
+    return res.status(404).json({message: "Please Enter a File"})
+  }
   try {
     // const {rows: doesExist}=await connect.query("SELECT EXISTS (SELECT resume_url FROM users WHERE uid=$1)", [userId]);
     const {rows: doesExist, rowCount}=await connect.query("SELECT resume_url FROM users WHERE uid=$1", [userId]);

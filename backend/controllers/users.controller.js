@@ -12,7 +12,7 @@ import dns from "dns/promises"
 export const getAllUserController= async (req, res)=>{
   
   const data=await tableDataFetch("users");
-  return res.json(data)
+  return res.status(200).json(data)
 }
 
 export const getloginUserController= async (req, res) => {
@@ -50,10 +50,10 @@ export const getParticularUserController=  async (req, res) => {
   const {id}=req.params;
   try {
     const { rows } = await connect.query("select * from users where uid=$1", [id]);
-    if(!rows) return res.json({message: "Please Enter Correct Uid"})
-      return res.json(rows[0]);
+    if(!rows) return res.status(404).json({message: "Please Enter Correct Uid"})
+      return res.status(200).json(rows[0]);
   } catch (error) {
-    return res.json(error)
+    return res.status(500).json(error)
   }
 };
 
@@ -67,16 +67,16 @@ export const postSignupUserController= async (req, res) => {
     const validateuser=userSchema.safeParse(allUser);
     if(!validateuser.success){
       const message=validateuser.error.issues.map(m=>m.message);
-      return res.json(message)
+      return res.status(422).json(message)
     }
     if (!fname || !lname || !education || !email || !password) {
-      return res.json({ message: "Please Enter All Values such as, fname, lname, education, email, password" });
+      return res.status(422).json({ message: "Please Enter All Values such as, fname, lname, education, email, password" });
     }
   const value=email.split('@')[1];
   
   dns.resolveMx(email.split('@')[1])
       .catch(e=>{
-        return res.status(201).json({message: "Invalid Email Please Enter Correct Email Type"})
+        return res.status(422).json({message: "Invalid Email Please Enter Correct Email Type"})
    })
    
     const {rowCount}=await connect.query("select * from users where email=$1", [email]);
@@ -112,10 +112,10 @@ export const deleteUserController= async (req, res) => {
   try {
     await connect.query("delete from users where uid=$1", [id]);
     const data=await tableDataFetch('users')
-    return res.json(data);
+    return res.status(204).json(data);
   } catch (error) {
     console.log(error);
-    res.json(error);
+    res.status(500).json(error);
   }
 };
 
@@ -126,10 +126,10 @@ export const addUserSkills=async (req, res)=>{
   const {rows: ifExist, rowCount}=await connect.query("select skills from users where uid=$1", [uid])
   const {skills: doesSkillExist}=ifExist[0];
   if(doesSkillExist!=null && doesSkillExist.includes(skills)){
-    return res.status(200).json({message: "Skills Already Exist"});
+    return res.status(401).status(200).json({message: "Skills Already Exist"});
   }
   const {rows}=await connect.query("update users set skills=array_append(skills, $1) where uid=$2 returning *", [skills, uid])
-  res.send({message: rows[0]})
+  res.status(201).send({message: rows[0]})
 }
 
 export const putUserController= async(req, res) => {
@@ -140,10 +140,10 @@ export const putUserController= async(req, res) => {
     const validateuser=userSchema.safeParse(allUser);
     if(!validateuser.success){
       const message=validateuser.error.issues.map(m=>m.message);
-      return res.status(404).json(message)
+      return res.status(422).json(message)
     }
    if(!fname || !lname || !education || !email || !password){
-    return res.json({message: "Please Enter a value"})
+    return res.status(422).json({message: "Please Enter a value"})
   }
   try {
     await connect.query("update users set fname=$1, lname=$2, education=$3, email=$4 where uid=$5", [fname, lname, education, email, id, password])
@@ -152,7 +152,7 @@ export const putUserController= async(req, res) => {
     res.status(200).json(data)
   } catch (error) {
     console.log(error)
-    res.json(error)
+    res.status(500).json(error)
   }
 };
 
@@ -164,7 +164,7 @@ export const putUserController= async(req, res) => {
 export const patchUserController= async(req, res)=>{
   const {id}=req.params;
   if(!id){
-    return res.status(404).json({message: "Please Enter the Id"})
+    return res.status(422).json({message: "Please Enter the Id"})
   }
   try {
     const fields = Object.keys(req.body);
@@ -173,7 +173,7 @@ export const patchUserController= async(req, res)=>{
     const length=fields.length+1;
     await connect.query(`UPDATE users SET ${setClause} WHERE uid = $${length}`, [...values, id]);
     const {rows}=await connect.query(`select * from users WHERE uid=$1`, [id]);
-    return res.json(rows[0])
+    return res.status(201).json(rows[0])
   } catch (error) {
     return res.status(402).json({message: "Please Enter Correct UUid."})
   }

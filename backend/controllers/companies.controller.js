@@ -1,9 +1,6 @@
-import express from "express";
-import bcrypt, { hash } from "bcryptjs";
 import connect from "../db.js";
 import tableDataFetch from "../utils/tableDataFetch.js";
 import companySchema from "../Models/companies.models.js";
-import jwt from "jsonwebtoken";
 
 export const getCompanyController= async(req, res) => {
   const {id}=req.params;
@@ -13,7 +10,7 @@ export const getCompanyController= async(req, res) => {
   try {
     const {rows, rowCount}=await connect.query("select * from companies where uid=$1", [id]);
     if(!rowCount){
-      return res.json({message: "Please Enter Correct Uid:"})
+      return res.status(404).json({message: "Please Enter Correct Uid:"})
     }
     return res.status(200).json(rows[0])
   } catch (error) {
@@ -29,13 +26,17 @@ export const postCompanyController=async (req, res) => {
    if(!validateAllInput.success){
       const message=validateAllInput.error.issues.map(m=>m.message);
       return res.status(404).json(message)
-    }
-  const {rowCount}=await connect.query("select * from companies where name=$1", [name]);
-  if(rowCount){
-    return res.status(402).json({message: "Company is Already Registed"});
   }
-  const {rows}=await connect.query("insert into companies (name, description, website) values ($1, $2, $3) returning *", [name, description, website])
-  return res.json(rows[0]);
+  try {
+    const {rowCount}=await connect.query("select * from companies where name=$1", [name]);
+    if(rowCount){
+      return res.status(401).json({message: "Company is Already Registed"});
+    }
+    const {rows}=await connect.query("insert into companies (name, description, website) values ($1, $2, $3) returning *", [name, description, website])
+    return res.status(200).json(rows[0]);
+  } catch (error) {
+    return res.status(500).json({message: error.message});
+  }
 }
 
 
@@ -62,7 +63,7 @@ export const putCompanyController= async(req, res) => {
   const {id}=req.params;
   const {name, description, website}=req.body;
    if(!name || !description || !website){
-    return res.json({message: "Please Enter all value"})
+    return res.status(404).json({message: "Please Enter all value"})
   }
     const allList={name, description, website};
   const validateAllInput=companySchema.safeParse(allList);
@@ -79,7 +80,7 @@ export const putCompanyController= async(req, res) => {
     res.status(200).json(rows[0])
   } catch (error) {
     console.log(error)
-    res.json({message: error.message})
+    res.status(500).json({message: error.message})
   }
 };
 

@@ -4,6 +4,7 @@ import dataFetch from "../utils/tableDataFetch.js";
 import { companyDashBoard, deleteCompanyController, getallApplicationsList, getAllEmployeesList, getAllJobsList, getCompanyController, postCompanyController, putCompanyController } from "../controllers/companies.controller.js";
 import isCompanyEmployee from "../Middleware/isCompanyEmployee.js";
 import connect from "../db.js"
+import validateCorrectUid from "../Middleware/validateCorrectUid.js";
 
 const router = express.Router();
 
@@ -20,10 +21,10 @@ router.get("/:id/jobs", getAllJobsList)
 router.get("/:id/applications", getallApplicationsList)
 
 
-router.get("/:id", getCompanyController);
+router.get("/:id", validateCorrectUid, getCompanyController);
 router.post("/", postCompanyController);
-router.delete("/:id", deleteCompanyController);
-router.put("/:id", putCompanyController);
+router.delete("/:id", validateCorrectUid, deleteCompanyController);
+router.put("/:id", validateCorrectUid, putCompanyController);
 
 
 export default router;

@@ -18,6 +18,7 @@ import cors from "cors";
 import "./services/email-verification.js"
 import generateRandomNumber from "./utils/generateRandom6DigitNumber.js";
 import { userLoggedOutcontroller } from "./controllers/users.controller.js";
+import validateCorrectUid from "./Middleware/validateCorrectUid.js";
 const app = express();
 const port = 3000;
 
@@ -38,7 +39,7 @@ app.use("/jobs",  jobListingRouter)
 app.use("/users", usersListingRouter)
 // app.use("/companies", authUserMiddleware, isAdminMIddleware,  companyRouter)
 app.use("/companies", authUserMiddleware,  companyRouter)
-app.use("/applications", authUserMiddleware, applicationRouter)
+app.use("/applications", validateCorrectUid, authUserMiddleware,  applicationRouter)
 
 app.get("/", (req, res) => {
   res.status(201).json({ message: "Homepage" });
