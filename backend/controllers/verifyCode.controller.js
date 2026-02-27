@@ -14,8 +14,7 @@ const {uid}=req.user;
     }
   const {rows} =await connect.query("select e.verified_code, e.is_verified, e.expired_at, e.uid, u.email from email_verified e inner join users u on u.uid=e.user_id where e.user_id=$1 order by e.created_at desc", [uid])
   if(rows[0].verified_code!=code){
-    console.log(rows[0].verified_code)
-      return res.status(401).json({message: "Please Enter Correct Code"})
+    return res.status(401).json({message: "Please Enter Correct Code"})
   }
   if(rows[0].is_verified==true){
       return res.status(401).json({message: "Token Already In User, You've Already Logged In."})

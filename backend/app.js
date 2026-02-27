@@ -11,8 +11,8 @@ import "./services/cron-task.js"
 
 
 import cookieParser from "cookie-parser";
-import isAdminMIddleware from "./Middleware/isAdmin.js";
 import authUserMiddleware from "./Middleware/isLoggedIn.js";
+import dns from "dns/promises"
 import rateLimit from "express-rate-limit";
 import cors from "cors";
 import "./services/email-verification.js"
@@ -21,18 +21,20 @@ import { userLoggedOutcontroller } from "./controllers/users.controller.js";
 const app = express();
 const port = 3000;
 
+
+app.use(cors({origin: process.env.CLIENT_BASE_URL,  credentials: true}));
 const limitUser=rateLimit({
   windowMs: 1000*60,
-  limit: 30
+  limit: 1000
 })
 
 app.use(limitUser);
-app.use(cors());
 app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/jobs",  authUserMiddleware, jobListingRouter)
+app.use("/jobs",  jobListingRouter)
+// app.use("/jobs",  authUserMiddleware, jobListingRouter)
 app.use("/users", usersListingRouter)
 // app.use("/companies", authUserMiddleware, isAdminMIddleware,  companyRouter)
 app.use("/companies", authUserMiddleware,  companyRouter)

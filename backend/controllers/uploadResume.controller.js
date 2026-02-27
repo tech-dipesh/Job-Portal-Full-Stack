@@ -1,7 +1,8 @@
 import {createClient} from "@supabase/supabase-js"
 import connect from "../db.js"
-import { application } from "express";
+import "dotenv/config"
 const supabase=createClient(process.env.URL_SUPABASE_CONNECT, process.env.ANON_KEY_SUPABASE)
+
 const uploadResume=  async (req, res)=>{
   const {uid: userId}=req.user;
   const {fieldname, originalname, buffer}=req.file;

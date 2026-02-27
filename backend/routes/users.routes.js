@@ -17,9 +17,9 @@ const limitUser=rateLimit({
 
 const router = express.Router();
 
-router.get("/logout", authUserMiddleware, userLoggedOutcontroller);
+router.get("/logout", userLoggedOutcontroller);
 
-router.get("/login", alreadyLoggedIn, getloginUserController);
+router.post("/login", alreadyLoggedIn, getloginUserController);
 router.post("/signup", alreadyLoggedIn, postSignupUserController);
 router.get("/", authUserMiddleware, isAdminMIddleware, getAllUserController)
 

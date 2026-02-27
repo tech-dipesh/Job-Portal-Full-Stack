@@ -28,7 +28,6 @@ const sendMail=async(uid, firstName, lastName, userEmail, type)=>{
     await connect.query("insert into email_verified(user_id, verified_type, verified_code)  values($1, 'verify_mail', $2)",[uid, random6DigitNumber]):
     await connect.query("insert into email_verified(user_id, verified_type, verified_code)  values($1, 'forget_password', $2)",[uid, random6DigitNumber])
   }
-  console.log(info)
 } catch (error) {
   console.log(error)
   return error;

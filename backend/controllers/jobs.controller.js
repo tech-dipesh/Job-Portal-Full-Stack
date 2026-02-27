@@ -39,17 +39,16 @@ export const searchJobsListing=async (req, res) => {
 
 export const getListingController= async (req, res) => {
   const {id}=req.params;
-  if(!id){
-    return res.status(404).json({message: "Please Enter Id For Get a information"})
-  }
   try {
-    await client.query("update jobs set total_job_views=(total_job_views+1) where uid=$1", [id]);
     const {rows}=await client.query("SELECT * FROM jobs where uid=$1", [id])
-    if(!rows){
-      return res.status(504).json({message: "Add Correct information to get the id info."})
+    if(rows.length===0){
+      console.log('rows', rows)
+      return res.status(404).json({message: "Id Doesn't exist that you're looking for"})
     }
+    await client.query("update jobs set total_job_views=(total_job_views+1) where uid=$1", [id]);
     return res.status(200).json(rows[0])
   } catch (error) {
+    console.log(error)
     return res.status(400).json({message: error.message})
   }
 };

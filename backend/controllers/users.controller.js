@@ -8,6 +8,7 @@ import generateRandom6DigitNumber from "../utils/generateRandom6DigitNumber.js"
 import { AuthImplicitGrantRedirectError } from "@supabase/supabase-js";
 import sendMail from "../services/email-verification.js";
 import isUserVerifiedEmail from "../utils/isUserEmailVerified.js";
+import dns from "dns/promises"
 export const getAllUserController= async (req, res)=>{
   
   const data=await tableDataFetch("users");
@@ -15,7 +16,7 @@ export const getAllUserController= async (req, res)=>{
 }
 
 export const getloginUserController= async (req, res) => {
-  const {email, password}=req.body;
+  const {email, password}=req?.body || {};
   try {
     if(!email || !password){
       return res.status(401).json({message: "Please Enter a Message and Password"})
@@ -33,7 +34,8 @@ export const getloginUserController= async (req, res) => {
     const storeJwt=jwt.sign({uid, role, company_id}, process.env.JSON_SECRET_KEY, {expiresIn: "1d"})
     res.cookie('token', storeJwt, {
       httpOnly: true,
-      secure: false,
+      secure: true,
+      sameSite: "none",
       maxAge: 1000*60*60
     })
     return res.status(200).json(rows[0]);
@@ -62,7 +64,6 @@ export const postSignupUserController= async (req, res) => {
   try {
     const { fname, lname, education, email, password} = req.body;
     const allUser={fname, lname, education, email, password}
-    console.log('user db', allUser)
     const validateuser=userSchema.safeParse(allUser);
     if(!validateuser.success){
       const message=validateuser.error.issues.map(m=>m.message);
@@ -71,7 +72,13 @@ export const postSignupUserController= async (req, res) => {
     if (!fname || !lname || !education || !email || !password) {
       return res.json({ message: "Please Enter All Values such as, fname, lname, education, email, password" });
     }
-
+  const value=email.split('@')[1];
+  
+  dns.resolveMx(email.split('@')[1])
+      .catch(e=>{
+        return res.status(201).json({message: "Invalid Email Please Enter Correct Email Type"})
+   })
+   
     const {rowCount}=await connect.query("select * from users where email=$1", [email]);
     if(rowCount>0){
       return res.status(401).json({message: `The User with same email of: ${email} already exist.`})
