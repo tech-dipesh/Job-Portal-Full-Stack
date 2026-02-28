@@ -25,3 +25,6 @@ dist-ssr
 
 
 package-lock.json
+.env
+color-idea.md
+frontend-idea.md
