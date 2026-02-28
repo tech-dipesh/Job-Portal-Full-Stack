@@ -1,7 +1,7 @@
 import path from "path"
 
 import express from "express";
-import { addUserSkills, deleteUserController, getAllUserController, getloginUserController, getParticularUserController, patchUserController, postSignupUserController, putUserController, userLoggedOutcontroller } from "../controllers/users.controller.js";
+import { addUserSkills, deleteUserController, getAllUserController, getloginUserController, getParticularUserController, patchUserController, postSignupUserController, putUserController, sendUserLoggedInStatus, userLoggedOutcontroller } from "../controllers/users.controller.js";
 import {uploadResume, uploadProfilePicture} from "../controllers/uploadResume.controller.js";
 import multer from "multer";
 import authUserMiddleware from "../Middleware/isLoggedIn.js";
@@ -9,6 +9,7 @@ import verifyEmailConfirmation, { forgetEmailPassword, resendVerificationCode, v
 import rateLimit from "express-rate-limit";
 import alreadyLoggedIn from "../Middleware/alreadyLoggedIn.js"
 import isAdminMIddleware from "../Middleware/isAdmin.js";
+import isUnverifiedUser from "../Middleware/isAuthButUnverified .js";
 const limitUser=rateLimit({
   windowMs: 1000*60,
   limit: 5,
@@ -17,6 +18,7 @@ const limitUser=rateLimit({
 
 const router = express.Router();
 
+router.get("/", authUserMiddleware, sendUserLoggedInStatus)
 router.get("/logout", userLoggedOutcontroller);
 
 router.post("/login", alreadyLoggedIn, getloginUserController);
@@ -38,8 +40,8 @@ router.patch("/:id", patchUserController)
 
 router.post("/forget-password", authUserMiddleware, forgetEmailPassword)
 router.post("/forget-password/verify", authUserMiddleware, verifyForgetPassword)
-router.post("/verify", authUserMiddleware, verifyEmailConfirmation)
-router.post("/verify/resend", limitUser, authUserMiddleware, resendVerificationCode)
+router.post("/verify", isUnverifiedUser, verifyEmailConfirmation)
+router.post("/verify/resend", limitUser, isUnverifiedUser, resendVerificationCode)
 
 const storage=multer.diskStorage({
   filename: (req, file, cb)=>{

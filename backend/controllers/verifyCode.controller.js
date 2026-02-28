@@ -6,23 +6,33 @@ import SendmailTransport from "nodemailer/lib/sendmail-transport/index.js";
 import bcrypt from "bcryptjs";
 import currentDate from "../utils/currentDateFormat.js";
 async function verifyEmailConfirmation(req, res) {
-const {uid}=req.user;
+const {uid, role, company_id}=req.user;
   try {
     const {code}=req.body;
     if(!code){
       return res.status(404).json({message: "Please Enter Verification Code"})
     }
-  const {rows} =await connect.query("select e.verified_code, e.is_verified, e.expired_at, e.uid, u.email from email_verified e inner join users u on u.uid=e.user_id where e.user_id=$1 order by e.created_at desc", [uid])
-  if(rows[0].verified_code!=code){
-    return res.status(401).json({message: "Please Enter Correct Code"})
+  console.log('user', uid)
+  const {rows} =await connect.query("select e.verified_code, e.is_verified, e.expired_at, e.uid, e.user_id, u.email from email_verified e inner join users u on u.uid=e.user_id where e.user_id=$1  order by e.created_at desc limit 1", [uid])
+  const {verified_code, is_verified:userVerified, expired_at}=rows[0];
+  if(verified_code!=code){
+    return res.status(422).json({message: "Please Enter Correct Code"})
   }
-  if(rows[0].is_verified==true){
-      return res.status(401).json({message: "Token Already In User, You've Already Logged In."})
+  if(userVerified==true){
+      return res.status(401).json({message: "Token Already In Used, You've Already Logged In."})
   }
  
-  if(rows[0].expired_at<currentDate){
+  if(expired_at<currentDate){
       return res.status(403).json({message: "Token is Expired Please Generate new Token"})
   }
+  
+  const storeJwt=jwt.sign({uid, role, company_id, userVerified}, process.env.JSON_SECRET_KEY, {expiresIn: "1d"})
+  res.cookie('token', storeJwt, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    maxAge: 1000*60*60
+  })
   await connect.query(`update email_verified set is_verified=true where user_id=$1 and verified_code=$2`, [uid, code]);
   return res.json({message: "Verification Code Have Been Succssfully Verified"})
   } catch (error) {

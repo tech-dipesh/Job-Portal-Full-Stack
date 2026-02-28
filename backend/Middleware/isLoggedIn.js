@@ -8,7 +8,7 @@ const authUserMiddleware = async(req, res, next) => {
   try {
     req.user = jwt.verify(token, process.env.JSON_SECRET_KEY); 
     if(req.user.userVerified==false){
-      return res.status(401).json({message: "Please Verify Your code."})
+      return res.status(401).json({message: "Please Verify Your Send to your mail."})
     }
     next();
   } catch(err) {

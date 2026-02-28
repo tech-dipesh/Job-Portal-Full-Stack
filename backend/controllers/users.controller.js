@@ -10,11 +10,13 @@ import sendMail from "../services/email-verification.js";
 import isUserVerifiedEmail from "../utils/isUserEmailVerified.js";
 import dns from "dns/promises"
 export const getAllUserController= async (req, res)=>{
-  
   const data=await tableDataFetch("users");
   return res.status(200).json(data)
 }
 
+export const sendUserLoggedInStatus=async (req, res)=>{
+  return res.status(200).json({message: req.user})
+}
 export const getloginUserController= async (req, res) => {
   const {email, password}=req?.body || {};
   try {
@@ -31,7 +33,8 @@ export const getloginUserController= async (req, res) => {
     }
     const {uid, role, company_id}=rows[0];
     if(!role)role='guest'
-    const storeJwt=jwt.sign({uid, role, company_id}, process.env.JSON_SECRET_KEY, {expiresIn: "1d"})
+    const userVerified=await isUserVerifiedEmail(uid)
+    const storeJwt=jwt.sign({uid, role, company_id, userVerified}, process.env.JSON_SECRET_KEY, {expiresIn: "1d"})
     res.cookie('token', storeJwt, {
       httpOnly: true,
       secure: true,
@@ -91,7 +94,6 @@ export const postSignupUserController= async (req, res) => {
     const {uid, role, fname:firstName, lname:lastName, email:userEmail}=rows[0]
     const response=await sendMail(uid, firstName, lastName, userEmail, 'verify')
     const userVerified=await isUserVerifiedEmail(uid)
-    console.log('verify code', userVerified)
     const storeJwt=jwt.sign({uid, role, userVerified}, process.env.JSON_SECRET_KEY, {expiresIn: "1d"})
     res.cookie('token', storeJwt, {
       httpOnly: true,

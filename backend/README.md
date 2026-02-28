@@ -357,7 +357,8 @@ for allow all teh credentiants now work.
 ## More Feature after the 02/26:
 - add the id validation custom function to check whether id is correct or not. with set to the middleware.
 - i also make sure that it's the correct dns type or correct domain that i can check with: `dns.resolve`
-
+- add the two is user logged in but not verified.
+- also fix minor verification code error.
 
 
 # The Backend Project is finished on: 2026/02/26

@@ -26,7 +26,7 @@ const port = 3000;
 app.use(cors({origin: process.env.CLIENT_BASE_URL,  credentials: true}));
 const limitUser=rateLimit({
   windowMs: 1000*60,
-  limit: 1000
+  limit: 100000
 })
 
 app.use(limitUser);
