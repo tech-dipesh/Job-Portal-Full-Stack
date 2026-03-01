@@ -51,8 +51,9 @@ app.use((req, res)=>{
 })
 
 app.use((err, req, res, next)=>{
+  console.log(err)
   if(err.message=='Unexpected field'){
-    return res.status(401).json({message: "Please Enter Correct file name of: resume"})
+    return res.status(401).json({message: "Please Enter Correct file name for upload"})
   }
   if(err){
     console.log(err)

@@ -359,6 +359,17 @@ for allow all teh credentiants now work.
 - i also make sure that it's the correct dns type or correct domain that i can check with: `dns.resolve`
 - add the two is user logged in but not verified.
 - also fix minor verification code error.
+- also where user is already logged in the data is not store on teh email_ verify i'm adding try catch and throw a request.
+- i've created a earlier a is_email_verify on the users table which i deleted instead already have separate table for that.
 
+- i also make sure only send a all user list which is needed not all i've sending.
+- add the validate correct uid on everywhere.
+- i've add a two things change a name of resme upload  and also on 10+ area change my status code
+- also chaeck edge case of user is not upload resume don't consider it.
+- as of now i've not test a bookmark job which now i'll test a bookmark a job.
+
+## more 03/01:
+- i also make sure to check is user is already saved that jobs make sure have a simple query with true false to again saved_jobs.
+- we can use: `explain analyze` for performance analysis.
 
 # The Backend Project is finished on: 2026/02/26

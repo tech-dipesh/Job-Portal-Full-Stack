@@ -14,12 +14,14 @@ const uploadResume=  async (req, res)=>{
     const {rows: doesExist, rowCount}=await connect.query("SELECT resume_url FROM users WHERE uid=$1", [userId]);
     if(rowCount){
       const {resume_url: resumeUrl}=doesExist[0];
-      const splitWorld=resumeUrl.split("/")
-      const removetoPath=`upload/${splitWorld[splitWorld.length-1]}`
-     const {error}= await supabase.storage.from('resume').remove([removetoPath])
-     if(error){
-      return res.status(401).json({message: error.message})
-     }
+      const splitWorld=resumeUrl?.split("/")
+      if(splitWorld){
+        const removetoPath=`upload/${splitWorld[splitWorld.length-1]}`
+        const {error}= await supabase.storage.from('resume').remove([removetoPath])
+        if(error){
+          return res.status(401).json({message: error.message})
+        }
+      }
      }
 
     const randomUUID=crypto.randomUUID()
@@ -30,8 +32,8 @@ const uploadResume=  async (req, res)=>{
     const {path}=data;
     const {data: getOutputUrl}=supabase.storage.from('resume').getPublicUrl(path)
     const {publicUrl}=getOutputUrl
-    const {rows}= await connect.query("update users set resume_url=$1 where uid=$2 returning *", [publicUrl, userId])
-   return res.status(201).json({message: rows[0]})
+await connect.query("update users set resume_url=$1 where uid=$2", [publicUrl, userId])
+   return res.status(201).json({message: 'Resume UPloaded Successfully'})
   } catch (error) {
     console.log(error)
     // res.status(401).json({message: error.message})
@@ -43,12 +45,12 @@ const uploadResume=  async (req, res)=>{
 
 const uploadProfilePicture=async (req, res)=>{
   const {uid}=req.user;
-  // console.log(req.file)
+  
   const {originalname, buffer, mimetype}=req.file;
   try {
     const {rows, rowCount}=await connect.query("SELECT profile_pic_url FROM users WHERE uid=$1", [uid]);
-    if(rowCount){
-        
+    if(rowCount==0){
+        return res.status(501).json({message: "Please Try Again Later"})
     }
     const randomUUID=crypto.randomUUID()
    const {data, error}= await supabase.storage.from("profile_pic").upload(`${randomUUID}-${originalname}`, buffer, {contentType: mimetype})
@@ -61,10 +63,10 @@ const uploadProfilePicture=async (req, res)=>{
    if(errorOutputUrl){
       return res.json(401).json({message: errorOutputUrl.message})
    }
-  const {rows:finalOutput}= await connect.query("update  users set profile_pic_url=$1 where uid=$2 returning *", [getOutputUrl.publicUrl, uid])
-    return res.status(201).json({message: finalOutput})
+  await connect.query("update  users set profile_pic_url=$1 where uid=$2 returning *", [getOutputUrl.publicUrl, uid])
+    return res.status(201).json({message: 'Profile Picture Uploadd Successfully'})
   } catch (error) {
-    return res.status(201).json({message: error.message})
+    return res.status(500).json({message: error.message})
   }
 }
 export {uploadResume, uploadProfilePicture};

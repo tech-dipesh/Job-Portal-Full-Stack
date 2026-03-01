@@ -10,7 +10,7 @@ const isUnverifiedUser = async(req, res, next) => {
     next();
   }
   catch{
-    return res.status(201).json({message: "invalid Please Try Again a Signup."})
+    return res.status(500).json({message: "invalid Please Try Again a Signup."})
   }
 };
 

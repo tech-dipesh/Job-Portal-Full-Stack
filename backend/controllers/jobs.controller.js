@@ -40,7 +40,7 @@ export const searchJobsListing=async (req, res) => {
 export const getListingController= async (req, res) => {
   const {id}=req.params;
   try {
-    const {rows}=await client.query("SELECT * FROM jobs where uid=$1", [id])
+    const {rows}=await client.query("select j.*, s.uid as job_uid, case when s.job_id is not null then true else false end as is_save from jobs j left join saved_jobs s on j.uid=s.job_id and j.uid=$1 limit 1;", [id]) 
     if(rows.length===0){
       console.log('rows', rows)
       return res.status(404).json({message: "Id Doesn't exist that you're looking for"})

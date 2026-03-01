@@ -13,18 +13,18 @@ router.get("/", async (req, res)=>{
   res.status(200).json(data)
 });
 
-router.get("/:id/dashboard", isCompanyEmployee, companyDashBoard);
+router.get("/:id/dashboard", validateCorrectUid, isCompanyEmployee, companyDashBoard);
 
 
-router.get("/:id/employees", getAllEmployeesList)
-router.get("/:id/jobs", getAllJobsList)
-router.get("/:id/applications", getallApplicationsList)
+router.get("/:id/employees", validateCorrectUid, getAllEmployeesList)
+router.get("/:id/jobs", validateCorrectUid, getAllJobsList)
+router.get("/:id/applications", validateCorrectUid, getallApplicationsList)
 
 
-router.get("/:id", validateCorrectUid, getCompanyController);
+router.get("/:id", validateCorrectUid, validateCorrectUid, getCompanyController);
 router.post("/", postCompanyController);
-router.delete("/:id", validateCorrectUid, deleteCompanyController);
-router.put("/:id", validateCorrectUid, putCompanyController);
+router.delete("/:id", validateCorrectUid, validateCorrectUid, deleteCompanyController);
+router.put("/:id", validateCorrectUid, validateCorrectUid, putCompanyController);
 
 
 export default router;

@@ -10,16 +10,16 @@ import validateCorrectUid from "../Middleware/validateCorrectUid.js";
 const router=express.Router();
 
 router.get("/saved_jobs/list", authUserMiddleware, getallSaveJob);
-router.post("/:id/bookmark_job", authUserMiddleware,  storeSaveJob);
-router.delete("/:id/remove_from_bookmark", authUserMiddleware, isOwnwerMiddleware, unsaveListJob);
+router.post("/:id/bookmark_job", validateCorrectUid, authUserMiddleware,  storeSaveJob);
+router.delete("/:id/remove_from_bookmark", validateCorrectUid, authUserMiddleware, isOwnwerMiddleware, unsaveListJob);
 
 router.get("/", getAllListingController);
 router.get("/search", searchJobsListing);
 
 router.get("/:id", validateCorrectUid, getListingController);
-router.post("/", isCompanyEmployee, postListingController);
+router.post("/new", isCompanyEmployee, postListingController);
 
-router.delete("/:id", validateCorrectUid, isOwnwerMiddleware, deleteListingController);
+router.delete("/:id/delete", validateCorrectUid, isOwnwerMiddleware, deleteListingController);
 
-router.put("/:id", validateCorrectUid, isOwnwerMiddleware, putListingController);
+router.put("/:id/edit", validateCorrectUid, isOwnwerMiddleware, putListingController);
 export default router;

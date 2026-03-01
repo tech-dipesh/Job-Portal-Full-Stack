@@ -1,11 +1,12 @@
 import express from "express"
 import isAdminMIddleware from "../Middleware/isAdmin.js"
-import isOwnerMiddleware from "../Middleware/isLoggedIn.js"
+import isLoggedInMiddleware from "../Middleware/isLoggedIn.js"
 import tableDataFetch from "../utils/tableDataFetch.js"
 import connect from "../db.js"
 import applicationSchema from "../Models/applications.models.js";
 import { applyJobApplicationController, withdrawJobApplicationController } from "../controllers/applications.controller.js";
 import authUserMiddleware from "../Middleware/isLoggedIn.js";
+import validateCorrectUid from "../Middleware/validateCorrectUid.js"
 const router = express.Router();
 
 
@@ -18,7 +19,7 @@ router.get("/lists", isAdminMIddleware, async (req, res)=>{
   }
 })
 
-// router.get("/:id/lists", isOwnerMiddleware, async (req, res)=>{
+// router.get("/:id/lists", isLoggedInMiddleware, async (req, res)=>{
 //   try {
 
 //     const data=await tableDataFetch('applications')
@@ -29,11 +30,11 @@ router.get("/lists", isAdminMIddleware, async (req, res)=>{
 // })
 
 
-router.post("/:id/apply", isOwnerMiddleware,  applyJobApplicationController)
+router.post("/:id/apply", validateCorrectUid, isLoggedInMiddleware,  applyJobApplicationController)
 
 
 
-router.delete("/:id/withdraw", isOwnerMiddleware, withdrawJobApplicationController, )
+router.delete("/:id/withdraw", validateCorrectUid, isLoggedInMiddleware, withdrawJobApplicationController, )
 
 
 export default router;

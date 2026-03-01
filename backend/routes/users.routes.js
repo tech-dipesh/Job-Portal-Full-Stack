@@ -10,6 +10,8 @@ import rateLimit from "express-rate-limit";
 import alreadyLoggedIn from "../Middleware/alreadyLoggedIn.js"
 import isAdminMIddleware from "../Middleware/isAdmin.js";
 import isUnverifiedUser from "../Middleware/isAuthButUnverified .js";
+import isOwnerMiddleware from "../Middleware/isOwner.js"
+import validateCorrectUid from '../Middleware/validateCorrectUid.js'
 const limitUser=rateLimit({
   windowMs: 1000*60,
   limit: 5,
@@ -23,20 +25,20 @@ router.get("/logout", userLoggedOutcontroller);
 
 router.post("/login", alreadyLoggedIn, getloginUserController);
 router.post("/signup", alreadyLoggedIn, postSignupUserController);
-router.get("/", authUserMiddleware, isAdminMIddleware, getAllUserController)
+router.get("/all", authUserMiddleware, isAdminMIddleware, getAllUserController)
 
-router.get("/:id",  getParticularUserController);
+router.get("/:id", validateCorrectUid, authUserMiddleware, isOwnerMiddleware,  getParticularUserController);
 
 
-router.post("/skills", authUserMiddleware,  addUserSkills);
+router.post("/:id/skills", validateCorrectUid, authUserMiddleware,  addUserSkills);
 
-router.delete("/:id", deleteUserController);
-router.put("/:id", putUserController);
+router.delete("/:id", validateCorrectUid, deleteUserController);
+router.put("/:id", validateCorrectUid, putUserController);
 
 
 // const ALLOWED_BODY = ['fname', 'lname', 'education', 'email', 'password'];
 
-router.patch("/:id", patchUserController)
+router.patch("/:id", validateCorrectUid, patchUserController)
 
 router.post("/forget-password", authUserMiddleware, forgetEmailPassword)
 router.post("/forget-password/verify", authUserMiddleware, verifyForgetPassword)
@@ -55,6 +57,6 @@ const storage=multer.diskStorage({
 
 const upload=multer({storage: multer.memoryStorage()})
 
-router.post("/upload", upload.single('resume'), authUserMiddleware,  uploadResume)
-router.post("/profilepicture", upload.single('profile'), authUserMiddleware,  uploadProfilePicture)
+router.post("/resume", upload.single('resume'), authUserMiddleware,  uploadResume)
+router.post("/profile-picture", upload.single('profile'), authUserMiddleware,  uploadProfilePicture)
 export default router;

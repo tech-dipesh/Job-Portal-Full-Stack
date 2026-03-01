@@ -10,8 +10,8 @@ import sendMail from "../services/email-verification.js";
 import isUserVerifiedEmail from "../utils/isUserEmailVerified.js";
 import dns from "dns/promises"
 export const getAllUserController= async (req, res)=>{
-  const data=await tableDataFetch("users");
-  return res.status(200).json(data)
+  const {rows}=await connect.query("select uid as userId, fname as firstName, lname as lastName, education, email, role, resume_url, profile_pic_url, skills, experience from users")
+  return res.status(200).json(rows)
 }
 
 export const sendUserLoggedInStatus=async (req, res)=>{
@@ -125,13 +125,18 @@ export const deleteUserController= async (req, res) => {
 export const addUserSkills=async (req, res)=>{
   const {uid}=req.user;
   const {skills}=req.body;
-  const {rows: ifExist, rowCount}=await connect.query("select skills from users where uid=$1", [uid])
-  const {skills: doesSkillExist}=ifExist[0];
-  if(doesSkillExist!=null && doesSkillExist.includes(skills)){
-    return res.status(401).status(200).json({message: "Skills Already Exist"});
+  try {
+    
+    const {rows: ifExist, rowCount}=await connect.query("select skills from users where uid=$1", [uid])
+    const {skills: doesSkillExist}=ifExist[0];
+    if(doesSkillExist!=null && doesSkillExist.includes(skills)){
+      return res.status(401).status(200).json({message: "Skills Already Exist"});
+    }
+    const {rows}=await connect.query("update users set skills=array_append(skills, $1) where uid=$2 returning *", [skills, uid])
+    res.status(201).send({message: rows[0]})
+  } catch (error) {
+    return res.status(501).json({message: error.message})
   }
-  const {rows}=await connect.query("update users set skills=array_append(skills, $1) where uid=$2 returning *", [skills, uid])
-  res.status(201).send({message: rows[0]})
 }
 
 export const putUserController= async(req, res) => {
@@ -177,7 +182,7 @@ export const patchUserController= async(req, res)=>{
     const {rows}=await connect.query(`select * from users WHERE uid=$1`, [id]);
     return res.status(201).json(rows[0])
   } catch (error) {
-    return res.status(402).json({message: "Please Enter Correct UUid."})
+    return res.status(402).json({message: error.message})
   }
 }
 
