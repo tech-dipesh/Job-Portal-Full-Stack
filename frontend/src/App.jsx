@@ -1,20 +1,15 @@
 import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
-import axios from "axios";
 import { Link, Outlet, useNavigate } from 'react-router';
-import isUserLoggedIn from './api/isUserLoggedin';
-import {logoutUser} from "./api/Login"
+import {isUserLoggedIn, logoutUser} from './api/auth.user';
 
 function App() {
   const navigate=useNavigate()
-  const [isLoggedUser, setUserLogged] = useState({ login: false, verify: false });
+  const [isLoggedUser, setUserLogged] = useState({ login: false, verify: false, user: '' });
   const checkUserLogged = async () => {
     try {
       const { status, data } = await isUserLoggedIn();
-      console.log('status', status, data)
-      setUserLogged({ login: true, verify: true })
+      setUserLogged({ login: true, verify: true, user:data.message.uid })
     } catch (error) {
       if (!error.response){
         setUserLogged({verify: false, login: false})
@@ -57,26 +52,32 @@ function App() {
   
 
 
-  console.log('is', isLoggedUser)
   return (
     <div className="min-h-screen flex flex-col">
-      <header className='flex justify-between items-center p-6 text-lg border-b mb-80'>
+      <header className='flex justify-between items-center p-6 text-lg border-b mb-20'>
         <Link to='/'>Homepage</Link>
         <div className='flex gap-6'>
           <Link to='/jobs'>Jobs</Link>
+          <Link to='/jobs/bookmarks'>Bookmars</Link>
           {isLoggedUser.login == true && isLoggedUser.verify == true ? <>
-            <Link to='user//dashboard'>Dashboard</Link> 
+            <Link to='users/all'>Dashboard</Link>
           </>
           : isLoggedUser.login == true ? <Link to='/verify-email'>Verify</Link> : <>
-            <Link to='/signup'>Signup</Link>
-            <Link to='/login'>Login</Link>
+            <Link to='/auth/signup'>Signup</Link>
+            <Link to='/auth/login'>Login</Link>
           </>}
-          {isLoggedUser.login==true && <Link to='/home' onClick={LogoutPage}>Logout</Link> }
+          {isLoggedUser.login==true &&
+          <>
+          <Link to='/home' onClick={LogoutPage}>Logout</Link>
+          <Link to={`/users/${isLoggedUser.user}/profile`}>Your Profile</Link>
+          </> 
+           }
         </div>
       </header>
       <div className="p-6">
         <Outlet />
       </div>
+      
     </div>
   )
 }

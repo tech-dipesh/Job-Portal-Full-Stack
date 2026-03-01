@@ -28,3 +28,4 @@ package-lock.json
 .env
 color-idea.md
 frontend-idea.md
+src/Colorsuggestion.jsx

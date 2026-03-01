@@ -2,61 +2,69 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App'
-import {RouterProvider, createBrowserRouter} from "react-router"
-import Jobs from "./pages/Jobs"
-import EachJob from './pages/eachJobs'
-import Login from './pages/Login'
-import Signup from './pages/Signup'
-import VerifyEmail from './pages/verifyEmail'
+import { RouterProvider, createBrowserRouter } from "react-router"
+import Jobs from "./pages/Jobs/Alljob"
+import EachJob from './pages/Jobs/eachJobs'
+import Login from './pages/User/Login'
+import Signup from './pages/User/Signup'
+import VerifyEmail from './pages/User/verifyEmail'
 import ColorPaletteTester from './Colorsuggestion'
 import Home from './pages/Home'
-import Dashboarduser from "./pages/Dashboard-user"
-let router = createBrowserRouter([
+import Alluser from './pages/User/Alluser'
+import Individualuser from './pages/User/Individualuser'
+import Edituser from './pages/User/Edituser'
+import ProfilePhoto from './pages/User/addProfilePhoto'
+import Addresume from './pages/User/AddResume'
+import AllBookmarks from './pages/Jobs/AllBookmarks'
+const router = createBrowserRouter([
   {
     path: "/",
-    element: <App/>,
+    element: <App />,
     children: [
+      { index: true, element: <Home /> },
       {
-        index: true,
-        element: <Home/>
+        path: "auth",
+        children: [
+          { path: "login", element: <Login /> },
+          { path: "signup", element: <Signup /> },
+          { path: "verify-email", element: <VerifyEmail /> },
+        ]
       },
       {
         path: "jobs",
-        element: <Jobs/>
+        children: [
+          { index: true, element: <Jobs /> },
+          { path: ":id", element: <EachJob /> },
+          { path: "bookmars", element: <AllBookmarks /> },
+        ]
       },
       {
-        path: "jobs",
-        element: <Jobs/>
+        path: "users",
+        children: [
+          { path: "all", element: <Alluser /> },
+          {
+            path: ":id",
+            children: [
+              { path: "profile", element: <Individualuser /> },
+              { path: "profile/edit", element: <Edituser /> },
+              { path: "profile/profile-picture", element: <ProfilePhoto /> },
+              { path: "profile/resume", element: <Addresume /> },
+            ]
+          },
+        ]
       },
-      {
-        path: "jobs/:jobId",
-        element: <EachJob/>
-      },
-      {
-        path: "Login",
-        element: <Login/>
-      },
-      {
-        path: "signup",
-        element: <Signup/>
-      },
-      {
-        path: "verify-email",
-        element: <VerifyEmail/>
-      },
-      {
-        path: "user/dashboard",
-        element: <Dashboarduser/>
-      },
-      {
-        path: "test",
-        element: <ColorPaletteTester/>
-      },
-  ]
+    ],
   },
+
+  // {
+  //   path: "dev/colors", 
+  //   element: <ColorPaletteTester />
+  // }
 ]);
+
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router}/>
+    <RouterProvider router={router} />
   </StrictMode>,
 )
