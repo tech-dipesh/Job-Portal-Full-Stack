@@ -1,7 +1,7 @@
 import express from "express"
 import isAdminMIddleware  from "../Middleware/isAdmin.js";
 
-import { deleteListingController, getAllListingController, getListingController, postListingController, putListingController, searchJobsListing } from "../controllers/jobs.controller.js";
+import { deleteListingController, getAllListingController, getListingController, postListingController, putListingController, searchJobsListing, verifyOwnerController } from "../controllers/jobs.controller.js";
 import isOwnwerMiddleware from "../Middleware/isLoggedIn.js";
 import authUserMiddleware from "../Middleware/isLoggedIn.js";
 import { getallSaveJob, storeSaveJob, unsaveListJob } from "../controllers/saveJobs.controller.js";
@@ -16,10 +16,11 @@ router.delete("/:id/remove_from_bookmark", validateCorrectUid, authUserMiddlewar
 router.get("/", getAllListingController);
 router.get("/search", searchJobsListing);
 
-router.get("/:id", validateCorrectUid, getListingController);
-router.post("/new", isCompanyEmployee, postListingController);
+router.get("/:id", validateCorrectUid, authUserMiddleware, getListingController);
+router.post("/new", authUserMiddleware,  isCompanyEmployee, postListingController);
 
 router.delete("/:id/delete", validateCorrectUid, isOwnwerMiddleware, deleteListingController);
 
 router.put("/:id/edit", validateCorrectUid, isOwnwerMiddleware, putListingController);
+router.get("/:id/verify-owner", validateCorrectUid, authUserMiddleware, verifyOwnerController);
 export default router;

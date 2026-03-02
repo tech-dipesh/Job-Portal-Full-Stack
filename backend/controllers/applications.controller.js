@@ -2,6 +2,23 @@ import express from "express"
 import connect from "../db.js"
 import applicationSchema from "../Models/applications.models.js";
 
+
+export const allAppliedJobs=async (req, res)=>{
+  const {uid}=req.user;
+  console.log('user', uid)
+
+  try {
+    const {rows}=await connect.query("select j.title, j.description, j.job_type, j.experience_years, a.status, a.uid from jobs j inner join applications a on a.job_id=j.uid where user_id=$1", [uid]);
+    return res.status(201).json({message: rows})
+  } catch (error) {
+    console.log(error)
+    return res.status(201).json({message: error.message})
+  }
+}
+
+export const particularJobsList=async(req, res)=>{
+  
+}
 export const applyJobApplicationController=async (req, res)=>{
   const {id: job_id}=req.params;
   try {

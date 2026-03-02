@@ -7,7 +7,7 @@ const router=express.Router();
 
 export const getAllListingController=async (req, res) => {
   let {page, limit, sortby}=req.query;
-  limit=limit??5
+  limit=limit??10
   page=page??1;
   sortby=sortby??'created_at'
   if(!DATALIST.includes(sortby)){
@@ -19,14 +19,12 @@ export const getAllListingController=async (req, res) => {
 
 export const searchJobsListing=async (req, res) => {
   const {title}=req.query;
-  console.log('title', title)
   if(!title){
     const message='Please Enter Search Term'
     return res.status(204).json({message: message});
   }
   try {
     const {rows, rowCount}=await client.query("select * from jobs where search_title @@ to_tsquery($1)", [`${title}:*`]);
-    console.log(rowCount)
     if(rowCount==0){
       return res.status(204).json({message: "No Content Found"})
     }
@@ -39,10 +37,10 @@ export const searchJobsListing=async (req, res) => {
 
 export const getListingController= async (req, res) => {
   const {id}=req.params;
+  const {uid}=req?.user;
   try {
-    const {rows}=await client.query("select j.*, s.uid as job_uid, case when s.job_id is not null then true else false end as is_save from jobs j left join saved_jobs s on j.uid=s.job_id and j.uid=$1 limit 1;", [id]) 
+    const {rows}=await client.query("select j.*, j.created_by, case when j.created_by=$1 then true else false end as is_owner, s.uid as job_uid, case when s.job_id is not null then true else false end as is_save from jobs j left join saved_jobs s on j.uid = s.job_id where j.uid =$2 limit 1;", [uid, id]) 
     if(rows.length===0){
-      console.log('rows', rows)
       return res.status(404).json({message: "Id Doesn't exist that you're looking for"})
     }
     await client.query("update jobs set total_job_views=(total_job_views+1) where uid=$1", [id]);
@@ -54,22 +52,25 @@ export const getListingController= async (req, res) => {
 };
 
 export const postListingController= async (req, res) => {
-  const {Title, Description, Job_Type, Salary, skills}=req.body;
+  let {title, description, job_type, salary, skills}=req.body;
   const {company_id, uid}=req.user;
-   const allListing={Title, Description, Job_Type, Salary, skills}
-    const validateListing=listingSchema.safeParse(allListing);
-    if(!validateListing.success){
+  // it's due to the client side sometimes send a cache data where it's sendint a string data even i've try.
+  if (typeof skills === 'string') {
+    skills = skills.split(',').map(skill => skill.trim());
+}
+  const allListing={title, description, job_type, salary, skills}
+  const validateListing=listingSchema.safeParse(allListing);
+  if(!validateListing.success){
       const message=validateListing.error.issues.map(m=>m.message);
-      return res.status(404).json(message)
+      return res.status(404).json({message: message[0]})
     }
-  if(!Title || !Description || !Job_Type || !Salary){
+  if(!title || !description || !job_type || !salary){
     return res.json({message: "Enter Value to Insert output"})
   }
   try {
-    // await client.query("Insert into Jobs (Title, Description, Salary, Job_Type, company_id, updated_at) values ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)", [Title, Description, Salary, Job_Type, company_id ])
-    const {rows}=await client.query("Insert into Jobs (Title, Description, Salary, Job_Type, company_id, created_by, skills) values ($1, $2, $3, $4, $5, $6, $7) returning *", [Title, Description, Salary, Job_Type, company_id , uid,  skills])
-    const {title, description, salary, job_type, is_job_open, skills:userSkills}=rows[0];
-   return res.status(200).json({title, description, salary, job_type, is_job_open, skills:userSkills})
+    // await client.query("Insert into Jobs (title, description, salary, job_type, company_id, updated_at) values ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)", [title, description, salary, job_type, company_id ])
+    const {rows}=await client.query("Insert into jobs (title, description, salary, job_type, company_id, created_by, skills) values ($1, $2, $3, $4, $5, $6, $7) returning uid", [title, description, salary, job_type, company_id , uid,  skills])
+   return res.status(200).json({message: rows[0].uid})
   } catch (error) {
     console.log('here', error)
    return res.json({message: error.message})
@@ -95,21 +96,41 @@ export const deleteListingController= async (req, res) => {
 
 export const putListingController= async (req, res) => {
   const {id}=req.params;
-  const {Title, Description, Job_Type, Salary, company_name}=req.body;
-   if(!Title || !Description || !Job_Type || !Salary){
-    return res.json({message: "Please Enter a value"})
+  let {title, description, job_type, salary, skills}=req?.body;
+   if(!title || !description || !job_type || !salary || !skills){
+    return res.json({message: "Please Enter All Values."})
+  }
+  const allListing={title, description, job_type, salary, skills}
+  const validateListing=listingSchema.safeParse(allListing);
+  if(!validateListing.success){
+    const message=validateListing.error.issues.map(m=>m.message);
+    return res.status(404).json({message: message[0]})
   }
   try {
-    await client.query("update jobs set Title=$1, Description=$2, Job_Type=$3, Salary=$4, company_name=$5 where uid=$6", [Title, Description, Job_Type, Salary, company_name, id])
+    await client.query("update jobs set title=$1, description=$2, job_type=$3, salary=$4, skills=$5 where uid=$6", [title, description, job_type, salary, skills, id])
     const {rows}=await client.query("select * from jobs where uid=$1", [id])
     if(!rows){
       return res.status(404).json({message: "Please Enter Id For Get a information"})
     }
-    res.status(200).json({rows})
+    res.status(200).json({message: rows[0]})
   } catch (error) {
     console.log(error)
     res.json({message: error.message})
   }
 };
 
+export const verifyOwnerController=async(req, res)=>{
+  const {id}=req.params;
+  const {uid}=req.user;
+  try {
+    const {rows}=await client.query("select exists ( select 1 from jobs where uid = $1 and created_by = $2);", [id, uid])
+    if(!rows[0].exists){
+        return res.status(401).json({message: "You Don't have access to routes."})
+    }
+      return res.status(200).json({message: "You owned this route."})
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({message: error.message})
+  }
+}
 export default router;

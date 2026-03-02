@@ -371,5 +371,13 @@ for allow all teh credentiants now work.
 ## more 03/01:
 - i also make sure to check is user is already saved that jobs make sure have a simple query with true false to again saved_jobs.
 - we can use: `explain analyze` for performance analysis.
+- with zod valdation of aray convertion i'm so stuck let see how it goes.
+- with simple mistake of: `j.uid = s.job_id and j.uid` with must be a : `j.uid = s.job_id and j.uid` with it's returning a different value.
+- i've not the ` on delete cascade` of foreign relation for data with violate a constraint with i addd a on delete cascade.
+ 
 
+
+03/02:
+- with select exists(select 1) return only true false if exists.
+- the `z.coerce` conver tour any value to that native alue for the zod valiadtion.
 # The Backend Project is finished on: 2026/02/26

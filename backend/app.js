@@ -39,7 +39,7 @@ app.use("/jobs",  jobListingRouter)
 app.use("/users", usersListingRouter)
 // app.use("/companies", authUserMiddleware, isAdminMIddleware,  companyRouter)
 app.use("/companies", authUserMiddleware,  companyRouter)
-app.use("/applications", validateCorrectUid, authUserMiddleware,  applicationRouter)
+app.use("/applications", authUserMiddleware,  applicationRouter)
 
 app.get("/", (req, res) => {
   res.status(201).json({ message: "Homepage" });
