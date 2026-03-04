@@ -71,9 +71,12 @@
 ## The Input Comps:
 - on the input comps i've make a way if i sendging on the group i'm sending also a name else not sending.
 - now i'll be implmenet a debounce throutle.
+- on react 19 i don't need to wite: `auth.provider` directly: `auth`
 
 
-
+- with now enw logic with the navigate provide a way to where we left off can go again back there.
+- also now i'm using a custom hook also the useContext. where useContext i already have the logic for use data fething.
+- i've add all the 4 things on teh application apply, withdraw, see all your application and all appied things.
 
 ## Libraries Used:
 1. axios: for data fetching:
