@@ -21,7 +21,7 @@ export default function ProfilePhoto() {
       setFile({ name, type: file.type, size: totalSize })
     }
   }
-  const { error:errState, loading, execute } = UseFetchData(uploadProfilePicture)
+  const {data,  error:errState, loading, execute } = UseFetchData(uploadProfilePicture)
 
   const fileUpload = async () => {
     const err=validateFileUpload(file, 'image')
@@ -32,20 +32,15 @@ export default function ProfilePhoto() {
     const formData = new FormData();
   
   formData.append('profile', content);
-    await execute(formData).then(t =>{
-      setSuccess(t?.message || 'File Upload') 
-    }
-  );
-}
-if(loading){
-  return 
+    await execute(formData)
+    console.log('data', data)
 }
 return (
   <div>
     <h2>Add Your Profile Photo</h2>
     {loading && <div>Loading...</div>}
     {errState && <div className='text-red-500'>{errState}</div>}
-    {success && <div className='text-green-500'>{success}</div>}
+    {success ||data  && <div className='text-green-500'>{success || data}</div>}
     <form encType="multipart/form-data" method="post" onChange={handleUpload}>
       <Inputcomps type='file' name='profile'/>
     </form>

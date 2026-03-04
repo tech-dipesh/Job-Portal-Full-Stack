@@ -1,96 +1,74 @@
 import React, { useEffect, useState } from 'react'
-import { getIndividualUser, postUserSkills } from '../../api/auth.user';
+import { getIndividualUser, postUserSkills, uploadProfilePicture } from '../../api/auth.user';
 import { Link, useNavigate, useParams } from 'react-router';
 import authUid from "../../auth/authUid"
 import Inputcomps from "../../components/Input"
 import ButtonComps from '../../components/Button';
 import validateText from "../../auth/textValidate"
+import useFetchData from '../../hooks/useFetchData';
 export default function Individualuser() {
-   const navigate = useNavigate();
-  const {id}=useParams();
+  const navigate = useNavigate();
+  const { id } = useParams();
 
-  const [user, setUsers]=useState([]);
-  const [error, setError]=useState()
-  const [isSkillsOpen, setIsSkillOpen]=useState(false)
-  const [skill, setSkills]=useState()
+  const [isSkillsOpen, setIsSkillOpen] = useState(false)
+  const [error, setError] = useState("")
+  const [skill, setSkills] = useState()
 
-  const getValueAll=async()=>{
-    try {
-      const {data}=await getIndividualUser(id);
-      setUsers(data)
-    } catch (error) {
-      if(!error.response){
-        return setError("Network Error")
-      }
-      const {status, data}=error.response;
-      if(status==403){
-        return setError("Only Admin Alllowed You're not a owner.")
-      }
-      setError(data?.message)
-    }
-  }
-  useEffect(()=>{
-    getValueAll()
+
+  const { data, loading, error: err, execute } = useFetchData(getIndividualUser);
+  const {data: profileData, execute: addprofile}=useFetchData(postUserSkills)
+  useEffect(() => {
+    ; (async () => {
+      await execute(id);
+    })()
   }, [])
 
-  const submitSkill=async()=>{
-    console.log('skkils', skill)
-    const err=validateText(skill);
-    if(err){
+  const isValid = authUid(id);
+  if (!isValid) return <div>Incorrect uid please enter correct uid</div>
+  const submitSkill = async () => {
+    const err = validateText(skill);
+    if (err) {
       return setError(err)
     }
-    try {
-      const {data}=await postUserSkills(skill, id);
-      console.log('data', data)
-      setTimeout(() => {
-        navigate(0)
-      }, 1000);
-    } catch (error) {
-      const {data}=error.response
-      console.log(data.message)
-      setError(data.message)
-    }
+    await addprofile(skill)
+    setTimeout(() => {
+      navigate(0)
+    }, 200);
   }
-  const isValid=authUid(id);
-  if (!isValid) return <div>Incorrect uid please enter correct uid</div>
-if (error) return <div className='text-red-500'>{error}</div>
+  console.log('data', profileData)
 
-console.log('user', user)
-return (
+  return (
+    <div>
+      {error || err && <div className='text-red-500'>{error || err}</div>}
+      {loading && <div>Loading...</div>}
+      {data &&
+        <div>
+          <img src={data.profile_pic_url} alt='profile' className='h-20 w-20 rounded-full object-cover' />
+          <h2>your Profile Picture:</h2>
+          <h2>Full Name: {data.fname}{data.lname}</h2>
+          <h3>Education: {data.education}</h3>
+          <h3>Email: {data.email}</h3>
 
-  <div>
-    <div>
-    <img src={user.profile_pic_url} alt='profile' className='h-20 w-20 rounded-full object-cover'/>
-    <h2>your Profile Picture:</h2>
-    <h2>Full Name: {user.fname}{user.lname}</h2>
-    <h3>Education: {user.education}</h3>
-    <h3>Email: {user.email}</h3>
-    
-    <h3>Experience: {user.experience_years}</h3>
-    <h3>Profile Pic url: {user.profile_pic_url ?? 'none'}</h3>
-    <Link to={user.resume_url} target='_blank' className='text-blue-300 underline'> {user.resume_url ?? 'none'}</Link>
-    <h4>Skills:</h4>
-    <div className='flex gap-8 text-gray-400 text-2xl'>
-      {user.skills && user.skills.map((u, i)=>
-      <p key={i}>{u}</p>
-    )}
-    </div>
-    </div>
-    <div>
-      <h3>Add User Skills:</h3>
-      <div onClick={()=>setIsSkillOpen(true)}><ButtonComps values='Add Skill'/> </div>
-      {isSkillsOpen &&
-      <div>
-        <Inputcomps placeholder='New Skill' type='text' click={setSkills} value={skill}/>
-        <div onClick={submitSkill}>
-        <ButtonComps values='Submit'/>
+          <h3>Experience: {data.experience_years}</h3>
+          <h3>Profile Pic url: {data.profile_pic_url ?? 'none'}</h3>
+          <Link to={data.resume_url} target='_blank' className='text-blue-300 underline'> {data.resume_url ?? 'none'}</Link>
+          <h4>Skills:</h4>
+          <div className='flex gap-8 text-gray-400 text-2xl'>
+            {data.skills && data.skills.map((u, i) => <p key={i}>{u}</p>)}
+          </div>
+          <h3>Add User Skills:</h3>
+          <div onClick={() => setIsSkillOpen(true)}><ButtonComps values='Add Skill' /></div>
+          {isSkillsOpen &&
+          <>
+            <div> <Inputcomps placeholder='New Skill' type='text' click={setSkills} value={skill}/></div>
+              <div onClick={submitSkill}><ButtonComps values='Submit' /></div>
+          </>  }
+              <Link to='edit'><ButtonComps values="Edit Profile" /></Link>
+              <Link to='profile-picture'><ButtonComps values="Add Profile Picture" /></Link>
+              <Link to='resume'><ButtonComps values="Upload Resume" /></Link>
+              {data.is_employee && <ButtonComps values="You're a employee." />}
         </div>
-      </div>
       }
     </div>
-    <Link to='edit'><ButtonComps values="Edit Profile"/></Link>
-    <Link to='profile-picture'><ButtonComps values="Add Profile Picture"/></Link>
-    <Link to='resume'><ButtonComps values="Upload Resume"/></Link>
-  </div>
   )
 }
