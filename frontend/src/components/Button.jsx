@@ -1,8 +1,9 @@
 import React from 'react'
 
-export default function ButtonComps({ values, color:colors }) {
+export default function ButtonComps({ values, color:colors, text: texts }) {
   const color=colors ? colors : 'bg-slate-700';
+  const text=texts ? texts : '';
   return (
-    <button className={`opacity-85 cursor-pointer ${color} font-semibold  py-2 px-4 rounded m-2 items-center duration-500`}>{values}</button>
+    <button className={`opacity-85 cursor-pointer ${color} font-semibold  py-2 px-4 rounded m-2 items-center duration-500 ${text}`}>{values}</button>
   )
 }
