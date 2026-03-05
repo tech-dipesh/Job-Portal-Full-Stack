@@ -8,11 +8,11 @@ const authUserMiddleware = async(req, res, next) => {
   try {
     req.user = jwt.verify(token, process.env.JSON_SECRET_KEY); 
     if(req.user.userVerified==false){
-      return res.status(401).json({message: "Please Verify Your Send to your mail."})
+      return res.status(403).json({message: "Please Verify Your verification code."})
     }
     next();
   } catch(err) {
-    console.log(err)
+    (err)
     return res.status(403).json({ message: 'Invalid token Please Logged in First' });
   }
 };

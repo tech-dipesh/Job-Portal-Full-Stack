@@ -14,7 +14,7 @@ import isOwnerMiddleware from "../Middleware/isOwner.js"
 import validateCorrectUid from '../Middleware/validateCorrectUid.js'
 const limitUser=rateLimit({
   windowMs: 1000*60,
-  limit: 5,
+  limit: 2,
   message: {error:"You only can send resend request once per minute"}
 })
 
@@ -40,8 +40,8 @@ router.put("/:id", validateCorrectUid, putUserController);
 
 router.patch("/:id", validateCorrectUid, patchUserController)
 
-router.post("/forget-password", authUserMiddleware, forgetEmailPassword)
-router.post("/forget-password/verify", authUserMiddleware, verifyForgetPassword)
+router.post("/forget-password", limitUser, forgetEmailPassword)
+router.post("/forget-password/verify", limitUser, verifyForgetPassword)
 router.post("/verify", isUnverifiedUser, verifyEmailConfirmation)
 router.post("/verify/resend", limitUser, isUnverifiedUser, resendVerificationCode)
 

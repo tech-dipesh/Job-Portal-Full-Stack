@@ -10,6 +10,8 @@ import isAdminMIddleware from "../Middleware/isAdmin.js";
 const router = express.Router();
 
 router.get("/all", isCompanyEmployee, getAllCompaniesList);
+router.post("/new", postCompanyController);
+router.get("/dashboard", isCompanyEmployee, companyDashBoard);
 
 router.route("/:id")
 .get(validateCorrectUid, getCompanyController)
@@ -17,8 +19,6 @@ router.route("/:id")
 .put(validateCorrectUid, isCompanyEmployee, putCompanyController)
 
 
-router.post("/", postCompanyController);
-router.get("/:id/dashboard", validateCorrectUid, isCompanyEmployee, companyDashBoard);
 
 router.get("/:id/analytics", validateCorrectUid, isCompanyEmployee, companyStatsController)
 router.get("/:id/employees", validateCorrectUid, isCompanyEmployee, getAllEmployeesList)

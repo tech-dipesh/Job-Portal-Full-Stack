@@ -13,7 +13,7 @@ await client.connect().then(t=>{
   console.log('connected to database');
 })
 .catch((err)=>{
-  console.log(err)
+  (err)
   console.log('unable to connect')
 })
 

@@ -46,7 +46,7 @@ export const getListingController= async (req, res) => {
     await client.query("update jobs set total_job_views=(total_job_views+1) where uid=$1", [id]);
     return res.status(200).json(rows[0])
   } catch (error) {
-    console.log(error)
+    (error)
     return res.status(400).json({message: error.message})
   }
 };
@@ -72,7 +72,6 @@ export const postListingController= async (req, res) => {
     const {rows}=await client.query("Insert into jobs (title, description, salary, job_type, company_id, created_by, skills) values ($1, $2, $3, $4, $5, $6, $7) returning uid", [title, description, salary, job_type, company_id , uid,  skills])
    return res.status(200).json({message: rows[0].uid})
   } catch (error) {
-    console.log('here', error)
    return res.json({message: error.message})
   }
 };
@@ -88,7 +87,7 @@ export const deleteListingController= async (req, res) => {
     const data= await tableDataFetch('jobs')
    return res.status(200).json({data})
   } catch (error) {
-    console.log(error)
+    (error)
     return res.json({message: error.message})
   }
 };
@@ -114,7 +113,7 @@ export const putListingController= async (req, res) => {
     }
     res.status(200).json({message: rows[0]})
   } catch (error) {
-    console.log(error)
+    (error)
     res.json({message: error.message})
   }
 };
@@ -129,7 +128,7 @@ export const verifyOwnerController=async(req, res)=>{
     }
       return res.status(200).json({message: "You owned this route."})
   } catch (error) {
-    console.log(error)
+    (error)
     return res.status(500).json({message: error.message})
   }
 }

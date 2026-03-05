@@ -387,6 +387,11 @@ for allow all teh credentiants now work.
 - the recruiter can't apply to the jobs
 - i'm mistakenly add a company_id from users cookie data, rather i should get from url.
 - one problem is: `/all` routes i've add after: `/:id` which is catching later.
+- with the domain i check with the try catch block. of domain existance.
+
+
+- one things that i missed when user is verify their mail i make sure that again resned a token with updated token ok.
+- i make sure that addJwtKey to reusable fucntion as i've use multiple place so it's better to have a reusable function.
 
 
 # The Backend Project is finished on: 2026/02/26

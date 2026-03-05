@@ -35,7 +35,7 @@ const uploadResume=  async (req, res)=>{
 await connect.query("update users set resume_url=$1 where uid=$2", [publicUrl, userId])
    return res.status(201).json({message: 'Resume UPloaded Successfully'})
   } catch (error) {
-    console.log(error)
+    (error)
     // res.status(401).json({message: error.message})
     return res.status(401).json({message: "Please only add less than 2mb file and Must be a pdf file type"})
   }

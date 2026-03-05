@@ -29,7 +29,7 @@ const sendMail=async(uid, firstName, lastName, userEmail, type)=>{
     await connect.query("insert into email_verified(user_id, verified_type, verified_code)  values($1, 'forget_password', $2)",[uid, random6DigitNumber])
   }
 } catch (error) {
-  console.log(error)
+  (error)
   return error;
 }
 }

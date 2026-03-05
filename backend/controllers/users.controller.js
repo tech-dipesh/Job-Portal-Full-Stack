@@ -9,6 +9,7 @@ import { AuthImplicitGrantRedirectError } from "@supabase/supabase-js";
 import sendMail from "../services/email-verification.js";
 import isUserVerifiedEmail from "../utils/isUserEmailVerified.js";
 import dns from "dns/promises"
+import VerifyJwt from "../services/verifyJwt.js";
 export const getAllUserController= async (req, res)=>{
   const {rows}=await connect.query("select uid as userId, fname as firstName, lname as lastName, education, email, role, resume_url, profile_pic_url, skills, experience from users")
   return res.status(200).json(rows)
@@ -34,16 +35,11 @@ export const getloginUserController= async (req, res) => {
     const {uid, role, company_id}=rows[0];
     if(!role)role='guest'
     const userVerified=await isUserVerifiedEmail(uid)
-    const storeJwt=jwt.sign({uid, role, company_id, userVerified}, process.env.JSON_SECRET_KEY, {expiresIn: "1d"})
-    res.cookie('token', storeJwt, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      maxAge: 1000*60*60
-    })
+   const content={uid, role, company_id, userVerified};
+   VerifyJwt(res, content)
     return res.status(200).json(rows[0]);
   } catch (error) {
-    console.log(error)
+    (error)
     return res.status(500).json({message: error.message}) 
   }
 };
@@ -56,7 +52,7 @@ export const getParticularUserController=  async (req, res) => {
     if(!rows) return res.status(404).json({message: "Please Enter Correct Uid"})
     return res.status(200).json(rows[0]);
   } catch (error) {
-    console.log(error)
+    (error)
     return res.status(500).json({message: error})
   }
 };
@@ -71,18 +67,21 @@ export const postSignupUserController= async (req, res) => {
     const validateuser=userSchema.safeParse(allUser);
     if(!validateuser.success){
       const message=validateuser.error.issues.map(m=>m.message);
-      return res.status(422).json(message)
+      return res.status(422).json({message: message[0]})
     }
     if (!fname || !lname || !education || !email || !password) {
       return res.status(422).json({ message: "Please Enter All Values such as, fname, lname, education, email, password" });
     }
-  const value=email.split('@')[1];
-  
-  dns.resolveMx(email.split('@')[1])
-      .catch(e=>{
-        return res.status(422).json({message: "Invalid Email Please Enter Correct Email Type"})
-   })
-   
+    const domain = email.split('@')[1];
+    try {
+      const checkDomainExistance = await dns.resolveMx(domain);
+      if (!checkDomainExistance || checkDomainExistance.length === 0) {
+        return res.status(422).json({ message: "Invalid email domain: No mail servers found." });
+      }
+    } catch (dnsError) {
+      return res.status(422).json({ message: `The email domain '${domain}' does not exist or is invalid.` });
+    }
+    
     const {rowCount}=await connect.query("select * from users where email=$1", [email]);
     if(rowCount>0){
       return res.status(401).json({message: `The User with same email of: ${email} already exist.`})
@@ -93,18 +92,13 @@ export const postSignupUserController= async (req, res) => {
       [fname, lname, education, email, hashPassword],
     );
     const {uid, role, fname:firstName, lname:lastName, email:userEmail}=rows[0]
-    const response=await sendMail(uid, firstName, lastName, userEmail, 'verify')
+    const response= sendMail(uid, firstName, lastName, userEmail, 'verify')
     const userVerified=await isUserVerifiedEmail(uid)
-    const storeJwt=jwt.sign({uid, role, userVerified}, process.env.JSON_SECRET_KEY, {expiresIn: "1d"})
-    res.cookie('token', storeJwt, {
-      httpOnly: true,
-      secure: false,
-      maxAge: 1000*60*60
-    })
+    const content={uid, role, company_id, userVerified};
+    VerifyJwt(res, content)
     return res.status(201).json({message: "Succssfully Signed Up, Verification Code have been sent to your mail"})
     // return res.status(201).json({message: "User Succssfully Signup", firstName, lastName, userEmail});
   } catch (error) {
-    console.log(error);
     return res.status(400).json({ error: error.message });
   }
 };
@@ -117,7 +111,7 @@ export const deleteUserController= async (req, res) => {
     const data=await tableDataFetch('users')
     return res.status(204).json(data);
   } catch (error) {
-    console.log(error);
+    (error);
     res.status(500).json(error);
   }
 };
@@ -156,10 +150,10 @@ export const putUserController= async(req, res) => {
   try {
     await connect.query("update users set fname=$1, lname=$2, education=$3, email=$4 where uid=$5", [fname, lname, education, email, id, password])
     const data=await tableDataFetch('users')
-    console.log(data)
+    (data)
     res.status(200).json(data)
   } catch (error) {
-    console.log(error)
+    (error)
     res.status(500).json(error)
   }
 };

@@ -33,7 +33,6 @@ app.use(limitUser);
 app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
-
 app.use("/jobs",  jobListingRouter)
 // app.use("/jobs",  authUserMiddleware, jobListingRouter)
 app.use("/users", usersListingRouter)
@@ -51,16 +50,16 @@ app.use((req, res)=>{
 })
 
 app.use((err, req, res, next)=>{
-  console.log(err)
+  (err)
   if(err.message=='Unexpected field'){
     return res.status(401).json({message: "Please Enter Correct file name for upload"})
   }
   if(err){
-    console.log(err)
+    (err)
     return res.status(500).json({message:err.message})
   }
 });
 
 app.listen(port, () => {
-  console.log(`App is listening on the ${port}`);
+  (`App is listening on the ${port}`);
 });

@@ -84,14 +84,12 @@ export const putCompanyController= async(req, res) => {
   }
   try {
     const {rows, rowCount}=await connect.query("update companies set name=$1, description=$2, website=$3 where uid=$4 returning *", [name, description, website, id])
-    console.log(rowCount)
     if(!rowCount){
       return res.status(404).json({message: "Please Enter Id For Get a information"})
     }
-    res.status(200).json(rows[0])
+    return res.status(200).json(rows[0])
   } catch (error) {
-    console.log(error)
-    res.status(500).json({message: error.message})
+    return res.status(500).json({message: error.message})
   }
 };
 
@@ -105,15 +103,14 @@ export const getAllEmployeesList=async(req, res)=>{
   }
 }
 export const companyStatsController=async (req, res)=>{
-  const {id}=req.user;
+  const {id, company_id}=req.user;
   try {
-    
-    const {rows}=await connect.query(`select count(*) from applications a join jobs j on a.job_id = j.uid where j.company_id = $1;`, [id]);
-    const {rows:rows1}=await connect.query("select count(*)  from applications where applied_at >= date_trunc('week', NOW());")
-    const {count: totalApplications}=rows[0];
-    const {count:  thisWeekapplications}=rows1[0];
-    const {rows: totalStatus}=await connect.query("select status, round(100.0 * COUNT(*) / SUM(COUNT(*)) OVER(),2) as percentage from applications group by status;")
-    res.status(200).json({message: {totalApplications, thisWeekapplications, totalStatus}})
+    const {rows}=await connect.query(`select count(*) from applications a join jobs j on a.job_id = j.uid where j.company_id = $1;`, [company_id]);
+    const {rows:rows1}=await connect.query("select count(*)  from applications a join jobs j on a.job_id=j.uid where applied_at >= date_trunc('week', NOW());")
+    const {count: allapplications}=rows[0];
+    const {count:  thisweekapplications}=rows1[0];
+    const {rows: totalstatus}=await connect.query("select status, round(100.0 * COUNT(*) / SUM(COUNT(*)) OVER(),2) as percentage from applications a join jobs j on j.uid=a.job_id where j.company_id=$1  group by status;", [company_id])
+    res.status(200).json({message: {allapplications, thisweekapplications, totalstatus}})
   } catch (error) {
     return res.status(500).json({message: error.message})
   }
@@ -121,8 +118,12 @@ export const companyStatsController=async (req, res)=>{
 
 export const getAllJobsList=async (req, res)=>{
   const {id}=req.params;
-  const {rows}=await connect.query("select title, description, salary, job_type, company_name, is_job_open, created_by from jobs where company_id=$1", [id])
-  res.status(200).json({message: rows})
+  try {
+    const {rows}=await connect.query("select uid, title, description, salary, job_type, company_name, is_job_open, created_by from jobs where company_id=$1", [id])
+    res.status(200).json({message: rows})
+  } catch (error) {
+    return res.status(500).json({message: error.message})
+  }
 }
 
 
@@ -132,8 +133,7 @@ export const getallApplicationsList=async (req, res)=>{
     const {rows}=await connect.query("select a.uid as application_id,  a.status, u.resume_url, j.title as job_title, j.total_job_views, u.uid as applicant_id from applications a join users u on a.user_id = u.uid join jobs j on a.job_id = j.uid where j.company_id=$1", [id])
    return res.status(200).json({message: rows})
   } catch (error) {
-    console.log(error)
-    res.status(401).json({message: error.message})
+    res.status(500).json({message: error.message})
   }
 }
 

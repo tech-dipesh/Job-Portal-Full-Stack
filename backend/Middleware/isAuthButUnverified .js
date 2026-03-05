@@ -7,6 +7,9 @@ const isUnverifiedUser = async(req, res, next) => {
   if (!token) return res.status(401).json({ message: 'User is Not Logged In.' });
   try {
     req.user = jwt.verify(token, process.env.JSON_SECRET_KEY); 
+    if(req.user.isVerified==true){
+      return res.status(200).json({message: "User is Already Verified."})
+    }
     next();
   }
   catch{
