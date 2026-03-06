@@ -7,13 +7,13 @@ import api from "../lib/axios"
 
  export const logoutUser=()=>api.get('/users/logout')
  export const getIndividualUser=(id)=>api.get(`/users/${id}`)
- export const postUserSkills=(skills, id)=>api.post(`/users/${id}/skills`, {skills})
+ export const postUserSkills=({ id, skill})=> api.post(`/users/${id}/skills`, {skills:skill})
  export const deleteIndivualUser=(id)=>api.get(`/users/${id}`)
  export const putIndivualUser=(data, id)=>api.put(`/users/${id}`, {data})
  export const patchIndivualUser=({id, ...data})=>api.patch(`/users/${id}`, data)
  export const verifyUser = (code) =>api.post('/users/verify', { code });
- export const resendVerificationCode=()=>api.get('/users/verify/resend')
+ export const resendVerificationCode=(code)=>api.post('/users/verify/resend', {code})
  export const forgetPassword=(email)=>api.post('/users/forget-password', {email})
- export const verifyForgetPassword=(code, newpassword, email)=>api.post('/users/forget-password', {code, newpassword, email})
+ export const verifyForgetPassword=({...value})=>api.post('/users/forget-password/verify', value)
  export const uploadProfilePicture=(payload)=>api.post('/users/profile-picture', payload)
  export const uploadResume=(file)=>api.post('/users/resume', file)

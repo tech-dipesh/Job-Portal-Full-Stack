@@ -78,6 +78,19 @@
 - also now i'm using a custom hook also the useContext. where useContext i already have the logic for use data fething.
 - i've add all the 4 things on teh application apply, withdraw, see all your application and all appied things.
 
+
+## New Data:
+- the better appraoch on teh login system, is store the output as data cant' be updated instantly and redirect homepage and again refresh a data.
+
+- with the help of the Link and the iframe i make sure resume and profile photo can upload 
+- on the company dashboard i now don't give the id, just directly goes to the dashboard.
+
+
+## Election Day:
+- i'm addinga  fontawesome for the adding a icons, have to add teh library for using it: `@fortawesome/react-fontawesome, @fortawesome/free-solid-svg-icons`
+
+
 ## Libraries Used:
 1. axios: for data fetching:
 2. tailwindcss: for styling
+3. fontaswesome: for adding a icons
