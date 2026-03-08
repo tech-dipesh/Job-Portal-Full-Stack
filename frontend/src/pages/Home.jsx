@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Link, Outlet, useLocation } from 'react-router'
 import { useAuth } from '../context/Authcontext';
-import Errorloading from '../components/Errorloading';
-import ButtonComps from '../components/Button';
-import Linkcomps from '../components/Linkcomps';
+import Errorloading from '../components/common/Errorloading';
+import ButtonComps from '../components/common/Button';
+import Linkcomps from '../components/common/Linkcomps';
 
 export default function Home() {
   const {data, error, loading}=useAuth();

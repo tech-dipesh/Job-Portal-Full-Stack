@@ -2,13 +2,13 @@ import { useState } from 'react'
 import { Link, useNavigate } from "react-router"
 import { signupUser } from '../../api/auth.user';
 import useFetchData from '../../hooks/useFetchData';
-import InputComps from '../../components/Input';
-import ButtonComps from '../../components/Button';
-import Errorloading from '../../components/Errorloading';
+import InputComps from '../../components/common/Input';
+import ButtonComps from '../../components/common/Button';
+import Errorloading from '../../components/common/Errorloading';
 import {validateEditUser} from '../../auth/User/Validateuser';
-import Textcomps from '../../components/Textcomps';
+import Textcomps from '../../components/common/Textcomps';
 import reactIcons from "../../assets/react.svg"
-import Linkcomps from '../../components/Linkcomps';
+import Linkcomps from '../../components/common/Linkcomps';
 import Benifits from '../../Data/Benifits';
 
 export default function Signup() {

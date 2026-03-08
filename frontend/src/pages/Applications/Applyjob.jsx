@@ -1,5 +1,5 @@
 import React from 'react'
-import ButtonComps from '../../components/Button'
+import ButtonComps from '../../components/common/Button'
 import useFetchData from '../../hooks/useFetchData'
 import { useNavigate, useParams } from 'react-router'
 import {applyToParticularJob, withdrawToParticularJob} from "../../api/auth.applications"

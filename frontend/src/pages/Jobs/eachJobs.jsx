@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import { bookMarkJob, deleteExistingJobs, individualJobs, removeBookmark } from '../../api/auth.job';
 import useFetchData from '../../hooks/useFetchData';
-import ButtonComps from "../../components/Button"
+import ButtonComps from "../../components/common/Button"
 import isOwnerMiddleware from '../../../../backend/Middleware/isOwner';
 import Applyjob from '../Applications/Applyjob';
 export default function EachJob() {

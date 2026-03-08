@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import useFetchData from '../../hooks/useFetchData'
 import { deleteCompany, getSingleCompany, updateCompany } from '../../api/auth.companies'
-import ButtonComps from '../../components/Button'
+import ButtonComps from '../../components/common/Button'
 import validateCompany from '../../auth/ValidateCompany'
-import InputComps from '../../components/Input'
-import Errorloading from '../../components/Errorloading'
+import InputComps from '../../components/common/Input'
+import Errorloading from '../../components/common/Errorloading'
 
 export default function Singlecompany() {
   const {id}=useParams()

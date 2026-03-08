@@ -6,7 +6,7 @@ import applicationSchema from "../Models/applications.models.js";
 export const allAppliedJobs=async (req, res)=>{
   const {uid}=req.user;
   try {
-    const {rows}=await connect.query("select j.title, j.description, j.job_type, j.experience_years, a.status, a.uid from jobs j inner join applications a on a.job_id=j.uid where user_id=$1", [uid]);
+    const {rows}=await connect.query("select j.title, j.description, j.job_type, a.applied_at, j.experience_years, a.status, a.uid from jobs j inner join applications a on a.job_id=j.uid where user_id=$1", [uid]);
     return res.status(201).json({message: rows})
   } catch (error) {
     return res.status(201).json({message: error.message})

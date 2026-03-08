@@ -3,9 +3,9 @@ import { useEffect } from 'react'
 import { useState } from 'react'
 import { savedJobsList } from '../../api/auth.job'
 import useFetchData from '../../hooks/useFetchData'
-import Jobcomps from '../../components/Jobcomps'
+import Jobcomps from '../../components/common/Jobcomps'
 import { Link } from 'react-router'
-import ButtonComps from '../../components/Button'
+import ButtonComps from '../../components/common/Button'
 
 export default function AllBookmarks() {
   const [value, setValue]=useState()

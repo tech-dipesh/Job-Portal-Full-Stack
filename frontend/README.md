@@ -97,4 +97,4 @@
 ## Libraries Used:
 1. axios: for data fetching:
 2. tailwindcss: for styling
-3. fontaswesome: for adding a icons
+3. fontaswesome: for adding a iconsW

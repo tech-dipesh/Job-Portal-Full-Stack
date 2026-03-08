@@ -6,7 +6,7 @@ import { useAuth } from '../context/Authcontext'
 import {faArrowRotateRight, faBars, faBriefcase, faMagnifyingGlass, faUser} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import reactIcons from "../assets/react.svg"
-import Linkcomps from './Linkcomps'
+import Linkcomps from './common/Linkcomps'
 export default function Header() {
   const navigate = useNavigate()
   const { execute } = useFetchData(logoutUser);

@@ -2,13 +2,13 @@ import React from 'react'
 import { useState } from 'react'
 import useFetchData from '../../hooks/useFetchData'
 import { forgetPassword, verifyForgetPassword } from '../../api/auth.user'
-import InputComps from '../../components/Input'
-import Buttomcomps from "../../components/Button"
+import InputComps from '../../components/common/Input'
+import Buttomcomps from "../../components/common/Button"
 import validateVerifyMail, { validateEmail, validatePassword } from '../../auth/User/Validatecodeemail'
-import Errorloading from '../../components/Errorloading'
-import Success from '../../components/Success'
+import Errorloading from '../../components/common/Errorloading'
+import Success from '../../components/common/Success'
 import validateCode from '../../auth/User/Validatecodeemail'
-import Successcomps from '../../components/Success'
+import Successcomps from '../../components/common/Success'
 import { useNavigate } from 'react-router'
 export default function Resetpassword() {
   const [email, setEmail]=useState("")

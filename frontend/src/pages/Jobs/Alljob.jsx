@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { Link, Links, useSearchParams } from 'react-router';
 import {allJobsList} from "../../api/auth.job"
 import UseFetchData from "../../hooks/useFetchData"
-import ButtonComps from '../../components/Button';
-import Jobcomps from '../../components/Jobcomps';
+import ButtonComps from '../../components/common/Button';
+import Jobcomps from '../../components/common/Jobcomps';
 const {VITE_SERVER_URL}=import.meta.env
 
 export default function Jobs() {

@@ -1,10 +1,10 @@
 import { Link, useNavigate } from 'react-router'
 import useFetchData from '../hooks/useFetchData'
 import { logoutUser } from '../api/auth.user'
-import ButtonComps from './Button'
+import ButtonComps from './common/Button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faCreativeCommons} from "@fortawesome/free-brands-svg-icons"
-import Linkcomps from './Linkcomps'
+import Linkcomps from './common/Linkcomps'
 export default function Footer({data}) {
   const navigate=useNavigate()
   const {execute}=useFetchData(logoutUser);

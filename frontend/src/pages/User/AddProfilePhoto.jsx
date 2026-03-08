@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import Inputcomps from "../../components/Input"
+import Inputcomps from "../../components/common/Input"
 import UseFetchData from '../../hooks/useFetchData'
-import Buttoncomps from "../../components/Button"
+import Buttoncomps from "../../components/common/Button"
 import { getIndividualUser, uploadProfilePicture } from "../../api/auth.user"
 import validateFileUpload from "../../auth/User/validateFileUpload"
-import Errorloading from '../../components/Errorloading'
-import Successcomps from '../../components/Success'
+import Errorloading from '../../components/common/Errorloading'
+import Successcomps from '../../components/common/Success'
 import { Link, useLocation, useNavigate, useParams } from 'react-router'
 import useFetchData from '../../hooks/useFetchData'
 import { useEffect } from 'react'

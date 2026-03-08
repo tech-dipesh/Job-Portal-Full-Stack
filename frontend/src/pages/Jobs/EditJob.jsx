@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react'
 import useFetchData from '../../hooks/useFetchData'
 import { individualJobs, isUserOwnedRoute, updateExistingJobs } from '../../api/auth.job'
 import { useLocation, useNavigate, useParams } from 'react-router'
-import InputComps from '../../components/Input'
-import ButtonComps from '../../components/Button'
+import InputComps from '../../components/common/Input'
+import ButtonComps from '../../components/common/Button'
 import validateJobs from '../../auth/validateJobs'
+import { JobtypeOption } from '../../Data/OptionList'
 
 export default function EditJob() {
   const { id } = useParams()
@@ -70,11 +71,7 @@ export default function EditJob() {
             <div>Skills</div>
           <InputComps placeholder='Skills' name='skills' type='text' value={value.skills} click={setValue} error={setError} />
             <div>Job type</div>
-          <select value={value.job_type} onChange={(e) => setValue((prev) => ({ ...prev, job_type: e.target.value }))} className='bg-gray-300 text-black cursor-pointer'>
-            <option>Remote</option>
-            <option>Onsite</option>
-            <option>Hybrid</option>
-          </select>
+          <Selectcomps value={value.job_type} change={setValue} option={JobtypeOption} error={setError}/>
           <hr />
           <ButtonComps values='Submit' />
         </div>

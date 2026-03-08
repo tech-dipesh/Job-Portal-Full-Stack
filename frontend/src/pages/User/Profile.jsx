@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { getIndividualUser, postUserSkills, uploadProfilePicture } from '../../api/auth.user';
 import { Link, useNavigate, useParams } from 'react-router';
 import authUid from "../../auth/authUid"
-import Inputcomps from "../../components/Input"
-import ButtonComps from '../../components/Button';
+import Inputcomps from "../../components/common/Input"
+import ButtonComps from '../../components/common/Button';
 import validateText from "../../auth/textValidate"
 import useFetchData from '../../hooks/useFetchData';
-import Textcomps from '../../components/Textcomps';
+import Textcomps from '../../components/common/Textcomps';
 import defaultImage from "../../assets/default-image.webp"
 export default function Individualuser() {
   const navigate = useNavigate();

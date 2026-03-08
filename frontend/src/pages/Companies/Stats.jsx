@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import useFetchData from '../../hooks/useFetchData'
 import { companyStats, getCompanyEmployee } from '../../api/auth.companies'
 import { useParams } from 'react-router';
-import Errorloading from '../../components/Errorloading';
+import Errorloading from '../../components/common/Errorloading';
 
 export default function Stats() {
   const {id}=useParams();

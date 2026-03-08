@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import useFetchData from '../../hooks/useFetchData'
 import { individualJobs, isUserOwnedRoute, postNewJobs, updateExistingJobs } from '../../api/auth.job'
 import {  Link, useNavigate, useParams } from 'react-router'
-import InputComps from '../../components/Input'
-import ButtonComps from '../../components/Button'
+import InputComps from '../../components/common/Input'
+import ButtonComps from '../../components/common/Button'
 import validateJobs from '../../auth/validateJobs'
 
 export default function EditJob() {

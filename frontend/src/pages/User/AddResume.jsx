@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
-import Inputcomps from "../../components/Input"
+import Inputcomps from "../../components/common/Input"
 import UseFetchData from '../../hooks/useFetchData'
-import Buttoncomps from "../../components/Button"
+import Buttoncomps from "../../components/common/Button"
 import { getIndividualUser, uploadResume } from "../../api/auth.user"
 import validateFileUpload from "../../auth/User/validateFileUpload"
 import { useEffect } from 'react'
 import useFetchData from '../../hooks/useFetchData'
 import { Link, useParams } from 'react-router'
-import Errorloading from '../../components/Errorloading'
-import Successcomps from '../../components/Success'
+import Errorloading from '../../components/common/Errorloading'
+import Successcomps from '../../components/common/Success'
 export default function Addresume() {
   const {id}=useParams()
   const [file, setFile] = useState({ name: '', type: '', size: '' })

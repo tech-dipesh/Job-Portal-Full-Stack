@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
-import InputComps from '../../components/Input'
+import InputComps from '../../components/common/Input'
 import { useEffect } from 'react'
 import CustomDebounceHook from "../../hooks/useDebounce"
 import useFetchData from '../../hooks/useFetchData'
 import { searchJobs } from '../../api/auth.job'
 import { Link } from 'react-router'
-import Textcomps from '../../components/Textcomps'
-import ButtonComps from '../../components/Button'
-import Jobcomps from '../../components/Jobcomps'
+import Textcomps from '../../components/common/Textcomps'
+import ButtonComps from '../../components/common/Button'
+import Jobcomps from '../../components/common/Jobcomps'
 export default function Searchjobs() {
   const [search, setSearch]=useState("")
   const debounce=CustomDebounceHook(search, 300)

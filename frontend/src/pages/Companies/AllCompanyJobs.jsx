@@ -1,7 +1,7 @@
 import React from 'react'
 import useFetchData from '../../hooks/useFetchData';
 import { getCompanyJobs } from '../../api/auth.companies';
-import Errorloading from '../../components/Errorloading';
+import Errorloading from '../../components/common/Errorloading';
 import { useEffect } from 'react';
 import { Link, useParams } from 'react-router';
 

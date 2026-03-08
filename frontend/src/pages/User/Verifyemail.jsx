@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import validateVerifyMail from '../../auth/User/Validatecodeemail';
-import ButtonComps from "../../components/Button"
-import InputComps from '../../components/Input';
+import ButtonComps from "../../components/common/Button"
+import InputComps from '../../components/common/Input';
 import  {verifyUser, resendVerificationCode} from '../../api/auth.user';
 
 import { useLocation, useNavigate } from "react-router"
 import useFetchData from '../../hooks/useFetchData';
-import Errorloading from '../../components/Errorloading';
-import Successcomps from '../../components/Success';
+import Errorloading from '../../components/common/Errorloading';
+import Successcomps from '../../components/common/Success';
 
 export default function VerifyEmail() {
   const [value, setValue] = useState();
