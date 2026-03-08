@@ -88,8 +88,12 @@
 
 ## Election Day:
 - i'm addinga  fontawesome for the adding a icons, have to add teh library for using it: `@fortawesome/react-fontawesome, @fortawesome/free-solid-svg-icons`
+- i've nto done much of teh things day afer election day due to election news.
 
 
+## More:
+- for the line truncation of the any content or split a line we can use: `line-clamp-2`
+- add the better ui of the resume and profle picture.
 ## Libraries Used:
 1. axios: for data fetching:
 2. tailwindcss: for styling

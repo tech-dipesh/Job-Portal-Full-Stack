@@ -12,11 +12,9 @@ export default function useFetchData(fetchFn) {
     try {
       const {data} = await fetchFn(params);
       setState({ data: data, error: "", loading: false });
-      console.log('data',data)
       return data;
     } catch (err) {
       const {response, message}=err;
-      console.log('err', err.response)
       const msg = response?.data?.message || message || "Network Error";
       setState({ data: null, error: msg, loading: false });
       return null;

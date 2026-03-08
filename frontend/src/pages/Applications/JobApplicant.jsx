@@ -10,7 +10,6 @@ export default function Jobapplicant() {
   useEffect(()=>{
     execute(id)
   }, [result])
-  console.log('data', data?.message)
   return (
     <div>
       {loading && <div>Loading...</div>}

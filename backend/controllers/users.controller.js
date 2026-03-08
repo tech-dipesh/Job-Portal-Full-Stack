@@ -120,6 +120,9 @@ export const deleteUserController= async (req, res) => {
 export const addUserSkills=async (req, res)=>{
   const {uid}=req.user;
   const {skills}=req.body;
+  if(!skills){
+    return res.status(201).json({message: "Please Enter Skills."})
+  }
   try {
     
     const {rows: ifExist, rowCount}=await connect.query("select skills from users where uid=$1", [uid])

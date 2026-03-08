@@ -7,11 +7,11 @@ import Jobs from "./pages/Jobs/Alljob"
 import EachJob from './pages/Jobs/eachJobs'
 import Login from './pages/User/Login'
 import Signup from './pages/User/Signup'
-import VerifyEmail from './pages/User/verifyEmail'
+import VerifyEmail from './pages/User/Verifyemail'
 import ColorPaletteTester from './Colorsuggestion'
 import Home from './pages/Home'
 import Alluser from './pages/User/Alluser'
-import Individualuser from './pages/User/Individualuser'
+import Individualuser from './pages/User/Profile'
 import Edituser from './pages/User/Edituser'
 import ProfilePhoto from './pages/User/addProfilePhoto'
 import Addresume from './pages/User/AddResume'
@@ -27,7 +27,12 @@ import AuthProvider from './context/Authcontext'
 import Allcompanies from './pages/Companies/Allcompanies'
 import NewCompany from './pages/Companies/NewCompany'
 import Singlecompany from './pages/Companies/Singlecompany'
-import Dashboard from './pages/Companies/Dashboard'
+import Companydashboard from './pages/Companies/Companydashboard'
+import Stats from './pages/Companies/Stats'
+import AllCompanyJobs from './pages/Companies/AllCompanyJobs'
+import Allapplications from './pages/Companies/Allapplicationscompany'
+import Resetpassword from './pages/User/Resetpassword'
+import IsEmployee from './components/auth/IsEmployee'
 const router = createBrowserRouter([
   {
     path: "/",
@@ -42,6 +47,7 @@ const router = createBrowserRouter([
         { path: "login", element: <Login /> },
         { path: "signup", element: <Signup /> },
         { path: "verify-email", element: <VerifyEmail /> },
+        { path: "forget-password", element: <Resetpassword /> },
       ]
     },
     {
@@ -94,15 +100,36 @@ const router = createBrowserRouter([
             element: <Allcompanies/>
           },
           {
+            path: "new",
+            element: <NewCompany/>
+          },
+
+          {
+            path: "dashboard",
+            element: <IsEmployee/>,
+            children: [{
+              index:true,
+              element: <Companydashboard/>
+            }]
+          },
+          {
             path: ":id",
             element: <Singlecompany/>
           },
           {
-            path: ":id/dashboard",
-            element: <Dashboard/>
+            path: ":id/analytics",
+            element: <Stats/>
+          },
+          {
+            path: ":id/jobs",
+            element: <AllCompanyJobs/>
+          },
+          {
+            path: ":id/applications",
+            element: <Allapplications/>
           },
         ]
-      }
+      },
     ],
   },
 

@@ -13,7 +13,7 @@ export default function AuthProvider({children}) {
   ;(async()=>execute())() 
   }, []);
   return (
-    <authContext.Provider value={{data: data?.message, error, loading}} >
+    <authContext.Provider value={{data: data?.message, reexecute:execute, error, loading}} >
       {children}
     </authContext.Provider>
   )
@@ -24,6 +24,5 @@ export const useAuth=()=>{
   if (!context) {
     throw new Error("Error on AuthContext");
   }
-  
   return context;
 }
