@@ -19,19 +19,18 @@ export default function Header() {
 
   const { data, reexecute } = useAuth();
   const { userVerified, uid, company_id } = data ?? {};
-
   const userProfile=<>{
     uid && <div className='relative'>
               <FontAwesomeIcon icon={faUser}  onClick={() => setProfile(!profile)} size='2x' className='bg-slate-900 h-32 w-32 rounded-full cursor-pointer flex justify-center items-center'/>
             {profile &&
-              <div className='absolute top-12 right-0 bg-gray-500 shadow-lg rounded-lg p-4 w-32 border z-50 justify-center'>
+              <nav className='absolute top-12 right-0 bg-gray-500 shadow-lg rounded-lg p-4 w-32 border z-50 justify-center'>
                 <Linkcomps to={`/users/${uid}/profile`} content='Your Profile'/>
                 <FontAwesomeIcon icon={faArrowRotateRight}  onClick={()=>reexecute()} className='cursor-pointer justify-center'/>
                 <div className='block'>You're: {company_id ? <FontAwesomeIcon icon={faBriefcase} />: <FontAwesomeIcon icon={faMagnifyingGlass} /> }</div>
                 <Link to='/' onClick={LogoutPage} className='block py-2 text-red-600'>
                   Logout
                 </Link>
-              </div>
+              </nav>
             }
             </div>
     }
@@ -54,11 +53,11 @@ export default function Header() {
         </div>
 
     const allCompanyLinks= company_id && 
-          <div className='hidden md:flex lg:flex gap-7 ml-auto items-center'>
+          <nav className='hidden md:flex lg:flex gap-7 ml-auto items-center'>
               <Linkcomps to='companies/dashboard' content={'Dashboard'}/>
               <Linkcomps to='jobs/new' content={'Create New Job'}/>
               {userProfile}
-        </div>
+        </nav>
         
   return (
       <div className='mt-2 sticky top-0 z-50 md:w-screen sm:w-screen w-full flex justify-end items-center px-4 py-4 bg-neutral-700'>

@@ -1,103 +1,103 @@
-# Frontend Project:
-- the proejct is started on: 2026/02/26
+  # Frontend Project:
+  - the proejct is started on: 2026/02/26
 
 
-## frontend projects:
-- when using teh children property i must use the: `outlet` on the app.
-- as it's another concnetp that i''ve learn is for accessing a .env content i must start with: `vite` then i only can access a vite cotnte. with also must be the: `VITE` capital
-- i make sreut that it only rerender when the jobid is changed.
-- now i've change on the backend of validate a uid.
-- now i also start for login signup flow.
-- get method doesn't send anything on the body so for login i've to make the post rotues.
-- i make sure that with: `withCredentiasls` store the token from the backend.
-- i've also setup all teh signup feature here.
+  ## frontend projects:
+  - when using teh children property i must use the: `outlet` on the app.
+  - as it's another concnetp that i''ve learn is for accessing a .env content i must start with: `vite` then i only can access a vite cotnte. with also must be the: `VITE` capital
+  - i make sreut that it only rerender when the jobid is changed.
+  - now i've change on the backend of validate a uid.
+  - now i also start for login signup flow.
+  - get method doesn't send anything on the body so for login i've to make the post rotues.
+  - i make sure that with: `withCredentiasls` store the token from the backend.
+  - i've also setup all teh signup feature here.
 
-- i make sure to create a new separate page for each data validation on the frontend.
-- the one major issue that i'm sendina  requeest to the: `login instead of verify`  
+  - i make sure to create a new separate page for each data validation on the frontend.
+  - the one major issue that i'm sendina  requeest to the: `login instead of verify`  
 
-- axiosi instance that i'll be usin ght `services` fodler.
-
-
-- i've created al the routes api connect of the users.
-- now i'm trying to createe all the users list.
- - also with moving app.jsx homepage content ot the another page.
-- created the separate indivua page like profiel picture url.
-- add the user skills setup.
-
-<!-- all backend route -->:
-- applications: `lists, id/apply, id/withdraw, `
-- companies: `/, id/dashbaord, id/employees, id/jobs, id/applications, id: get company all, id: post new company, / delete company, /id put new company`
-- jobs: `saved_jobs/list, id/bookmark_job, id/remove_from_bookmar, /: all listing, /search, id/ particular listing jobs, id: new jobs, id/ deelete, /id update`
-- users: `/logout, /login, /signup, /: all user, /:id individual user details, /skills add the user skills, /id, delete a user, /put, update user, /patch, update particular list, /forget-password, /forget-password-verify, /verify, /verify/resend, /upload-resume, /upload-profile-picture`
+  - axiosi instance that i'll be usin ght `services` fodler.
 
 
-2026/02/28:
-- update verify code and other logic.
-- now i will be creatng a `lib` folder where i'll create one axios instance and use everywhere.
+  - i've created al the routes api connect of the users.
+  - now i'm trying to createe all the users list.
+  - also with moving app.jsx homepage content ot the another page.
+  - created the separate indivua page like profiel picture url.
+  - add the user skills setup.
+
+  <!-- all backend route -->:
+  - applications: `lists, id/apply, id/withdraw, `
+  - companies: `/, id/dashbaord, id/employees, id/jobs, id/applications, id: get company all, id: post new company, / delete company, /id put new company`
+  - jobs: `saved_jobs/list, id/bookmark_job, id/remove_from_bookmar, /: all listing, /search, id/ particular listing jobs, id: new jobs, id/ deelete, /id update`
+  - users: `/logout, /login, /signup, /: all user, /:id individual user details, /skills add the user skills, /id, delete a user, /put, update user, /patch, update particular list, /forget-password, /forget-password-verify, /verify, /verify/resend, /upload-resume, /upload-profile-picture`
 
 
->:warning: i'll create the custom hooks of queryData for axios fetch data.
-- i also make sure to use the axios new Abortcontrolle when user is abort a controller,
-  - for sending a reuqest: `controler new AbortControll`
- and cancel with on the catch we've to send with the axios request like this: `{signal: controler+signal}` 
-  - with check: `if(!axios.isCancel(error)) check`
-  - cleanup method we can do with: `controller.abort()`
-
-- we also can use: `iifeo` we can use the semicolon.
-02/29
-- i'm workion gon the backend.
-- also minor change on th backendof patch a user.
+  2026/02/28:
+  - update verify code and other logic.
+  - now i will be creatng a `lib` folder where i'll create one axios instance and use everywhere.
 
 
-- for navigate on page backward: `navigate(-1)`
-- make my children route on teh main.jsx
-- on the upload resume i'm sending a content through a : `formData` with axios not able to send it.
-- also on teh api i've wrap on `object `which cause the erreror.
-- also the resume hwich i've done creaging it will have a link tag.
+  >:warning: i'll create the custom hooks of queryData for axios fetch data.
+  - i also make sure to use the axios new Abortcontrolle when user is abort a controller,
+    - for sending a reuqest: `controler new AbortControll`
+  and cancel with on the catch we've to send with the axios request like this: `{signal: controler+signal}` 
+    - with check: `if(!axios.isCancel(error)) check`
+    - cleanup method we can do with: `controller.abort()`
 
-- i've also use a custom hooks and function on both each jobs and the all jobs.
-- i've faced a minor error of spelling: `bookmars` which cause data fetching another app.
-
-
-- i've add the middlerare of isUserloggein and isOwner middleare.
->:warning: i shouldn't keep a setvalue initially on the normal flow should add on teh effect to not reerender too many.
-- i also make sure that the pass a ... value so it can recieve a data.
-- i've also impleemte a update a jobs with skills  features.
-- now i will make sure to implmement a deleete features and 
-- now i've done creatinga  delete feature now i will work on new Job features.
-
-- with new jobs wrorkign perfely.
-
-## The Input Comps:
-- on the input comps i've make a way if i sendging on the group i'm sending also a name else not sending.
-- now i'll be implmenet a debounce throutle.
-- on react 19 i don't need to wite: `auth.provider` directly: `auth`
+  - we also can use: `iifeo` we can use the semicolon.
+  02/29
+  - i'm workion gon the backend.
+  - also minor change on th backendof patch a user.
 
 
-- with now enw logic with the navigate provide a way to where we left off can go again back there.
-- also now i'm using a custom hook also the useContext. where useContext i already have the logic for use data fething.
-- i've add all the 4 things on teh application apply, withdraw, see all your application and all appied things.
+  - for navigate on page backward: `navigate(-1)`
+  - make my children route on teh main.jsx
+  - on the upload resume i'm sending a content through a : `formData` with axios not able to send it.
+  - also on teh api i've wrap on `object `which cause the erreror.
+  - also the resume hwich i've done creaging it will have a link tag.
+
+  - i've also use a custom hooks and function on both each jobs and the all jobs.
+  - i've faced a minor error of spelling: `bookmars` which cause data fetching another app.
 
 
-## New Data:
-- the better appraoch on teh login system, is store the output as data cant' be updated instantly and redirect homepage and again refresh a data.
+  - i've add the middlerare of isUserloggein and isOwner middleare.
+  >:warning: i shouldn't keep a setvalue initially on the normal flow should add on teh effect to not reerender too many.
+  - i also make sure that the pass a ... value so it can recieve a data.
+  - i've also impleemte a update a jobs with skills  features.
+  - now i will make sure to implmement a deleete features and 
+  - now i've done creatinga  delete feature now i will work on new Job features.
 
-- with the help of the Link and the iframe i make sure resume and profile photo can upload 
-- on the company dashboard i now don't give the id, just directly goes to the dashboard.
+  - with new jobs wrorkign perfely.
+
+  ## The Input Comps:
+  - on the input comps i've make a way if i sendging on the group i'm sending also a name else not sending.
+  - now i'll be implmenet a debounce throutle.
+  - on react 19 i don't need to wite: `auth.provider` directly: `auth`
 
 
-## Election Day:
-- i'm addinga  fontawesome for the adding a icons, have to add teh library for using it: `@fortawesome/react-fontawesome, @fortawesome/free-solid-svg-icons`
-- i've nto done much of teh things day afer election day due to election news.
+  - with now enw logic with the navigate provide a way to where we left off can go again back there.
+  - also now i'm using a custom hook also the useContext. where useContext i already have the logic for use data fething.
+  - i've add all the 4 things on teh application apply, withdraw, see all your application and all appied things.
 
 
-- also makre sure i added a 2 exrta info on teh companies of locationand the founded_year,
+  ## New Data:
+  - the better appraoch on teh login system, is store the output as data cant' be updated instantly and redirect homepage and again refresh a data.
 
-## More:
-- for the line truncation of the any content or split a line we can use: `line-clamp-2`
-- add the better ui of the resume and profle picture.
-- it has both method of the pagination and also the deobounce method for the searching.
-## Libraries Used:
-1. axios: for data fetching:
-2. tailwindcss: for styling
-3. fontaswesome: for adding a iconsW
+  - with the help of the Link and the iframe i make sure resume and profile photo can upload 
+  - on the company dashboard i now don't give the id, just directly goes to the dashboard.
+
+
+  ## Election Day:
+  - i'm addinga  fontawesome for the adding a icons, have to add teh library for using it: `@fortawesome/react-fontawesome, @fortawesome/free-solid-svg-icons`
+  - i've nto done much of teh things day afer election day due to election news.
+
+
+  - also makre sure i added a 2 exrta info on teh companies of locationand the founded_year,
+
+  ## More:
+  - for the line truncation of the any content or split a line we can use: `line-clamp-2`
+  - add the better ui of the resume and profle picture.
+  - it has both method of the pagination and also the deobounce method for the searching.
+  ## Libraries Used:
+  1. axios: for data fetching:
+  2. tailwindcss: for styling
+  3. fontaswesome: for adding a iconsW

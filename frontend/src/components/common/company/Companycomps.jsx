@@ -45,6 +45,7 @@ export default function Companycomps({uid, resume_url, name, description, websit
     {experience_years && <h2>Experience Years: {experience_years}</h2>}
     {website && <Linkcomps content={"Visit Website"}  to={`https://${website}`}/>}
     {founded_year && <div>Founded Year: {founded_year}</div>}
+    <Linkcomps content={'All Company Jobs'} to={`/companies/${uid}/jobs`}/>
     {location && <div>Location: {location}</div>}
       {role=='admin' && 
       <>
