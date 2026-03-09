@@ -395,6 +395,9 @@ for allow all teh credentiants now work.
 - add the two column of: `founded_year, location` on the company details.
 
 
+
+- now for uploading a feature of teh companies logo i've to change a lot but i will change it.
+
 - i've make the company dashboard to show a company all employees, total jobs like this.
 # The Backend Project is finished on: 2026/02/26
 

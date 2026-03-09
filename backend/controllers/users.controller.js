@@ -18,6 +18,7 @@ export const getAllUserController= async (req, res)=>{
 export const sendUserLoggedInStatus=async (req, res)=>{
   return res.status(200).json({message: req.user})
 }
+
 export const getloginUserController= async (req, res) => {
   const {email, password}=req?.body || {};
   try {
@@ -34,6 +35,7 @@ export const getloginUserController= async (req, res) => {
     }
     const {uid, role, company_id}=rows[0];
     if(!role)role='guest'
+    console.log('uid', uid)
     const userVerified=await isUserVerifiedEmail(uid)
    const content={uid, role, company_id, userVerified};
    VerifyJwt(res, content)

@@ -6,11 +6,12 @@ import isCompanyEmployee from "../Middleware/isCompanyEmployee.js";
 import connect from "../db.js"
 import validateCorrectUid from "../Middleware/validateCorrectUid.js";
 import isAdminMIddleware from "../Middleware/isAdmin.js";
+import upload from "../services/Multer.js";
 
 const router = express.Router();
 
 router.get("/all", isCompanyEmployee, getAllCompaniesList);
-router.post("/new", postCompanyController);
+router.post("/new", upload.single("company_logo"), postCompanyController);
 router.get("/dashboard", isCompanyEmployee, companyDashBoard);
 
 router.route("/:id")

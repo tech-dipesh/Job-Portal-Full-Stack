@@ -12,6 +12,7 @@ import isAdminMIddleware from "../Middleware/isAdmin.js";
 import isUnverifiedUser from "../Middleware/isAuthButUnverified .js";
 import isOwnerMiddleware from "../Middleware/isOwner.js"
 import validateCorrectUid from '../Middleware/validateCorrectUid.js'
+import upload from "../services/Multer.js"
 const limitUser=rateLimit({
   windowMs: 1000*60,
   limit: 2,
@@ -45,17 +46,7 @@ router.post("/forget-password/verify", limitUser, verifyForgetPassword)
 router.post("/verify", isUnverifiedUser, verifyEmailConfirmation)
 router.post("/verify/resend", limitUser, isUnverifiedUser, resendVerificationCode)
 
-const storage=multer.diskStorage({
-  filename: (req, file, cb)=>{
-    const ext=path.extname(file.originalname);
-    cb(null, `${Date.now()}${file.originalname}${ext}`)
-  },
-  destination: (req, file, cb)=>{
-    cb(null, './upload')
-  }
-})
 
-const upload=multer({storage: multer.memoryStorage()})
 
 router.post("/resume", upload.single('resume'), authUserMiddleware,  uploadResume)
 router.post("/profile-picture", upload.single('profile'), authUserMiddleware,  uploadProfilePicture)

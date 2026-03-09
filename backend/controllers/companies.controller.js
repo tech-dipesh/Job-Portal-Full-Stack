@@ -1,14 +1,12 @@
 import connect from "../db.js";
 import tableDataFetch from "../utils/tableDataFetch.js";
 import companySchema from "../Models/companies.models.js";
-import { exactOptional } from "zod";
-import dataFetch from "../utils/tableDataFetch.js";
-
+import { supabase } from "../services/Supabase.js";
 
 export const getAllCompaniesList= async (req, res)=>{
   try {
-    const message=await dataFetch('companies');
-   return res.status(200).json(message)
+    const {rows}=await connect.query("select c.*, count(j.company_id) as count from companies c left join jobs j on j.company_id=c.uid group by c.uid;")
+   return res.status(200).json({message: rows})
   } catch (error) {
     return res.status(500).json({message: error.message})
   }
@@ -28,17 +26,29 @@ export const postCompanyController=async (req, res) => {
   const {name, description, website, location, founded_year}=req?.body;
   const allList={name, description, website, location, founded_year};
   const validateAllInput=companySchema.safeParse(allList);
+  const {originalname, buffer,mimetype}=req.file || {};
+  if(!originalname){
+    return "Please Enter a Company Logo";
+  }
    if(!validateAllInput.success){
       const message=validateAllInput.error.issues.map(m=>m.message);
-      return res.status(404).json(message)
+      return res.status(422).json({message: message[0]})
   }
   try {
-    const {rowCount}=await connect.query("select * from companies where name=$1", [name]);
-    if(rowCount){
+    const {rows:isExist}=await connect.query("select exists(select 1 from companies where name = lower($1)) from companies limit 1;", [name]);
+    console.log('is', isExist)
+    if(isExist[0].exists){
       return res.status(401).json({message: "Company is Already Registed"});
     }
-    const {rows}=await connect.query("insert into companies (name, description, website) values ($1, $2, $3) returning *", [name, description, website])
-    return res.status(200).json(rows[0]);
+    const randomUUID=crypto.randomUUID()
+    const {data, error}=await supabase.storage.from('company').upload(`/${randomUUID}-${originalname}`, buffer, {contentType: mimetype})
+    if(error){
+      return res.status(502).json({message: error.message})
+    }
+    const {data:getUrl}= supabase.storage.from('company').getPublicUrl(data.path)
+    const {rows}=await connect.query("insert into companies (name, description, website, location, founded_year, logo_url) values ($1, $2, $3, $4, $5, $6) returning *", [name, description, website, location, founded_year, getUrl.publicUrl])
+  // return res.status(201).json({message: 'hello'})
+    return res.status(201).json(rows[0]);
   } catch (error) {
     return res.status(500).json({message: error.message});
   }
