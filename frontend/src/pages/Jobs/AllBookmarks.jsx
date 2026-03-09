@@ -6,6 +6,7 @@ import useFetchData from '../../hooks/useFetchData'
 import Jobcomps from '../../components/common/Jobcomps'
 import { Link } from 'react-router'
 import ButtonComps from '../../components/common/Button'
+import Errorloading from '../../components/common/Errorloading'
 
 export default function AllBookmarks() {
   const [value, setValue]=useState()
@@ -31,6 +32,7 @@ export default function AllBookmarks() {
         <Jobcomps uid={uid} title={title} description={description} job_type={job_type} is_job_open={is_job_open} salary={salary}/>
       ))}
     </div>
+    <Errorloading data={{error, loading}}/>
     </div>
   )
 }

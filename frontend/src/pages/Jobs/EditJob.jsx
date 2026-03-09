@@ -54,7 +54,7 @@ export default function EditJob() {
   return (
     <div>
       <h2>Edit the Job:</h2>
-      <form method="post" onSubmit={submitForm}>
+      <form method="post" onSubmit={submitForm} className='w-full space-y-4 bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md'>
         <div className='justify-center align-middle'>
           <div>Title</div>
           <InputComps

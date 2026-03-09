@@ -50,7 +50,7 @@ export default function Resetpassword() {
   }
   const {message}=data ?? '';
   return (
-    <div>
+    <article>
       <Errorloading data={{error}}/>
       {!isOpen &&
       <>
@@ -58,7 +58,7 @@ export default function Resetpassword() {
       <Errorloading data={{loading, error:apierror}}/>
       <Success data={message}/>
       <form onSubmit={butSubmit}>
-        <InputComps type='text' click={setEmail} value={email} error={setError}/>
+        <InputComps type='text' placeholder='Email' click={setEmail} value={email} error={setError}/>
         <Buttomcomps/>
       </form>
       <div onClick={()=>setIsOpen(!isOpen)}>
@@ -73,7 +73,7 @@ export default function Resetpassword() {
       <Buttomcomps values='Go BAck to to email!'/>
       </div>
       <h1>Add the Forget Password Authetncitcation.</h1>
-      <form onSubmit={verifyCode} className='m-16'>
+      <form onSubmit={verifyCode} className='w-full space-y-4 bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md'>
         <h3>your Email:</h3>
         <InputComps placeholder='Email' type='text' click={setEmail} value={email} error={setError}/>
         <h2>Your Code:</h2>
@@ -86,7 +86,7 @@ export default function Resetpassword() {
       <Success data={resetdata?.message}/>
       </>
       }
-    </div>
+    </article>
     
   )
 }

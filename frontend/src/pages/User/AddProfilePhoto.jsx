@@ -59,7 +59,12 @@ return (
     <Errorloading data={{error: errState, loading}}/>
     <Successcomps data={data?.message || success}/>
     <form encType="multipart/form-data" method="post" onChange={handleUpload} >
-      <Inputcomps type='file' name='profile'/>
+    <form encType="multipart/form-data" method="post" onChange={handleUpload}>
+        <div className='border-2 border-dashed rounded-lg p-6 text-center hover:border-blue-500 cursor-pointer'>
+      <Inputcomps type='file' name='resume' className='hidden'/>
+        <p>Click Here or drag A Profile Picture(Only image type allowed)</p>
+        </div>
+        </form>
     </form>
   <div onClick={fileUpload}>
     <Buttoncomps values='submit' />

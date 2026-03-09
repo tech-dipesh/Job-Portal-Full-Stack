@@ -6,6 +6,8 @@ import {getIndividualUser, patchIndivualUser} from "../../api/auth.user"
 import {  useNavigate, useParams } from 'react-router'
 import UseFetchData from '../../hooks/useFetchData'
 import useFetchData from '../../hooks/useFetchData'
+import Selectcomps from '../../components/common/Selectcomps'
+import { EducationOption } from '../../Data/OptionList'
 
 export default function Edituser() {
   const navigate=useNavigate()
@@ -58,13 +60,7 @@ export default function Edituser() {
           <h2>Experience in Years</h2>
         <InputComps placeholder='experience' name='experience' type='number' value={value.experience} click={setValue} error={setError} />
         <label className='text-sm font-medium mb-1'>Education:</label>
-        <select value={value.education} onChange={(e) => setValue((prev) => ({ ...prev, education: e.target.value }))} className='w-full p-2 border rounded-lg bg-white dark:bg-gray-800'>
-          <option>Basic</option>
-          <option>Matrix</option>
-          <option>High School</option>
-          <option>Undergraduation</option>
-          <option>Postgraduation</option>
-        </select>
+        <Selectcomps value={value.education} change={setValue} option={EducationOption} multiple={true}/>
       </div>
         <ButtonComps values='Submit' />
       </form>

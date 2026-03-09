@@ -91,9 +91,12 @@
 - i've nto done much of teh things day afer election day due to election news.
 
 
+- also makre sure i added a 2 exrta info on teh companies of locationand the founded_year,
+
 ## More:
 - for the line truncation of the any content or split a line we can use: `line-clamp-2`
 - add the better ui of the resume and profle picture.
+- it has both method of the pagination and also the deobounce method for the searching.
 ## Libraries Used:
 1. axios: for data fetching:
 2. tailwindcss: for styling

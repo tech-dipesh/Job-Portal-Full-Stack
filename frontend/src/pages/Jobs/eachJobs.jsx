@@ -79,29 +79,27 @@ export default function EachJob() {
     const valueButton = is_save  ? "Remove from Saved Jobs" : "Save Job";
     const clickFun = is_save ? RemoveSavedJobs : saveJob
     return (
-      <div>
+      <article>
         {success && <div className='text-green-500'>{success}</div>}
-        <div  className='bg-neutral-900 p-8 h-auto w-120 rounded-lg'>
+        <div  className='bg-neutral-900 p-8 h-auto max-w-xl w-full mx-auto rounded-lg flex justify-center flex-col mt-10 space-y-3'>
           <p>Job Id: {value.uid}</p>
-          <p>Title: {value.title}</p>
+          <p className='text-xl font-semibold'>Title: {value.title}</p>
           <p>Description: {value.description}</p>
           <p>Job Type: {value.job_type}</p>
           <p>Salary: {value.salary}</p>
           <p>Total Job View: {value.total_job_views}</p>
           <p>Experience: {value.experience_years}</p>
-          <div className='flex gap-8'>
-            Skills:
-            {value?.skills?.map((skill, i) => <p key={i} className='border-2 bg-slate-600 p-2 rounded-xl cursor-pointer'>{skill}</p>)}
+          <div className='flex flex-wrap gap-2'>
+            <span>Skills</span>
+            {value?.skills?.map((skill, i) => <span key={i} className='border-2 bg-slate-600 p-2 rounded-xl cursor-pointer flex flex-col gap-2'>{skill}</span>)}
           </div>
+        {!is_owner &&  <span onClick={clickFun} className='flex gap-3 mt-4'><ButtonComps values={valueButton} /></span>  }
         {showEditButton()}
         </div>
-        {!is_owner && 
-        <div onClick={clickFun}><ButtonComps values={valueButton} /></div>
-      }
-        {error && <div className='text-red-500'>{error}</div>}
+        {error && <div className='text-red-500 mb-4'>{error}</div>}
         <div className='flex justify-end w-full'>
     <Applyjob value={value.is_applied}/>
   </div>
-      </div>
+      </article>
     )
   }

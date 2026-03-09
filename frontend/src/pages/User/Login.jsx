@@ -12,6 +12,7 @@ import reactIcons from "../../assets/react.svg"
 import Linkcomps from '../../components/common/Linkcomps.jsx';
 import Textcomps from '../../components/common/Textcomps.jsx';
 import Benifits from "../../Data/Benifits.js"
+import Registerleftcomps from '../../components/common/User/Registerleftcomps.jsx';
 
 export default function Login() {
   const {reexecute, data:checkuser}=useAuth()
@@ -40,17 +41,11 @@ export default function Login() {
 
 
   return (
-      <div className='w-screen overflow-x-hidden flex items-center justify-center gap-8 bg-slate-700 p-6'>
-        <div className='border border-white/20 rounded-2xl p-8 flex flex-col items-center gap-4 flex-1 self-stretch w-1/2 '>
-        <Linkcomps to={'/'} content={<img src={reactIcons} alt="Profile" />}/>
-        <Textcomps content={'Jobify! Where You Test a Student project With Industry Standard.'}/>
-        <Textcomps content="Jobs Where With Major Benifits"/>
-        {Benifits.map(benifit=>(
-          <div className='gap-7 mb-2'>
-          <Textcomps content={benifit}/>
-          </div>
-          ))}
-        </div>
+      <div className='grid md:grid-cols-2 grid-cols-1 items-center min-h-screen bg-slate-700 p-6'>
+        <Registerleftcomps/>
+        <Successcomps data={data}/>
+        <Errorloading data={{loading}}/>
+        <Errorloading data={{error: error}}/>
         <div className='border border-white/20 rounded-2xl p-6  flex flex-col gap-4 flex-1 self-stretch w-1/2'>
         <h1 className='font-semibold justify-center align-middle'>Welcome to Jobify.</h1>
         <form onSubmit={submitForm} className='flex flex-col gap-4 align-middle'>
@@ -64,9 +59,6 @@ export default function Login() {
           Submit
         </button>
         </form>
-        <Successcomps data={data}/>
-        <Errorloading data={{loading}}/>
-        <Errorloading data={{error: error}}/>
         <div className='flex gap-4 justify-between'>
         <Linkcomps to='../forget-password' content={<ButtonComps values="Can't sign in?" color='bg-red-500' text='text-white'/>}/>
         <Linkcomps to='../signup' content={<ButtonComps values='Create an account' color='bg-red-500' text='text-white'/>}/>

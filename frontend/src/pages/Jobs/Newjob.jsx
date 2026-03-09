@@ -5,6 +5,8 @@ import {  Link, useNavigate, useParams } from 'react-router'
 import InputComps from '../../components/common/Input'
 import ButtonComps from '../../components/common/Button'
 import validateJobs from '../../auth/validateJobs'
+import Selectcomps from '../../components/common/Selectcomps'
+import { JobtypeOption } from '../../Data/OptionList'
 
 export default function EditJob() {
   const [value, setValue] = useState({
@@ -46,7 +48,7 @@ export default function EditJob() {
   return (
     <div className='grid'>
       <h2>Add New Job:</h2>
-      <form method="post" onSubmit={submitForm} className=''>
+      <form method="post" onSubmit={submitForm} className='grid'>
         <div className='justify-center align-middle'>
           <div>Title</div>
           <InputComps
@@ -63,12 +65,7 @@ export default function EditJob() {
             <div>Skills</div>
           <InputComps placeholder='Skills' name='skills' type='text' value={value.skills} click={setValue} error={setError} />
             <div>Job type</div>
-          <select value={value.job_type} onChange={(e) => setValue((prev) => ({ ...prev, job_type: e.target.value }))} className='bg-gray-300 text-black cursor-pointer'>
-            <option hidden>Select Option</option>
-            <option>Remote</option>
-            <option>Onsite</option>
-            <option>Hybrid</option>
-          </select>
+          <Selectcomps value={value.job_type} change={setValue} multiple={true} option={JobtypeOption}/>
           <hr />
           <ButtonComps values='Submit' />
         </div>

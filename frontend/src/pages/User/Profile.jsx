@@ -8,6 +8,7 @@ import validateText from "../../auth/textValidate"
 import useFetchData from '../../hooks/useFetchData';
 import Textcomps from '../../components/common/Textcomps';
 import defaultImage from "../../assets/default-image.webp"
+import Linkcomps from "../../components/common/Linkcomps"
 export default function Individualuser() {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -54,8 +55,10 @@ export default function Individualuser() {
           <div className='flex justify-center mb-4'>
           <img src={data.profile_pic_url || defaultImage} alt='profile' 
             className='h-32 w-32 rounded-full object-cover border-4 border-gray-300 shadow-lg' />
+            <div className='grid justify-center mt-4'>
+            <Linkcomps content={'Change Photo'} to={'profile-picture'} />
+          </div>
       </div>
-          <h2>your Profile Picture:</h2>
           <h1 className='text-2xl font-bold text-center'>{data.fname} {data.lname}</h1>
           <p className='text-gray-600 text-center mb-4'>{data.email}</p>
          <div className='grid grid-cols-2 gap-4 bg-slate-500 p-4 rounded-lg'>
@@ -85,7 +88,6 @@ export default function Individualuser() {
         
             <div className='flex flex-wrap gap-3 mt-6 pt-4 border-t'>
             <Link to='edit'><ButtonComps values="Edit Profile" /></Link>
-            <Link to='profile-picture'><ButtonComps values="Add Profile Picture" /></Link>
             <Link to='resume'><ButtonComps values="Upload Resume" /></Link>
           </div>
               {data.is_employee && <ButtonComps values="You're a employee." />}

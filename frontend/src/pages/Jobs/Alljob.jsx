@@ -21,7 +21,7 @@ export default function Jobs() {
   }
   // const buttons=['1', '2', '3', '4', '5', '7']
   return (
-    <div className='grid w-screen'>
+    <div className='grid w-auto'>
     <div className='flex justify-center gap-24'>
       <Link to='search'>
       <ButtonComps values='Search Job' className='text-4xl' />
