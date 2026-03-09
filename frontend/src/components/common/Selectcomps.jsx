@@ -1,22 +1,22 @@
 import React from 'react'
 
-export default function Selectcomps({option, value, change, error}) {
+export default function Selectcomps({option, value, change, error, multiple}) {
   const changeOption=(e)=>{
     // (e)=>change((prev)=>({...prev, education: e.target.value}))
-    if(value){
+    if(multiple){
       change((prev)=>({...prev, value: e.target.value}))
     }
     else{
       change(e.target.value)
     }
-    error("")
+   error &&  error("")
   }
   return (
-    <select value={value} onChange={changeOption} className='bg-gray-300 text-black cursor-pointer'>
+    <select value={value} onChange={changeOption}   className='bg-neutral-700 text-white cursor-pointer p-3 border-none rounded-lg shadow-md hover:bg-neutral-600 focus:ring-2 focus:ring-blue-500 outline-none transition-all duration-200'>
       <>
       <option hidden>Select Option</option>
-      {option.map(o=>(
-        <option>{o}</option>
+      {option.map((o, i)=>(
+        <option className='mb-4 p-2 border rounded cursor-pointer' key={i}>{o}</option>
       ))}
       </>
     </select>

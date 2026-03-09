@@ -7,7 +7,7 @@ const isValidWebsite=(val)=>{
   }
 }
 
-const validateCompany= ({name, description, website})=>{
+const validateCompany= ({name, description, website, location, founded_year})=>{
   if(!name){
     return "Please Enter the Name."
   }
@@ -16,6 +16,12 @@ const validateCompany= ({name, description, website})=>{
   }
   if(!website){
     return "Please Enter the Website."
+  }
+  if(!founded_year){
+    return "Please Enter the Founded Year."
+  }
+  if(!location){
+    return "Please Enter the Location of Company."
   }
   if(name.length<2 || name.length>25){
     return "Name Can't be more than a 25 and less than 2 letter."

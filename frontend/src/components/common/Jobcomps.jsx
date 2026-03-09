@@ -6,10 +6,9 @@ import Textcomps from './Textcomps'
 export default function Jobcomps({uid, title, description, salary, job_type, total_job_views, skills, is_job_open, status,experience_years, company_name, applied_at}) {
   return (
      <div key={uid} className='bg-neutral-500  rounded-xl shadow-lg transition-shadow flex  justify-between items-start flex-col gap-3 border border-gray-200 p-8 min-h-auto w-82 '>
-          <Linkcomps content={'See Job'} to={`./${uid}`}/>
-          <Textcomps content={`Title: ${title}`} size='text-2xl'/>
+          <Linkcomps content={'See Job'} to={`/jobs/${uid}`}/>
           <div className='flex items-center gap-2'>
-       <Textcomps content={`Title: ${title}`} size='text-2xl'/>
+          <Textcomps content={`Title: ${title}`} size='text-2xl'/>
           {is_job_open !== undefined && (
             <span className={`text-xs px-2 py-1 rounded-full ${is_job_open ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'}`}>
               {is_job_open ? ' Open' : '○ Closed'}
@@ -31,8 +30,7 @@ export default function Jobcomps({uid, title, description, salary, job_type, tot
             </span>
           </div>
         )}
-          {total_job_views && <h2>Total Job Views: {total_job_views}</h2>}
-          {experience_years && <h2>Experience Years: {experience_years}</h2>}
+          {experience_years && <h2>Experience Years: {experience_years} years</h2>}
           {company_name && <h2>Company Name: {company_name}</h2>}
           {skills?.length > 0 && (
           <div className='flex flex-wrap gap-1 mt-2'>
