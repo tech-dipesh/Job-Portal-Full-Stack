@@ -72,7 +72,7 @@ export default function Singlecompany() {
         <ButtonComps values={!edit ? 'Edit Content': 'Escape Edit'}/>
       </div>
     {edit && 
-    <form onSubmit={editForm}>
+    <form onSubmit={editForm} className='w-full space-y-4 bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md'>
       <h3>Name</h3>
       <InputComps placeholder='Name' name='name' type='text' value={value.name} click={setValue} error={setError}/>
       <h3>Description</h3>

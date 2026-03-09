@@ -15,6 +15,7 @@ export default function Jobapplicant() {
       {loading && <div>Loading...</div>}
       {error && <div className='text-red-500'>{error}</div>}
       <h1>Who've applied so far on the role:</h1>
+      <div className='container grid grid-cols-2 gap-16 p-8'>
       {data && data.message.map(({applied_at, experience, full_name, resume_url, skills}, i)=>(
         <div className='p-4 bg-slate-300 text-black' key={i}>
             <h1>User Name: {full_name}</h1>
@@ -24,6 +25,7 @@ export default function Jobapplicant() {
             {skills && skills.map((skill, i)=><p key={i} className='text-gray-400 '>{skill}</p>)}
         </div>
       ))}
+    </div>
     </div>
   )
 }

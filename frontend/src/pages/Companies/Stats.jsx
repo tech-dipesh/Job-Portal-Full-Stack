@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import useFetchData from '../../hooks/useFetchData'
-import { companyStats, getCompanyEmployee } from '../../api/auth.companies'
+import { companyStats } from '../../api/auth.companies'
 import { useParams } from 'react-router';
 import Errorloading from '../../components/common/Errorloading';
 
@@ -11,6 +11,7 @@ export default function Stats() {
       execute(id)
   }, [id])
   const {message}=data || {}
+  console.log('message', message)
   return (
     <div>
       <h1>Company Stats.</h1>
