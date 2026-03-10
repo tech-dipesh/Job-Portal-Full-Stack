@@ -39,6 +39,7 @@ export const getloginUserController= async (req, res) => {
     const userVerified=await isUserVerifiedEmail(uid)
    const content={uid, role, company_id, userVerified};
    VerifyJwt(res, content)
+   console.log('rows', rows)
     return res.status(200).json(rows[0]);
   } catch (error) {
     (error)

@@ -16,5 +16,5 @@ await client.connect().then(t=>{
   (err)
   console.log('unable to connect')
 })
-
+export { client as connect };
 export default client;

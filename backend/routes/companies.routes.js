@@ -1,7 +1,7 @@
 import express from "express";
 import bcrypt, { hash } from "bcryptjs";
 import dataFetch from "../utils/tableDataFetch.js";
-import { companyDashBoard, companyStatsController, deleteCompanyController, getallApplicationsList, getAllCompaniesList, getAllEmployeesList, getAllJobsList, getCompanyController, postCompanyController, putCompanyController } from "../controllers/companies.controller.js";
+import { companyDashBoard, companyStatsController, deleteCompanyController, getallApplicationsList, getAllCompaniesList, getAllEmployeesList, getAllJobsList, getCompanyController, postCompanyController, putCompanyController} from "../controllers/companies.controller.js";
 import isCompanyEmployee from "../Middleware/isCompanyEmployee.js";
 import connect from "../db.js"
 import validateCorrectUid from "../Middleware/validateCorrectUid.js";

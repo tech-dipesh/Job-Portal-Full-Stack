@@ -399,6 +399,9 @@ for allow all teh credentiants now work.
 - now for uploading a feature of teh companies logo i've to change a lot but i will change it.
 - 
 - i've make the company dashboard to show a company all employees, total jobs like this.
+
+
+- for assing a any users to the cmopanies i've setup by 2 backend routes frirst search all the companies and then assing that companies to the any user that exist.
 # The Backend Project is finished on: 2026/02/26
 
 

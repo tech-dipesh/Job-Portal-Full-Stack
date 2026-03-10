@@ -145,9 +145,11 @@ export const getallApplicationsList=async (req, res)=>{
 
 export const companyDashBoard=async (req, res)=>{
   const {company_id}=req.user;
+  console.log('company', req.user)
   try {
     const {rows}=await connect.query( `select count(distinct j.uid) as total_jobs, count(distinct a.uid) as total_applications, count(distinct case when j.is_job_open ='active'then j.uid end) as open_jobs, count(distinct u.uid) as total_employees from jobs j left join applications a on j.uid = a.job_id left join users u on u.company_id = j.company_id where j.company_id = $1;`,
       [company_id])
+    
       return res.status(200).json({message: rows[0]})
     } catch (error) {
       return res.status(501).json({message: error.message})
