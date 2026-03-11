@@ -65,7 +65,14 @@ export default function EditJob() {
             click={setValue}
             error={setError} />
           <label htmlFor='description'>Description</label>
-          <InputComps placeholder='Description' name='description' type='text' value={value.description} click={setValue} error={setError} />
+          <InputComps placeholder='Description' 
+          name='description'
+          height='h-48'
+        type='text'
+         value={value.description} 
+         click={setValue} 
+         error={setError}
+          />
             <label htmlFor='salary'>Salary</label>
           <InputComps placeholder='Salary' name='salary' type='number' value={value.salary} click={setValue} error={setError} />
             <label htmlFor='skills'>Skills</label>

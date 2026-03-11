@@ -1,16 +1,20 @@
-import React from 'react'
+  import React, { useState } from 'react'
 import useFetchData from '../../hooks/useFetchData';
 import { getCompanyApplications, getCompanyJobs } from '../../api/auth.companies';
 import Errorloading from '../../components/common/Errorloading';
 import { useEffect } from 'react';
 import { Link, useParams } from 'react-router';
 import Applicationscomps from '../../components/common/applications/applicationscomps';
-
+import Selectcomps from "../../components/common/Selectcomps"
+import { ApplystatusOption } from '../../Data/OptionList';
+import Linkcomps from '../../components/common/Linkcomps';
+import SingleApplicationsCompanycomps from '../../components/common/company/SingleApplicationsCompanycomps';
 export default function Allapplications() {
   const {id}=useParams()
   const {data, error, loading, execute}=useFetchData(getCompanyApplications);
   useEffect(()=>{(async()=>execute(id))()}, [id])
   const {message}=data || {}
+  console.log('user', message)
   return (
     <div className='bg-neutral-700 min-h-screen p-8'>
       <Errorloading data={{error, loading}}/>
@@ -21,8 +25,8 @@ export default function Allapplications() {
       </div>
       <h1 className='text-white text-2xl font-bold mb-6'>All Applications</h1>
       <div className='grid grid-cols-3 gap-6'>
-      {message && message.map(({job_title, resume_url, status, total_job_views, applicant_id})=>(
-           <Applicationscomps job_title={job_title} resume_url={resume_url} total_job_views={total_job_views} status={status} applicant_id={applicant_id}/>
+      {message && message.map(({job_title, applicant_id, resume_url, status, total_job_views, job_id})=>(
+         <SingleApplicationsCompanycomps applicant_id={applicant_id} job_id={job_id} job_title={job_title} resume_url={resume_url} status={status} key={job_id}/>
       ))}
     </div>
     </div>

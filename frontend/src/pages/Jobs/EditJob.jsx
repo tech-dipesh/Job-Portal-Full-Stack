@@ -32,7 +32,7 @@ export default function EditJob() {
     }, [])
 
   if (errValue) {
-    return <div>{navigate("../../")}</div>
+    return <div>{navigate("../")}</div>
   }
    if(loading || submitload){
     return <Loading/>

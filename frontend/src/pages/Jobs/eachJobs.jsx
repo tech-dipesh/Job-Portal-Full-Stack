@@ -8,6 +8,7 @@ import isOwnerMiddleware from '../../../../backend/Middleware/isOwner';
 import Applyjob from '../Applications/Applyjob';
 import Loading from '../../components/Loading';
 import Errorloading from '../../components/common/Errorloading';
+import { useAuth } from '../../context/Authcontext';
 export default function EachJob() {
   const navigate = useNavigate()
   const [value, setValue] = useState({});
@@ -15,15 +16,14 @@ export default function EachJob() {
   const [error, setError]=useState()
   const { id } = useParams();
 
-  const { error:fetchErr, loading, execute } = useFetchData(individualJobs)
+  const {data}=useAuth()
+
+  const { data:fetchdata, error:fetchErr, loading, execute } = useFetchData(individualJobs)
   const { error: errabookmark, loading: loadabookmark, execute: bookmark } = useFetchData(bookMarkJob)
   const { error: removeerrbookmark, loading: loadremovebookmark, execute: removeBook } = useFetchData(removeBookmark)
   const { error: errdelete, loading: loaddelete, execute: deletes } = useFetchData(deleteExistingJobs)
   useEffect(() => {
-    ; (async () => {
-      execute(id).then(t => setValue(t))
-      setError(fetchErr)
-    })()
+    execute(id)
   }, [id])
 
   const saveJob = async () => {
@@ -31,8 +31,8 @@ export default function EachJob() {
     navigate(0)
   }
   const RemoveSavedJobs = async () => {
-    const data=await removeBook(id);
-    setSuccess(data?.message)
+    const output=await removeBook(id);
+    setSuccess(output?.message)
     navigate(0)
   }
   if (loading || loadabookmark || loadremovebookmark) {
@@ -42,7 +42,7 @@ export default function EachJob() {
     return <Errorloading data={{error: error || errabookmark}}/>
   }
   const { is_owner, is_save } = value || {};
-
+  const {role}=data ?? {}
   const deleteJob=async ()=>{
     const con=confirm("Are you really want to delete a job.");
     if(!con) return;
@@ -74,32 +74,34 @@ export default function EachJob() {
       );
     // }
   }
- if(loading){
+ if(loading || loaddelete ||loadabookmark){
   return <Loading/>
  }
     const valueButton = is_save  ? "Remove from Saved Jobs" : "Save Job";
     const clickFun = is_save ? RemoveSavedJobs : saveJob
+    console.log('data', fetchdata, fetchErr)
     return (
       <article>
-        {success && <div className='text-green-500'>{success}</div>}
+        <Errorloading data={{error: fetchErr}}/>
+        {fetchdata && 
         <div  className='bg-neutral-900 p-8 h-auto max-w-xl w-full mx-auto rounded-lg flex justify-center flex-col mt-10 space-y-3'>
-          <p>Job Id: {value.uid}</p>
-          <p className='text-xl font-semibold'>Title: {value.title}</p>
-          <p>Description: {value.description}</p>
-          <p>Job Type: {value.job_type}</p>
-          <p>Salary: {value.salary}</p>
-          <p>Total Job View: {value.total_job_views}</p>
-          <p>Experience: {value.experience_years}</p>
+          <p>Job Id: {fetchdata.uid}</p>
+          <p className='text-xl font-semibold'>Title: {fetchdata.title}</p>
+          <p>Description: {fetchdata.description}</p>
+          <p>Job Type: {fetchdata.job_type}</p>
+          <p>Salary: {fetchdata.salary}</p>
+          <p>Total Job View: {fetchdata.total_job_views}</p>
+          <p>Experience: {fetchdata.experience_years}</p>
           <div className='flex flex-wrap gap-2'>
             <span>Skills</span>
-            {value?.skills?.map((skill, i) => <span key={i} className='border-2 bg-slate-600 p-2 rounded-xl cursor-pointer flex flex-col gap-2'>{skill}</span>)}
+            {fetchdata?.skills?.map((skill, i) => <span key={i} className='border-2 bg-slate-600 p-2 rounded-xl cursor-pointer flex flex-col gap-2'>{skill}</span>)}
           </div>
-        {!is_owner &&  <span onClick={clickFun} className='flex gap-3 mt-4'><ButtonComps values={valueButton} /></span>  }
+        {(!is_owner && role=='guest') &&  <span onClick={clickFun} className='flex gap-3 mt-4'><ButtonComps values={valueButton} /></span>  }
         {showEditButton()}
         </div>
-        {error && <div className='text-red-500 mb-4'>{error}</div>}
+        }
         <div className='flex justify-end w-full'>
-    <Applyjob value={value.is_applied}/>
+      {role=='guest' && <Applyjob value={fetchdata.is_applied}/>}
   </div>
       </article>
     )

@@ -43,11 +43,11 @@ export default function Login() {
   return (
       <div className='grid md:grid-cols-2 grid-cols-1 items-center min-h-screen bg-slate-700 p-6'>
         <Registerleftcomps/>
-        <Successcomps data={data}/>
-        <Errorloading data={{loading}}/>
-        <Errorloading data={{error: error}}/>
-        <div className='border border-white/20 rounded-2xl p-6  flex flex-col gap-4 flex-1 self-stretch w-1/2'>
+        
+        <div className='border border-white/20 rounded-2xl p-6  flex flex-col gap-4 flex-1 self-stretch w-full'>
         <h1 className='font-semibold justify-center align-middle'>Welcome to Jobify.</h1>
+        <Successcomps data={data}/>
+        <Errorloading data={{error: error, loading}}/>
         <form onSubmit={submitForm} className='flex flex-col gap-4 align-middle'>
           <h2>Email</h2>
           <InputComps type='text' name='email' placeholder='Email' value={value.email} click={setValue} error={setError}/>

@@ -8,32 +8,28 @@ import { Link } from 'react-router'
 import ButtonComps from '../../components/common/Button'
 import Errorloading from '../../components/common/Errorloading'
 import Loading from '../../components/Loading'
+import Emptycomps from '../../components/Emptycomps'
 
 export default function AllBookmarks() {
   const [value, setValue]=useState()
-  const {error, loading, execute } = useFetchData(savedJobsList)
+  const {data, error, loading, execute } = useFetchData(savedJobsList)
   useEffect(()=>{
-      ;(async()=>{
-          await execute().then(t=>setValue(t?.message))
-      })()
+      execute()
     },[])
-     if(loading){
-      return <Loading/>
-     }
+    if(loading){
+    return <Loading/>
+    }
   return (
-    <div>
-      {!value?.length && (
-   <div className='text-center py-12 col-span-4'>
-        <p className='text-gray-500'>No bookmarks yet. Start saving jobs!</p>
-        <Link to='/jobs'><ButtonComps values='Browse Jobs' /></Link>
-      </div>
-    )}
+     <div className='min-h-screen bg-slate-900 text-white'>
+          <div className='max-w-7xl mx-auto px-6 py-10'>
+          <Emptycomps data={data?.message} type='Bookmarks'/>
       <div className='container grid grid-cols-4 margin-8'>
-      {value?.map(({uid, title, description, job_type, is_job_open, salary})=>(
+      {data && data?.message?.map(({uid, title, description, job_type, is_job_open, salary})=>(
         <Jobcomps uid={uid} title={title} description={description} job_type={job_type} is_job_open={is_job_open} salary={salary}/>
       ))}
     </div>
     <Errorloading data={{error, loading}}/>
+    </div>
     </div>
   )
 }
