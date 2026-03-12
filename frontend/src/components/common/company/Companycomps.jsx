@@ -23,7 +23,7 @@ export default function Companycomps({uid, resume_url, name, description, websit
 
   return (
     <div key={uid} className='bg-neutral-600  rounded-xl shadow-lg transition-shadow  hover:shadow-xl flex justify-between items-start flex-col gap-3 border border-gray-200 p-8 w-80 '>
-        {title && <Textcomps content={`Title: ${title}`} size='text-2xl'/>}
+        {title && <Textcomps content={`Title: ${title}`} style='text-2xl'/>}
         {name &&  <h2 className='line-clamp-2'>Name: {name}</h2>}
         <h2 className='line-clamp-2'>Description: {description}</h2>
         {job_type && <span className='bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm'>{job_type}</span>}

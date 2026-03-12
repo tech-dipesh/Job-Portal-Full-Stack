@@ -38,7 +38,7 @@ export const validateEditUser= ({fname, lname, education, email, experience, pas
   if (!emailRegex.test(email)) return "Invalid email format.";
   if(type=='edit'){
     if(!experience){
-      return "Please Enter a experience"
+      return "Please Enter a experience Years"
     }
     if(experience<0 || experience>35){
       return "Please Enter a valid experience Years."

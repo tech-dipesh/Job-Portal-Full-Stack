@@ -7,6 +7,7 @@ import { Link, useParams } from 'react-router';
 import Companycomps from '../../components/common/company/Companycomps';
 import Jobcomps from '../../components/common/Jobcomps';
 import Titlecomps from '../../components/common/Titlecomps';
+import ButtonComps from '../../components/common/Button';
 
 export default function AllCompanyJobs() {
   const {id}=useParams()
@@ -21,6 +22,7 @@ export default function AllCompanyJobs() {
   return (
   <div>
         <div className='px-8 pt-8 pb-4 border-b border-neutral-700'>
+        <Link to='../../dashboard'><ButtonComps values='Go Back'/></Link>
         <h1 className='text-4xl font-bold text-white'>All Company Jobs</h1>
         <p className='text-neutral-400 mt-1'>Browse all Jobs</p>
       </div>

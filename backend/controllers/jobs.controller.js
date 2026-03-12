@@ -6,15 +6,20 @@ const DATALIST=["uid", "title", "description", "salary", "job_type", "is_job_ope
 const router=express.Router();
 
 export const getAllListingController=async (req, res) => {
-  let {page, limit, sortby}=req.query;
-  limit=limit??10
-  page=page??1;
-  sortby=sortby??'created_at'
-  if(!DATALIST.includes(sortby)){
-    return res.status(401).json({message: "Please Add Only Avaible column list"});
+  let {page=1, limit=10, sortby='created_at'}=req.query;
+  const offset=(page-1)*limit;
+  try {
+    if(!DATALIST.includes(sortby)){
+      return res.status(401).json({message: "Please Add Only Avaible column list"});
+    }
+    const {rows: countTotal}=await client.query("select count(*) as count from jobs");
+    const {rows}=await client.query(`select * from jobs where is_job_open<>'closed' order by ${sortby} desc limit $1 offset $2`, [limit, offset])
+    console.log('hello world')
+    console.log('count ', countTotal)
+    return res.status(200).json({message: rows, limit, page, total: countTotal[0].count})
+  } catch (error) {
+    return res.status(500).json({message: error.message})
   }
-  const {rows}=await client.query(`SELECT * FROM jobs where is_job_open<>'closed' order by ${sortby} desc limit $1 offset $2`, [limit, page])
-  return res.status(200).json({message: rows, limit, page})
 };  
 
 export const searchJobsListing=async (req, res) => {
@@ -37,10 +42,12 @@ export const searchJobsListing=async (req, res) => {
 
 export const getListingController= async (req, res) => {
   const {id}=req.params;
-  const {uid}=req?.user;
-  console.log('id', id, 'uid', uid)
+  const {uid, company_id}=req?.user;
+  console.log(id)
+  console.log(uid)
+  console.log(company_id)
   try {
-    const {rows}=await client.query("select j.*,j.created_by=$1 is_owner,s.job_id is not null is_save,a.user_id is not null is_applied from jobs j left join saved_jobs s on j.uid=s.job_id and s.users_id=$1 left join applications a on j.uid=a.job_id and a.user_id=$1 where j.uid=$2 limit 1;", [uid, id]) 
+    const {rows}=await client.query("select j.*, j.company_id = $3 as is_owner, s.job_id is not null as is_saved, a.user_id is not null as is_applied from jobs j left join saved_jobs s ON j.uid = s.job_id and s.users_id = $1 left join applications a ON j.uid = a.job_id and a.user_id = $1 WHERE j.uid = $2 limit 1;;", [uid, id, company_id]) 
     if(rows.length===0){
       return res.status(404).json({message: "Id Doesn't exist that you're looking for"})
     }
@@ -53,25 +60,23 @@ export const getListingController= async (req, res) => {
 };
 
 export const postListingController= async (req, res) => {
-  let {title, description, job_type, salary, skills}=req.body;
+  let {title, description, job_type, salary, skills, experience_years}=req.body;
   const {company_id, uid}=req.user;
   // it's due to the client side sometimes send a cache data where it's sendint a string data even i've try.
   if (typeof skills === 'string') {
     skills = skills.split(',').map(skill => skill.trim());
 }
-  const allListing={title, description, job_type, salary, skills}
+  experience_years=experience_years ??0;
+  const allListing={title, description, job_type, salary, skills, experience_years}
   const validateListing=listingSchema.safeParse(allListing);
   if(!validateListing.success){
       const message=validateListing.error.issues.map(m=>m.message);
       return res.status(404).json({message: message[0]})
     }
-  if(!title || !description || !job_type || !salary){
-    return res.json({message: "Enter Value to Insert output"})
-  }
   try {
     // await client.query("Insert into Jobs (title, description, salary, job_type, company_id, updated_at) values ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)", [title, description, salary, job_type, company_id ])
-    const {rows}=await client.query("Insert into jobs (title, description, salary, job_type, company_id, created_by, skills) values ($1, $2, $3, $4, $5, $6, $7) returning uid", [title, description, salary, job_type, company_id , uid,  skills])
-   return res.status(200).json({message: rows[0].uid})
+    const {rows}=await client.query("Insert into jobs (title, description, salary, job_type, company_id, created_by, skills, experience_years) values ($1, $2, $3, $4, $5, $6, $7, $8) returning uid", [title, description, salary, job_type, company_id , uid,  skills, experience_years])
+   return res.status(200).json({message: rows[0]})
   } catch (error) {
    return res.json({message: error.message})
   }

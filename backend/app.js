@@ -67,5 +67,5 @@ app.use((err, req, res, next)=>{
 });
 
 app.listen(port, () => {
-  (`App is listening on the ${port}`);
+  console.log(`App is listening on the http://localhost:${port}`);
 });

@@ -17,7 +17,7 @@ export default function Edituser() {
   const [value, setValue] = useState({ fname: '', lname: '', education: '', email: '', experience: '' });
   const [error, setError]=useState("")
   const { execute: fetchUser, error: errorData, loading } = useFetchData(getIndividualUser);
-  const { execute: updateUser, error:patchError, loading: isUpdating } = useFetchData(patchIndivualUser);
+  const {data, execute: updateUser, error:patchError, loading: isUpdating } = useFetchData(patchIndivualUser);
   useEffect(() => {
     fetchUser(id)
     .then(data => {
@@ -31,9 +31,11 @@ export default function Edituser() {
     const err = validateEditUser(value, 'edit');
     if (err) return setError(err);
     await updateUser({ id, ...value });
-    setTimeout(() => {
-      navigate(-1)
-    }, 500);
+   if(data){
+     setTimeout(() => {
+       navigate(-1)
+      }, 500);
+    }
   };
    if(loading || isUpdating){
     return <Loading/>

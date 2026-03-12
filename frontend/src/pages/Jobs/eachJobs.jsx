@@ -9,9 +9,11 @@ import Applyjob from '../Applications/Applyjob';
 import Loading from '../../components/Loading';
 import Errorloading from '../../components/common/Errorloading';
 import { useAuth } from '../../context/Authcontext';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBookmark as solid } from '@fortawesome/free-solid-svg-icons'
+import { faBookmark as regular } from '@fortawesome/free-regular-svg-icons'
 export default function EachJob() {
   const navigate = useNavigate()
-  const [value, setValue] = useState({});
   const [success, setSuccess] = useState()
   const [error, setError]=useState()
   const { id } = useParams();
@@ -22,10 +24,10 @@ export default function EachJob() {
   const { error: errabookmark, loading: loadabookmark, execute: bookmark } = useFetchData(bookMarkJob)
   const { error: removeerrbookmark, loading: loadremovebookmark, execute: removeBook } = useFetchData(removeBookmark)
   const { error: errdelete, loading: loaddelete, execute: deletes } = useFetchData(deleteExistingJobs)
+  console.log('fetchdata', fetchdata)
   useEffect(() => {
     execute(id)
   }, [id])
-
   const saveJob = async () => {
     await bookmark(id).then(t => setSuccess(t?.message))
     navigate(0)
@@ -41,7 +43,6 @@ export default function EachJob() {
   if (error || errabookmark || removeerrbookmark) {
     return <Errorloading data={{error: error || errabookmark}}/>
   }
-  const { is_owner, is_save } = value || {};
   const {role}=data ?? {}
   const deleteJob=async ()=>{
     const con=confirm("Are you really want to delete a job.");
@@ -56,10 +57,10 @@ export default function EachJob() {
     }, 250);
     
   }
-  const showEditButton = () => {
-    // if (is_owner) {
-      const sendAllValue={uid: value.uid, title: value.title, description: value.description, job_type: value.job_type, salary: value.salary, skills: value.skills}
-      return is_owner && (
+  const ShowEditButton = () => {
+      const sendAllValue={uid: fetchdata.uid, title: fetchdata.title, description: fetchdata.description, job_type: fetchdata.job_type, salary: fetchdata.salary, skills: fetchdata.skills}
+      console.log('value is', )
+      return  (
         <>
         <div onClick={deleteJob}>
           <ButtonComps values="Delete Job" color='bg-red-500  '/>
@@ -67,9 +68,8 @@ export default function EachJob() {
         <Link to={`edit`} state={sendAllValue}>
           <ButtonComps values="Edit Job" />
         </Link>
-        <Link to={`../../applications/${value.uid}/applylist`} state={sendAllValue}>
-          <ButtonComps values="All applicant" />
-        </Link>
+        {/* <Link to={`../../applications/${fetchdata.uid}/applylist`} state={sendAllValue}> <ButtonComps values="All Jobs Applicant" /> </Link> */}
+        <Link to={`/companies/${fetchdata.company_id}/applications`} state={sendAllValue}> <ButtonComps values="All Jobs Applicant" /> </Link>
         </>
       );
     // }
@@ -77,9 +77,9 @@ export default function EachJob() {
  if(loading || loaddelete ||loadabookmark){
   return <Loading/>
  }
-    const valueButton = is_save  ? "Remove from Saved Jobs" : "Save Job";
-    const clickFun = is_save ? RemoveSavedJobs : saveJob
-    console.log('data', fetchdata, fetchErr)
+    const {job_data}=fetchdata ?? {}
+    const valueButton = job_data?.is_save  ? <FontAwesomeIcon icon={solid}/> : <FontAwesomeIcon icon={regular}/>;
+    const clickFun = job_data?.is_save ? RemoveSavedJobs : saveJob
     return (
       <article>
         <Errorloading data={{error: fetchErr}}/>
@@ -96,12 +96,13 @@ export default function EachJob() {
             <span>Skills</span>
             {fetchdata?.skills?.map((skill, i) => <span key={i} className='border-2 bg-slate-600 p-2 rounded-xl cursor-pointer flex flex-col gap-2'>{skill}</span>)}
           </div>
-        {(!is_owner && role=='guest') &&  <span onClick={clickFun} className='flex gap-3 mt-4'><ButtonComps values={valueButton} /></span>  }
-        {showEditButton()}
+        {(!fetchdata.is_owner && role=='guest') &&  <span onClick={clickFun} className='flex gap-3 mt-4'><ButtonComps values={valueButton} /></span>  }
+        {/* {showEditButton()} */}
+        {fetchdata && fetchdata?.is_owner && <ShowEditButton/>}
         </div>
         }
         <div className='flex justify-end w-full'>
-      {role=='guest' && <Applyjob value={fetchdata.is_applied}/>}
+      {role=='guest' && <Applyjob value={fetchdata?.is_applied}/>}
   </div>
       </article>
     )

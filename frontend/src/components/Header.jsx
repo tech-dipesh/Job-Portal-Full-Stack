@@ -7,6 +7,7 @@ import {faArrowRotateRight, faBars, faBriefcase, faMagnifyingGlass, faUser} from
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import reactIcons from "../assets/react.svg"
 import Linkcomps from './common/Linkcomps'
+import { GrUserAdmin } from 'react-icons/gr'
 export default function Header() {
   const navigate = useNavigate()
   const { execute } = useFetchData(logoutUser);
@@ -20,8 +21,8 @@ export default function Header() {
   const { data, reexecute } = useAuth();
   const { userVerified, uid, company_id, role } = data ?? {};
 
-  const allUserLinks = data ? (
-    uid ? [
+  const allUserLinks = data ? (role=='guest' ?
+     [
       {value: 'Visit Your Profile', link:`users/${uid}/profile`},
       {value: 'All Jobs', link:`/jobs`},
       {value: 'All Bookmarks', link:`/jobs/bookmarks`}
@@ -31,23 +32,24 @@ export default function Header() {
     ] : role=='recruiter'?[
       {value: 'Dashboard', link:`companies/dashboard`},
       {value: 'Create New Job', link:`jobs/new`},
-    ] :[
+    ] :[]
+  ):
+  [
       {value: 'Login', link:`/auth/login`},
       {value: 'Signup', link:`/auth/signup`}
     ]
-  ) : [];
+
 
   const userProfile=<>{
     uid && <div className='relative'>
               <FontAwesomeIcon icon={faUser}  onClick={() => setProfile(!profile)} size='2x' className='bg-slate-900 h-32 w-32 rounded-full cursor-pointer flex justify-center items-center'/>
-                
             {profile &&
               <nav className='absolute top-12 right-0 bg-gray-500 shadow-lg rounded-lg p-4 w-32 border z-50 justify-center'
               //  onClick={()=>setProfile(!profile)}
                >
-                <Linkcomps to={`/users/${uid}/profile`} content='Your Profile'/>
+                <span onClick={()=>setProfile(false)}><Linkcomps to={`/users/${uid}/profile`} content='Your Profile'/></span>
                 <FontAwesomeIcon icon={faArrowRotateRight}  onClick={()=>reexecute()} className='cursor-pointer justify-center'/>
-                <div className='block'>You're: {company_id ? <FontAwesomeIcon icon={faBriefcase} />: <FontAwesomeIcon icon={faMagnifyingGlass} /> }</div>
+                <div className='flex'><span className='px-2'>You're:</span><span className=''> {role=='recruiter' ? <FontAwesomeIcon icon={faBriefcase} />: role=='admin'?<GrUserAdmin/>: <FontAwesomeIcon icon={faMagnifyingGlass} /> }</span></div>
                 <Link to='/' onClick={LogoutPage} className='block py-2 text-red-600'>
                   Logout
                 </Link>
@@ -90,7 +92,7 @@ export default function Header() {
   return (
       <div className='mt-1 sticky top-0 z-50 md:w-screen sm:w-screen w-full overflow-y-visible flex justify-end items-center px-4 py-4 bg-neutral-700'>
         <header className='flex w-full overflow-y-visible font-semibold items-center justify-between'>
-          <Link to={'/'}><img src={reactIcons} alt="Profile"/></Link>
+          <Link to={'/'} onClick={()=>setProfile(false)}><img src={reactIcons} alt="Profile"/></Link>
           <div className='flex md:hidden items-center justify-center'>
            <div className='flex md:hidden items-center'>
             <FontAwesomeIcon icon={faBars} className='cursor-pointer text-white text-xl' onClick={()=>setIsMobileMenu(!isMobileMenu)}/>

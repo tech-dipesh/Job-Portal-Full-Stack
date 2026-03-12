@@ -2,4 +2,5 @@ export const EducationOption=["Basic", "High School", "Undergraduation", "Postgr
 
 export const JobtypeOption=["Remote", "Onsite", "Hybrid"]
 
-export const ApplystatusOption=["Applied", "Pending", "Interview", "Rejected"]
+export const ApplystatusOption=["Applied",  "Rejected", "Hired"]
+export const ApplyLowerCasestatusOption=["applied",  "rejected", "hired"]

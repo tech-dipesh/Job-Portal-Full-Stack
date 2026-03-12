@@ -79,7 +79,7 @@ export default function Home() {
             className='flex items-center gap-2 bg-slate-700/50 px-4 py-2 rounded-full border border-slate-600'
           >
             <span className='text-cyan-400 text-lg'>✓</span>
-            <Textcomps content={feature} className='text-slate-300' />
+            <Textcomps content={feature} style='text-slate-300' />
           </div>
         ))}
       </div>

@@ -13,6 +13,7 @@ import Benifits from '../../Data/Benifits';
 import Selectcomps from '../../components/common/Selectcomps';
 import { EducationOption } from '../../Data/OptionList';
 import Successcomps from '../../components/common/Success';
+import Registerleftcomps from '../../components/common/User/Registerleftcomps';
 
 export default function Signup() {
   const navigate=useNavigate()
@@ -43,19 +44,7 @@ export default function Signup() {
   }
   return (
     <div className='grid md:grid-cols-2 grid-cols-1 items-center min-h-screen bg-slate-700 p-6'>
-      <div className='p-6 md:p-16 space-y-4 flex justify-center flex-col'>
-      <h2 className='text-3xl font-bold text-gray-300 text-sm`'>Welcome to the signup page:</h2>
-      <div className="flex items-center gap-3">
-     <img src={reactIcons} alt='Icon' className="w-10 h-10"/>
-     <span className="text-2xl font-bold text-cyan-400">Jobify</span>
-    </div>
-      {Benifits.map((benefit, i)=>(
-        <div className="flex items-center gap-3" key={i}>
-     <span className="text-cyan-400 text-lg">✓</span>
-     <TextComps content={benefit}/>
-       </div>
-        ))}
-      </div>
+          <Registerleftcomps type='Login'/>
       <div className='bg-white/10 backdrop-blur m-8 rounded-2xl p-8 flex flex-col gap-4'>
       <form  onSubmit={submitForm} className='grid space-y-4'>
         <InputComps placeholder='First Name' type='text' name='fname' value={value.fname} click={setValue} error={setAPIError}/>
@@ -65,12 +54,14 @@ export default function Signup() {
         <InputComps placeholder='Password' type='password' name='password' value={value.password} click={setValue} error={setAPIError}/>
         <ButtonComps values='Submit' color='bg-cyan-500' text='text-black'/>
       </form>
+      <Errorloading data={{error: error || apiError, loading}}/>
+      {<Successcomps  data={data?.message}/>}
+      <span className='flex flex-col lg:flex-row justify-between'>
       <Link to='../forget-password'><ButtonComps values='Reset Your Password'/></Link>
-      <Link to='../login'><ButtonComps values='Login' color='bg-red-500'/></Link>
-       <Errorloading data={{error:apiError}}/>
-      {data && <Successcomps  data={data?.message}/>}
+      <Link to='../login' className='grid justify-items-center'><ButtonComps values='Login' color='bg-red-500'/></Link>
+      </span>
+       
       </div>
-      <Errorloading data={{error, loading}}/>
     </div>
   )
 }

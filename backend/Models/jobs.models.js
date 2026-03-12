@@ -12,6 +12,10 @@ const listingSchema=z.object({
     .min(25, {message: "Description Must be at least 25 characters"}),
   job_type:z
     .enum(allAvaibleJobType, {error: "Please Only Enter a Avaible Option such as, Onsite, Remote, Hybrid"}),
+  experience_years:z.coerce.
+    number({error: "PLease Enter a experience_years"})
+    .min(0, "Experience Years Can't be the negative Value.")
+    .max(50, "Upper Limit Reach Experience Years"),
   salary:z.coerce
     .number({message: "Please Enter a Salary for the Job Listing"})
     .min(2500, "Salary can't be less than 2500")

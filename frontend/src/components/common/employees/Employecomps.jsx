@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 export default function Employeecomps({ uid, full_name, email, experience, education, role, resume_url, profile_pic_url, applied_at, skills }) {
   return (
     <div key={uid} className='bg-neutral-600  rounded-xl shadow-lg transition-shadow flex justify-between items-start flex-col gap-3 border border-gray-200 p-8 w-80 '>
@@ -23,9 +24,12 @@ export default function Employeecomps({ uid, full_name, email, experience, educa
     {applied_at && <p className='text-sm text-neutral-800'>Applied on: {new Date(applied_at).toLocaleDateString()}</p>}
     {skills && skills.map((u, i) => <p key={i} className='bg-gray-200 text-gray-800 px-4 py-2 rounded-full text-sm font-medium'>{u}</p>)}
        {resume_url && 
-      <iframe src={resume_url} width="20%" height="200px">
+       <>
+       <span className="text-gray-200">View Resume</span>
+      <iframe src={resume_url} className="w-60 h-50">
   <p>Your browser does not support iframes. <a href={resume_url}>Download the PDF</a>.</p>
     </iframe>
+       </>
       }
     </div>
   )

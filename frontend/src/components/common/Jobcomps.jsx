@@ -5,10 +5,10 @@ import Textcomps from './Textcomps'
 
 export default function Jobcomps({uid, title, description, salary, job_type, total_job_views, skills, is_job_open, status,experience_years, company_name, applied_at}) {
   return (
-     <div key={uid} className='bg-neutral-500  rounded-xl shadow-lg transition-shadow flex  justify-between items-start flex-col gap-3 border border-gray-200 p-8 min-h-auto w-82 '>
-          <Linkcomps content={'See Job'} to={`/jobs/${uid}`}/>
+     <div key={uid} className='bg-neutral-500  rounded-xl shadow-lg transition-shadow flex  justify-between items-start flex-col gap-3 border border-gray-200 p-8 min-h-auto w-full'>
+          <Linkcomps content={'See Job'} to={`/jobs/${uid}`} className='md:text-2xl sm:text-2xl'/>
           <div className='flex items-center gap-2'>
-          <Textcomps content={`Title: ${title}`} size='text-2xl'/>
+          <Textcomps content={`Title: ${title}`} style='text-2xl'/>
           {is_job_open !== undefined && (
             <span className={`text-xs px-2 py-1 rounded-full ${is_job_open ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'}`}>
               {is_job_open ? ' Open' : '○ Closed'}

@@ -42,12 +42,10 @@ export default function Login() {
 
   return (
       <div className='grid md:grid-cols-2 grid-cols-1 items-center min-h-screen bg-slate-700 p-6'>
-        <Registerleftcomps/>
-        
+        <Registerleftcomps type={'Login'}/>
         <div className='border border-white/20 rounded-2xl p-6  flex flex-col gap-4 flex-1 self-stretch w-full'>
-        <h1 className='font-semibold justify-center align-middle'>Welcome to Jobify.</h1>
+        <h1 className='font-semibold justify-center align-middle'>Welcome Back To The Jobify.</h1>
         <Successcomps data={data}/>
-        <Errorloading data={{error: error, loading}}/>
         <form onSubmit={submitForm} className='flex flex-col gap-4 align-middle'>
           <h2>Email</h2>
           <InputComps type='text' name='email' placeholder='Email' value={value.email} click={setValue} error={setError}/>
@@ -55,13 +53,14 @@ export default function Login() {
           <InputComps type='password' name='password' placeholder='Password' value={value.password} click={setValue} error={setError}/>
         <button 
           type="submit" 
-          className='w-24 py-3 rounded-xl bg-cyan-500 text-black font-bold text-lg tracking-wide hover:bg-cyan-400 active:scale-95 transition-all duration-200 cursor-pointer'>
+          className='w-24 py-3 self-center rounded-xl bg-slate-800 text-white font-bold text-lg hover:bg-slate-900 transition-all duration-200 cursor-pointer'>
           Submit
         </button>
         </form>
-        <div className='flex gap-4 justify-between'>
+        <Errorloading data={{error: error, loading}}/>
+        <div className='grid grid-cols-1 lg:grid-cols-2 justify-items-center  gap-4 justify-between my-4 '>
         <Linkcomps to='../forget-password' content={<ButtonComps values="Can't sign in?" color='bg-red-500' text='text-white'/>}/>
-        <Linkcomps to='../signup' content={<ButtonComps values='Create an account' color='bg-red-500' text='text-white'/>}/>
+        <Linkcomps to='../signup' content={<ButtonComps values='Create an account' color={'bg-slate-800'} text='text-white'/>}/>
         </div>
         </div>
       </div>

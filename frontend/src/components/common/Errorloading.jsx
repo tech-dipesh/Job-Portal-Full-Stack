@@ -5,7 +5,7 @@ export default function Errorloading({data}) {
   const {error, loading}=data;
     return (
     <>
-      {error && <div className='text-red-500 text-xl justify-center'>{error}</div>}
+      {error && <div className='text-red-500 text-xl justify-center grid justify-items-center'>{error}</div>}
       {loading && <Loading/>}
     </>
   )

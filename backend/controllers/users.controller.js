@@ -38,7 +38,7 @@ export const getloginUserController= async (req, res) => {
     const userVerified=await isUserVerifiedEmail(uid)
    const content={uid, role, company_id, userVerified};
    VerifyJwt(res, content)
-    return res.status(200).jason(rows[0]);
+    return res.status(200).json(rows[0]);
   } catch (error) {
     (error)
     return res.status(500).json({message: error.message}) 
@@ -50,11 +50,12 @@ export const getParticularUserController=  async (req, res) => {
   const {id, company_id}=req.params;
   try {
     const { rows } = await connect.query("SELECT uid, profile_pic_url, fname, education, email, experience, resume_url, skills, company_id IS NOT NULL AS is_employee, uid AS job_uid FROM users WHERE uid =$1", [id]);
+    console.log('rows', rows)
     if(!rows) return res.status(404).json({message: "Please Enter Correct Uid"})
     return res.status(200).json(rows[0]);
   } catch (error) {
-    (error)
-    return res.status(500).json({message: error})
+    console.log(error)
+    return res.status(500).json({message: error.message})
   }
 };
 
@@ -140,7 +141,6 @@ export const addUserSkills=async (req, res)=>{
 
 export const putUserController= async(req, res) => {
    const {id}=req.params;
-
   const {fname, lname, education, email, password }=req.body;
    const allUser={fname, lname, education, email, password}
     const validateuser=userSchema.safeParse(allUser);
@@ -154,10 +154,9 @@ export const putUserController= async(req, res) => {
   try {
     await connect.query("update users set fname=$1, lname=$2, education=$3, email=$4 where uid=$5", [fname, lname, education, email, id, password])
     const data=await tableDataFetch('users')
-    (data)
     res.status(200).json(data)
   } catch (error) {
-    (error)
+    console.log(error)
     res.status(500).json(error)
   }
 };
@@ -181,7 +180,8 @@ export const patchUserController= async(req, res)=>{
     const {rows}=await connect.query(`select * from users WHERE uid=$1`, [id]);
     return res.status(201).json(rows[0])
   } catch (error) {
-    return res.status(402).json({message: error.message})
+    console.log(error)
+    return res.status(502).json({message: error.message})
   }
 }
 

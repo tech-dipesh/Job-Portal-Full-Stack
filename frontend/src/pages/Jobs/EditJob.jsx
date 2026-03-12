@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import useFetchData from '../../hooks/useFetchData'
-import { individualJobs, isUserOwnedRoute, updateExistingJobs } from '../../api/auth.job'
+import { individualJobs, updateExistingJobs } from '../../api/auth.job'
 import { useLocation, useNavigate, useParams } from 'react-router'
 import InputComps from '../../components/common/Input'
 import ButtonComps from '../../components/common/Button'

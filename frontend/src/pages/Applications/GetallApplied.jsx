@@ -7,6 +7,9 @@ import { ApplystatusOption } from '../../Data/OptionList'
 import { Link } from 'react-router'
 import ButtonComps from '../../components/common/Button'
 import Loading from '../../components/Loading'
+import Textcomps from '../../components/common/Textcomps'
+import Errorloading from '../../components/common/Errorloading'
+import Emptycomps from '../../components/Emptycomps'
 
 export default function GetallApplied() {
   const {data, error, loading, execute}=useFetchData(getAllAppliedJobs)
@@ -19,9 +22,9 @@ export default function GetallApplied() {
     return <Loading/>
    }
   return (
-    <div>
-      {error && <div className='text-red-500'>{error}</div>}
-      <h1>Get All Applied Jobs:</h1>
+    <div className='my-5 mx-3'>
+      <Errorloading data={{error, loading}}/>
+      <Emptycomps data={filter} type={'Applied Jobs'}/>
       <Selectcomps option={ApplystatusOption} value={application} change={setApplication}/>
       <span onClick={()=>setApplication("")}><ButtonComps values='Clear Filter'/></span>
       {!filter && (

@@ -93,13 +93,61 @@
 
   - also makre sure i added a 2 exrta info on teh companies of locationand the founded_year,
 - i've ad the loading feature and update to the every page.
+- alter my postgres table with add the role types to `recruiter`
+
 
   ## More:
   - for the line truncation of the any content or split a line we can use: `line-clamp-2`
   - add the better ui of the resume and profle picture.
   - it has both method of the pagination and also the deobounce method for the searching.
+  - i've add the assignUserToCompanies with three api interact with the backend, .
+  - also make sure hav ethe interacperts or middleware which we can called the outlet that on teh isAdmin, isOwnedUser, and isLoggedinUser so that user can only redirect to routes that they have access.
+  - with i make sure it have some level of responsive design nto that depth but very basic should not broke something when user ivsit fro the mobile.
+  - now the next features that i'm planing is two features: `the companies person can change the user applied status and also will implement teh socket io features for real time notification system.`
+  - implement hte fature of the company owener person can change the status of user applied.
+
+## The Card Stylying:
+```html 
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+  <div class="rounded-lg bg-slate-700 p-6">
+    <h2 class="mb-2 text-xl font-semibold text-gray-800">Value</h2>
+  </div>
+```
+
+- the: `mx-auto or self-center` make a center content on the flex.
+
+
+## Ui Upgrade:
+  Done Following Ui Upgrade on the page
+with i make sure that if the role is recutier it must have company_id then is not null.
+  - with all owned jobs i've improve some minor ui.
+  - make the dashboard to cente of all teh contnt.
+  - with make all jobs applicant point to the correct area.
+  - and the header option should see a valid option.
+  - add the go back option to all 3 page on the dashboar page.
+  - make sure to have a valid status option and user can change a status.
+  - repsonsive page of teh all application status.
+  - fix the company employees with also minor change on thee empty comps and add a back option 
+  - i've not added the experince years field on teh new job and also the job type which i missed now i'm adding.
+  - the new job will have the compelelty different ui which i've make the prototype and worked around that.
+  - entire new jobs system have with the best uid.
+  - all applied jobs user site, is better top bar with empty comps add.
+  - add the icoicons of the admin icons from react icons.
+  - empty comps on the job applicant add.
+  - make the w-82 to full as it's need to take full space and giving a gap.
+  - where on the header if i click on profile or homepage that popup bar should be closed.
+  - both the login and the signup button broken is fix with single line two line from the repsonsive design.
+  - which login signup page is not coming when user it not loggd in the header which also i fix that.
+  - for i've to login again twic eis the minor spell error of: `jaon` which i've not noticed. 
+  - i've make a empty comps of the two liner on the mobile phone.
+  - get all applied ui is now make a repsonsive page.
+  - with the page limti and the offest i've able to make the pagination system with very good thining.
+  
+
   ## Libraries Used:
   1. axios: for data fetching:
   2. tailwindcss: for styling
   3. fontaswesome: for adding a icons
   4. react-spinners for the loading icon.
+  5. react icons adding some not have font aweome icon.
+  

@@ -70,8 +70,9 @@ export const changeApplicationStatus=async (req, res)=>{
     if(rows.length==0){
       return res.status(422).json({message: "You've Not Applied Please First Apply."})
     }
+    console.log('status is', status, 'rows is', rows[0].status)
     if( rows[0].status==status){
-     return res.status(401).json({message: "You've Already Applied"})
+     return res.status(401).json({message: "Please Change the Application Status"})
    }
     await connect.query("update applications set status=$1 where user_id=$2 and job_id=$3", [status, user_id, job_id])
     return res.status(201).json({message: "Application Status Updated Successfully"});

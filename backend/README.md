@@ -406,8 +406,19 @@ for allow all teh credentiants now work.
 >:warning: today i only know that on the bruno i can make the baseurl with: `{{base-url}}`.
 - i've face one problem of zod validation as status comes on teh normal case but i want the lower case which i've to use teh preprocesser.
 
+- add the backend system where on the users if the any perosn is the recruiter we it must have to add teh company_id with db constraint.
 
 - for assing a any users to the cmopanies i've setup by 2 backend routes frirst search all the companies and then assing that companies to the any user that exist.
+- previously i've not added the experience_years and the location on the new jobs, now i'm adding a experinece_year and the location which are missing.
+## Pagination:
+- with on teh pagination logic now i don't need to check i can pass the default value if not exist.
+- also i can send a total length tot the database so that frontend can know how many data are there.
+- which i need only offset to send a data and based on the page it can check a data.
+- i've finally implement the load more features with the page limit and the offeset.
+
+
 # The Backend Project is finished on: 2026/02/26
+
+
 
 

@@ -19,8 +19,7 @@ export default function Companydashboard() {
   if(error=="You're not a employee of the company"){
     return navigate("/")
   }
-  console.log('data', data)
-  const {company_id, userVerified, role}=authdata ?? {};
+  const {company_id, uid, role}=authdata ?? {};
   const {message}=data || {}
   return (
     <div>
@@ -39,13 +38,14 @@ export default function Companydashboard() {
       }
       <Errorloading data={{error:errdata, loading:loaddata}}/>
       <Errorloading data={{error, loading}}/>
-        {role==='admin' ?
-        <span className='grid grid-cols-2 my-4 gap-4'>
+        {(role && role==='admin') ?
+        <span className='grid grid-cols-1 lg:grid-cols-2 my-4 gap-4'>
         <Link to='/companies/all'><ButtonComps values='All Companies'/></Link>
         <Link to='/companies/new'><ButtonComps values='New Company'/></Link>
         <Link to={`/admin/users/all`}><ButtonComps values='All Users'/></Link>
         </span>:
-        company_id ? <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6'>
+        role=='recruiter' ?
+         <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 justify-items-center gap-4 mt-6'>
           <Link to={`/companies/${company_id}/jobs`}><ButtonComps values='All Owned Jobs'/></Link>
           <Link to={`/companies/${company_id}/applications`}><ButtonComps values='All Applications'/></Link>
           <Link to={`/companies/${company_id}/users/all`}><ButtonComps values='All Employees'/></Link>
