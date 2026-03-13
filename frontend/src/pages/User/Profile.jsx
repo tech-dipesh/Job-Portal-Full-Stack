@@ -11,91 +11,64 @@ import defaultImage from "../../assets/default-image.webp"
 import Linkcomps from "../../components/common/Linkcomps"
 import Loading from '../../components/Loading';
 import Errorloading from "../../components/common/Errorloading"
+import Popup from '../../components/Popup';
+import PostSkills from '../../components/common/User/PostSkills';
+import Buttoncomps from '../../components/common/Button';
+import {useAuth} from "../../context/Authcontext"
 export default function Individualuser() {
   const navigate = useNavigate();
   const { id } = useParams();
-  const [isSkillsOpen, setIsSkillOpen] = useState(false)
-  const [error, setError] = useState("")
-  const [skill, setSkills] = useState()
-
-
+  const {data:user}=useAuth()
   const { data, loading, error: err, execute } = useFetchData(getIndividualUser);
-  const {data: profileData, error:skilllerr, execute: addprofile}=useFetchData(postUserSkills)
   useEffect(() => {
-    ; (async () => {
-      await execute(id);
-    })()
-  }, [])
+       execute(id);
+  }, [id])
 
   const isValid = authUid(id);
-  if (!isValid) return <div>Incorrect uid please enter correct uid</div>
-  const submitSkill = async (e) => {
-    e.preventDefault()
-    const err = validateText(skill);
-    console.log('err', err)
-    if (err) {
-      return setError(err)
-    }
-  
-   const res= await addprofile({id, skill})
-   if(res){
-     setTimeout(() => {
-       navigate(0)
-      }, 50);
-      return;
-    }
-    if(skilllerr){
-      setError(skilllerr)
-    }
+  if (!isValid) return <Errorloading data={{ error: 'Incorrect uid please enter correct uid' }} />
+  if (loading) {
+    return <Loading />
   }
-   if(loading){
-  return <Loading/>
- }
- console.log('error, ', error)
+  console.log('data', data)
+  const { profile_pic_url, fname, lname, email, education, experience_years, resume_url, skills } = data || {}
+  const splitUrl=resume_url?.split("/");
+  const originalName=splitUrl[splitUrl?.length-1];
+
   return (
     <div className='max-w-3xl mx-auto p-6 space-y-6'>
       {data &&
-        <div>
+        <div className='grid'>
           <div className='flex justify-center mb-4'>
-          <img src={data.profile_pic_url || defaultImage} alt='profile' 
-            className='h-32 w-32 rounded-full object-cover border-4 border-gray-300 shadow-lg' />
-            <div className='grid justify-center mt-4'>
-            <Linkcomps content={'Change Photo'} to={'profile-picture'} />
+            <img src={profile_pic_url || defaultImage} alt='profile'
+              className='h-32 w-32 rounded-full object-cover border-4 border-gray-300 shadow-lg' />
           </div>
-      </div>
-          <h1 className='text-2xl font-bold text-center'>{data.fname} {data.lname}</h1>
-          <p className='text-gray-600 text-center mb-4'>{data.email}</p>
-         <div className='grid grid-cols-2 gap-4 bg-slate-500 p-4 rounded-lg'>
-          <span className='font-semibold'>Education:</span> {data.education}</div>
-        <div><span className='font-semibold'>Experience:</span> {data.experience_years ?? '0'} years
-      </div>
-          <h3>Profile Pic url: {data.profile_pic_url ?? 'none'}</h3>
-          {data.profile_pic_url &&
-          <Link to={data.resume_url} target='_blank' className='text-blue-300 underline'> {data.resume_url}</Link>
-        }
-          <h4>Skills:</h4>
-          <div className='flex flex-wrap  gap-2 text-gray-400 text-2xl'>
-            {!data.skills?.length && <div className="text-gray-400">No skills added</div>}
-            <div className='flex flex-wrap gap-2 my-4'>
-            {data.skills && data.skills.map((u, i) => <p key={i} className='bg-gray-200 text-gray-800 px-4 py-2 rounded-full text-sm font-medium'>{u}</p>)}
+          <span className='grid justify-center mt-4'> <Linkcomps to={'profile-picture'} content={<ButtonComps values='Change Photo' />}></Linkcomps></span>
+          <div className='grid justify-center mb-4'>
+            <h1 className='text-2xl font-bold text-center transition-colors'>{fname} {lname}</h1>
+            <span className="px-3 py-1 text-sm bg-blue-600 rounded-full text-white">{user?.role=='guest'? 'Job Seeker':user?.role=='admin'?'Admin':'Recruiter'}</span>
+            <p className='text-gray-600 text-center mb-4'>{email}</p>
+            <Textcomps content={`Education: ${education}`} />
+            <Textcomps content={`Experience: ${experience_years ?? '0'} years`} />
+            <span className='my-4 justify-center grid cursor-pointer'> <Linkcomps to={'profile-picture'} content={<ButtonComps values='Edit Profille' />}></Linkcomps></span>
+          </div>
+          <div className='flex flex-wrap just align-middle gap-2 text-gray-400 text-2xl'>
+            <h4>Skills:</h4>
+            {(!skills || skills.length == 0) && <div className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg text-sm font-medium">No skills added</div>}
+            <div className='grid grid-cols-3 lg:grid-cols-4 gap-2'>
+              {skills && skills.map((u, i) => <p key={i} className='bg-gray-200 text-gray-800 px-4 py-2 rounded-lg text-sm font-medium'>{u}</p>)}
             </div>
           </div>
-        <Errorloading data={{error:error || err}}/>
-          <h3>Add User Skills:</h3>
-          <div onClick={() => setIsSkillOpen(!isSkillsOpen)}><ButtonComps values={isSkillsOpen ? 'Escape Skills': 'Add Skills'} /></div>
-          {isSkillsOpen &&
-          <>
-            <form className='flex gap-2 items-center mt-2' onSubmit={submitSkill}>
-          <Inputcomps placeholder='New Skill' type='text' error={setError} click={setSkills} value={skill}/>
-          <ButtonComps values='Add'/>
-        </form>
-          </>  }
-        
-            <div className='flex flex-wrap gap-3 mt-6 pt-4 border-t'>
-            <Link to='edit'><ButtonComps values="Edit Profile" /></Link>
-            <Link to='resume'><ButtonComps values="Upload Resume" /></Link>
-          </div>
-              {data.is_employee && <ButtonComps values="You're a employee." />}
+          <Popup id={id} navigate={navigate} content={"Add Skills"}/>
+          <Errorloading data={{ error: err }} />
+
+          <div className='flex flex-wrap gap-3 mt-6 pt-4 border-t'>
+            <Textcomps content={'Resume'}/>
+            {resume_url ? <Textcomps  style={'text-red-500'} content={'No Resume Added Please First Add the Resume'}/>: <Textcomps content={originalName}/>}
+            <div className='flex gap-6'>
+              {resume_url && <Linkcomps content={'View Resume'} to={resume_url}/>}
+              <Link to='resume'><Buttoncomps values="Upload Resume" /></Link>
+            </div>
+            </div>
         </div>
       }
     </div>

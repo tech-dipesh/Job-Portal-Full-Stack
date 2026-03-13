@@ -143,7 +143,23 @@ with i make sure that if the role is recutier it must have company_id then is no
   - i've make a empty comps of the two liner on the mobile phone.
   - get all applied ui is now make a repsonsive page.
   - with the page limti and the offest i've able to make the pagination system with very good thining.
-  
+  - - add the go back to login page on the reste password page. which i also add to the each jobs.
+  - with the apply jobs i've chanage hte entire loooks of the page, and now i'm trying to fix a problem inside a edit job.
+  - also update the edit jobs which have the logical error not all value are there.
+  - with edit jobs also finished now lets' see other content to fix.
+  - with both applie jobs and withdra jobs i've both make a logic for that.
+  - with the each jobs page become a very good ui,
+  - now i will make the page of responseive of the each page.
+  - with the apply jobs and withdraw and all applied list also comes on the center of the page.
+  - with backend where i've nto send a request on the withdraw and appply and also on the update jobs i've nto setup a location and experience years i've setup all that.
+
+
+## Portal:
+- as for the popup which is the major problem of the posotion indexing which is the better solution of the portal.
+- which portal will have the separate html index contnet we just wrap everything to that.
+- with following three step process: `return createPortal(<div/>, document.getelementById("portal"))` 
+  - ```html <div id='portal'/>```
+
 
   ## Libraries Used:
   1. axios: for data fetching:

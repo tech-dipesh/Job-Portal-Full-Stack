@@ -80,7 +80,8 @@ export default function Applyjob({ data: children, execute: reexecute }) {
       <div className='flex items-center justify-between relative'>
         <div className=' flex justify-center align-middle'>
           {is_owner ?
-            <div className='flex gap-6  mt-4 items-center justify-center'>
+            // <div className='grid justify-items-center mx-auto lg:flex gap-6  my-4 items-center lg:justify-center'>
+            <div className='gap-8 space-x-8 lg:space-x-38 '>
               <Link to={`/companies/${company_id}/applications`} className='flex-1'>
                 <ButtonComps values='Applicants' color='bg-slate-600' />
               </Link>

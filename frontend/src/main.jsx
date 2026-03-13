@@ -38,6 +38,7 @@ import Editcompany from './pages/Admin/Editcompany'
 import Isadmin from './components/auth/Isadmin'
 import Assignusertocompanies from './pages/Admin/Assignusertocompanies'
 import IsOwnerandloggedIn from './components/auth/isOwnerAndLoggedIn'
+import Popup from './components/Popup'
 const router = createBrowserRouter([
   {
     path: "/",
@@ -168,6 +169,10 @@ const router = createBrowserRouter([
           element: <Assignusertocompanies/>
         },
       ]
+      },
+      {
+        path: "test",
+        element: <Popup/>
       }
     ]
   }]);
