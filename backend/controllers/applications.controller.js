@@ -24,17 +24,18 @@ export const particularJobsListController=async(req, res)=>{
   }
 }
 export const applyJobApplicationController=async (req, res)=>{
+  const {uid}=req.user;
   const {id: job_id}=req.params;
-  const {uid: user_id}=req.user;
+
   try {
-    const {rowCount, rows: appliedList}=await connect.query("select job_id, status from applications where user_id=$1 and job_id=$2", [user_id, job_id])
+    const {rowCount, rows: appliedList}=await connect.query("select job_id, status from applications where user_id=$1 and job_id=$2", [uid, job_id])
     if(rowCount>0 && appliedList[0].status=='applied'){
       return res.status(401).json({message: "You've Already Applied"})
     }
-    await connect.query("insert into applications (user_id, job_id, status) values ($1, $2, 'applied')", [user_id, job_id, status])
+    await connect.query("insert into applications (user_id, job_id, status) values ($1, $2, 'applied')", [uid, job_id])
     return res.status(201).json({message: "You've Successfully applied to the role."})
   } catch (error) {
-    (error)
+    return res.status(500).json({message: error.message})
   }
 }
 
@@ -42,11 +43,16 @@ export const applyJobApplicationController=async (req, res)=>{
 
 export const withdrawJobApplicationController= async (req, res)=>{
   const {id: job_id}=req.params;
+  const {uid}=req.user;
   try {
-    await connect.query("delete from applications where job_id=$1", [job_id])
+    const {rows}=await connect.query("select exists(select 1 from applications where job_id=$1 and user_id=$2);", [job_id, uid]);
+    if(!rows[0].exists){
+      return res.status(204).json({message: "No id Data Exist"})
+    }
+    await connect.query("delete from applications where job_id=$1 and user_id=$2", [job_id, uid])
     return res.status(204).json({message: 'Successfully Withdraw from applications'});
   } catch (error) {
-    res.status(401).json({message: "Invalid Id Please Try With Correct credentials"})
+    res.status(500).json({message: error.message})
   }
 }
 
@@ -70,7 +76,6 @@ export const changeApplicationStatus=async (req, res)=>{
     if(rows.length==0){
       return res.status(422).json({message: "You've Not Applied Please First Apply."})
     }
-    console.log('status is', status, 'rows is', rows[0].status)
     if( rows[0].status==status){
      return res.status(401).json({message: "Please Change the Application Status"})
    }

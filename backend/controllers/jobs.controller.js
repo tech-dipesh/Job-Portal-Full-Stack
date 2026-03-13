@@ -14,10 +14,9 @@ export const getAllListingController=async (req, res) => {
     }
     const {rows: countTotal}=await client.query("select count(*) as count from jobs");
     const {rows}=await client.query(`select * from jobs where is_job_open<>'closed' order by ${sortby} desc limit $1 offset $2`, [limit, offset])
-    console.log('hello world')
-    console.log('count ', countTotal)
     return res.status(200).json({message: rows, limit, page, total: countTotal[0].count})
   } catch (error) {
+    console.log(error)
     return res.status(500).json({message: error.message})
   }
 };  
@@ -43,9 +42,6 @@ export const searchJobsListing=async (req, res) => {
 export const getListingController= async (req, res) => {
   const {id}=req.params;
   const {uid, company_id}=req?.user;
-  console.log(id)
-  console.log(uid)
-  console.log(company_id)
   try {
     const {rows}=await client.query("select j.*, j.company_id = $3 as is_owner, s.job_id is not null as is_saved, a.user_id is not null as is_applied from jobs j left join saved_jobs s ON j.uid = s.job_id and s.users_id = $1 left join applications a ON j.uid = a.job_id and a.user_id = $1 WHERE j.uid = $2 limit 1;;", [uid, id, company_id]) 
     if(rows.length===0){
@@ -101,18 +97,15 @@ export const deleteListingController= async (req, res) => {
 
 export const putListingController= async (req, res) => {
   const {id}=req.params;
-  let {title, description, job_type, salary, skills}=req?.body;
-   if(!title || !description || !job_type || !salary || !skills){
-    return res.json({message: "Please Enter All Values."})
-  }
-  const allListing={title, description, job_type, salary, skills}
+  let {title, description, job_type, salary, skills, experience_years, location}=req?.body;
+  const allListing={title, description, job_type, salary, skills, experience_years, location}
   const validateListing=listingSchema.safeParse(allListing);
   if(!validateListing.success){
     const message=validateListing.error.issues.map(m=>m.message);
     return res.status(404).json({message: message[0]})
   }
   try {
-    await client.query("update jobs set title=$1, description=$2, job_type=$3, salary=$4, skills=$5 where uid=$6", [title, description, job_type, salary, skills, id])
+    await client.query("update jobs set title=$1, description=$2, job_type=$3, salary=$4, skills=$5, location=$6 where uid=$7", [title, description, job_type, salary, skills, location, id])
     const {rows}=await client.query("select * from jobs where uid=$1", [id])
     if(!rows){
       return res.status(404).json({message: "Please Enter Id For Get a information"})
@@ -126,9 +119,9 @@ export const putListingController= async (req, res) => {
 
 export const verifyOwnerController=async(req, res)=>{
   const {id}=req.params;
-  const {uid}=req.user;
+  const {company_id}=req.user;
   try {
-    const {rows}=await client.query("select exists ( select 1 from jobs where uid = $1 and created_by = $2);", [id, uid])
+    const {rows}=await client.query("select exists ( select 1 from jobs where uid = $1 and company_id = $2);", [id, company_id])
     if(!rows[0].exists){
         return res.status(401).json({message: "You Don't have access to routes."})
     }

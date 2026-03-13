@@ -9,7 +9,8 @@ import Errorloading from '../../components/common/Errorloading'
 import Success from '../../components/common/Success'
 import validateCode from '../../auth/User/Validatecodeemail'
 import Successcomps from '../../components/common/Success'
-import { useNavigate } from 'react-router'
+import { Link, useNavigate } from 'react-router'
+import Buttoncomps from '../../components/common/Button'
 export default function Resetpassword() {
   const [email, setEmail] = useState("")
   const [value, setValue] = useState("")
@@ -50,6 +51,8 @@ export default function Resetpassword() {
   }
   const { message } = data ?? '';
   return (
+    <>
+      <Link to='../login' className='relative align-middle justify-items-center'><Buttoncomps values='Go Back To Login'/></Link>
     <article className='min-h-screen flex items-center justify-center px-4'>
       <div className='w-full max-w-md bg-slate-700 border border-slate-600 rounded-2xl flex flex-col gap-6 p-8'>
         <Success data={message} />
@@ -110,5 +113,6 @@ export default function Resetpassword() {
           <Errorloading data={{ error }} />
         </div>
     </article>
+    </>
   )
 }

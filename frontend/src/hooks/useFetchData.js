@@ -15,7 +15,6 @@ export default function useFetchData(fetchFn) {
       return data;
     } catch (err) {
       const {response, message}=err;
-      console.log('err', response)
       const msg = response?.data?.message || message || "Network Error";
       setState({ data: null, error: msg, loading: false });
       return null;

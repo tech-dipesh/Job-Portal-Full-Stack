@@ -8,6 +8,7 @@ const isCompanyEmployee = async (req, res, next) => {
   if(role=='guest'){
     return res.status(403).json({message: "You're not a employee of the company"});
   }
+  
   next();
 };
 

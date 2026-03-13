@@ -115,6 +115,7 @@
 ```
 
 - the: `mx-auto or self-center` make a center content on the flex.
+- with i add teh confirmation like any page with the dialog bar with the: `fixed inset-0 top-0 flex` make the top of the page 
 
 
 ## Ui Upgrade:

@@ -22,7 +22,10 @@ const listingSchema=z.object({
     .max(2500000, "Salary can't be more than 25000000"),
   skills:z
     .array(
-      z.string(),{error: "Please Enter Skills"})
+      z.string(),{error: "Please Enter Skills"}),
+  location:z.coerce
+      .string({error: "Please Enter  a Location"})
+      .min(3,{message: "Location Must be the 3 Leters."})
 })
 
 

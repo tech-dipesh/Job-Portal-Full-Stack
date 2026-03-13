@@ -8,6 +8,7 @@ import { useLocation, useNavigate } from "react-router"
 import useFetchData from '../../hooks/useFetchData';
 import Errorloading from '../../components/common/Errorloading';
 import Successcomps from '../../components/common/Success';
+import { useEffect } from 'react';
 
 export default function VerifyEmail() {
   const [value, setValue] = useState();
@@ -21,6 +22,10 @@ export default function VerifyEmail() {
   const {state}=useLocation();
   const {error:apierror, loading, data, execute}=useFetchData(verifyUser);
   const {error:apiresend, loading:loadresend, data:resenddata, execute:resendexecute}=useFetchData(resendVerificationCode);
+  
+  useEffect(()=>{
+ if(data) navigate(state?.from || "../")
+},[data])
   const verifyYourMail = async (e) => {
     e.preventDefault();
     const err=validateVerifyMail(value);
@@ -30,9 +35,6 @@ export default function VerifyEmail() {
     }
   
    await execute(value)
-    if(data){
-      navigate(state.from || '../')
-    }
   }
 
   

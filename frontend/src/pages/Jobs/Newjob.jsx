@@ -72,10 +72,6 @@ export default function EditJob() {
             </div>
             <div className='flex flex-col gap-1.5'>
               <label className='text-xs text-slate-400'>Description *</label>
-              {/* <InputComps placeholder=''
-                height={'h-36'}
-                name='description' type='text'
-                value={value.description} click={setValue} error={setError} /> */}
               <textarea className={`bg-transparent max-h-36 min-h-36 w-full rounded-lg text-white focus:outline-none placeholder-gray-400 ring-2 px-2  ring-gray-500 `} placeholder='Eg:Explain Requirements Role, Benifits Expectations' value={value.description}
                onChange={(e)=>{
                 setValue((prev)=>({...prev, description: e.target.value}))

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate, Outlet } from 'react-router';
+import { useParams, useNavigate, Outlet, useLocation } from 'react-router';
 import useFetchData from '../../hooks/useFetchData';
 import { isUserOwnedRoute } from '../../api/auth.admin';
 import Loading from '../Loading';
@@ -7,6 +7,7 @@ import { useAuth } from '../../context/Authcontext';
 
 export default function IsOwnerandloggedIn() {
   const { id } = useParams();
+  const location=useLocation()
   const navigate = useNavigate();
     const {execute, error:fetcherrData, loading: verifyOwner}=useFetchData(isUserOwnedRoute)
     const {data, error, loading}=useAuth()
@@ -17,12 +18,22 @@ export default function IsOwnerandloggedIn() {
       return;
     }
       await execute(id);
-       if (fetcherrData === 'Please Verify Your verification code.') { navigate("/auth/verify-email", {   state: { from: location.pathname },  replace: true });
-      return;
-    }
     })();
   }, [id]); 
-  if(loading || verifyOwner){
+
+
+  useEffect(()=>{
+    console.log('fetec', fetcherrData)
+  if (fetcherrData === 'Please Verify Your verification code.') {
+      //  navigate("/auth/verify-email", {   state: { from: location.pathname },  replace: true });
+    return;
+  }
+ if(fetcherrData) {
+   navigate("/", { replace: true})
+ }
+  }, [fetcherrData])
+
+if(loading || verifyOwner){
     return <Loading/>
   }
 

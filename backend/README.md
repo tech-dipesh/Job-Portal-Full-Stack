@@ -415,7 +415,7 @@ for allow all teh credentiants now work.
 - also i can send a total length tot the database so that frontend can know how many data are there.
 - which i need only offset to send a data and based on the page it can check a data.
 - i've finally implement the load more features with the page limit and the offeset.
-
+- with experience_year is not have on the put i've added that.
 
 # The Backend Project is finished on: 2026/02/26
 

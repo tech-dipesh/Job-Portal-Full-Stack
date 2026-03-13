@@ -1,109 +1,62 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router'
-import { bookMarkJob, deleteExistingJobs, individualJobs, removeBookmark } from '../../api/auth.job';
-import useFetchData from '../../hooks/useFetchData';
-import ButtonComps from "../../components/common/Button"
-import isOwnerMiddleware from '../../../../backend/Middleware/isOwner';
+import { useEffect, useState } from 'react'
+import { Link, useParams } from 'react-router'
 import Applyjob from '../Applications/Applyjob';
 import Loading from '../../components/Loading';
 import Errorloading from '../../components/common/Errorloading';
-import { useAuth } from '../../context/Authcontext';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBookmark as solid } from '@fortawesome/free-solid-svg-icons'
-import { faBookmark as regular } from '@fortawesome/free-regular-svg-icons'
+
+import Buttoncomps from '../../components/common/Button';
+import useFetchData from '../../hooks/useFetchData';
+import { individualJobs } from '../../api/auth.job';
+import Confirmation from '../../components/Confirmation';
 export default function EachJob() {
-  const navigate = useNavigate()
-  const [success, setSuccess] = useState()
-  const [error, setError]=useState()
   const { id } = useParams();
-
-  const {data}=useAuth()
-
-  const { data:fetchdata, error:fetchErr, loading, execute } = useFetchData(individualJobs)
-  const { error: errabookmark, loading: loadabookmark, execute: bookmark } = useFetchData(bookMarkJob)
-  const { error: removeerrbookmark, loading: loadremovebookmark, execute: removeBook } = useFetchData(removeBookmark)
-  const { error: errdelete, loading: loaddelete, execute: deletes } = useFetchData(deleteExistingJobs)
-  console.log('fetchdata', fetchdata)
+  const { data, error, loading, execute } = useFetchData(individualJobs)
+  const [loaddesc, setLoadDesc]=useState(false)
   useEffect(() => {
     execute(id)
   }, [id])
-  const saveJob = async () => {
-    await bookmark(id).then(t => setSuccess(t?.message))
-    navigate(0)
-  }
-  const RemoveSavedJobs = async () => {
-    const output=await removeBook(id);
-    setSuccess(output?.message)
-    navigate(0)
-  }
-  if (loading || loadabookmark || loadremovebookmark) {
+
+  if(loading){
     return <Loading/>
   }
-  if (error || errabookmark || removeerrbookmark) {
-    return <Errorloading data={{error: error || errabookmark}}/>
-  }
-  const {role}=data ?? {}
-  const deleteJob=async ()=>{
-    const con=confirm("Are you really want to delete a job.");
-    if(!con) return;
-    const res=await deletes(id)
-    if(!res){
-      setError(errdelete);
-      return;
-    }
-    setTimeout(() => {
-        navigate('..')
-    }, 250);
-    
-  }
-  const ShowEditButton = () => {
-      const sendAllValue={uid: fetchdata.uid, title: fetchdata.title, description: fetchdata.description, job_type: fetchdata.job_type, salary: fetchdata.salary, skills: fetchdata.skills}
-      console.log('value is', )
-      return  (
-        <>
-        <div onClick={deleteJob}>
-          <ButtonComps values="Delete Job" color='bg-red-500  '/>
-        </div>
-        <Link to={`edit`} state={sendAllValue}>
-          <ButtonComps values="Edit Job" />
-        </Link>
-        {/* <Link to={`../../applications/${fetchdata.uid}/applylist`} state={sendAllValue}> <ButtonComps values="All Jobs Applicant" /> </Link> */}
-        <Link to={`/companies/${fetchdata.company_id}/applications`} state={sendAllValue}> <ButtonComps values="All Jobs Applicant" /> </Link>
-        </>
-      );
-    // }
-  }
- if(loading || loaddelete ||loadabookmark){
-  return <Loading/>
- }
-    const {job_data}=fetchdata ?? {}
-    const valueButton = job_data?.is_save  ? <FontAwesomeIcon icon={solid}/> : <FontAwesomeIcon icon={regular}/>;
-    const clickFun = job_data?.is_save ? RemoveSavedJobs : saveJob
-    return (
-      <article>
-        <Errorloading data={{error: fetchErr}}/>
-        {fetchdata && 
-        <div  className='bg-neutral-900 p-8 h-auto max-w-xl w-full mx-auto rounded-lg flex justify-center flex-col mt-10 space-y-3'>
-          <p>Job Id: {fetchdata.uid}</p>
-          <p className='text-xl font-semibold'>Title: {fetchdata.title}</p>
-          <p>Description: {fetchdata.description}</p>
-          <p>Job Type: {fetchdata.job_type}</p>
-          <p>Salary: {fetchdata.salary}</p>
-          <p>Total Job View: {fetchdata.total_job_views}</p>
-          <p>Experience: {fetchdata.experience_years}</p>
-          <div className='flex flex-wrap gap-2'>
-            <span>Skills</span>
-            {fetchdata?.skills?.map((skill, i) => <span key={i} className='border-2 bg-slate-600 p-2 rounded-xl cursor-pointer flex flex-col gap-2'>{skill}</span>)}
+  const {description, title, job_type, salary, experience_years, location, skills}=data || {}
+  return (
+    <article className='min-w-screen min-h-screen px-6 py-8'>
+      <Link to='../'><Buttoncomps values='Go Back To All Jobs' /></Link>
+      <Errorloading data={{ error: error }} />
+      {data &&
+        <div className='bg-slate-800 p-8 max-w-5xl min-h-[90vh] mx-auto  rounded-2xl space-y-5'>
+          <span className='text-slate-400 text-xs opacity-90'>Job Id: {data.uid}</span>
+          <div className='grid grid-cols-2'>
+            <p className='text-3xl font-bold tracking-wide'>Title: {title}</p>
+            <p className='font-semibold text-right text-gray-300'>Job Type: {job_type}</p>
           </div>
-        {(!fetchdata.is_owner && role=='guest') &&  <span onClick={clickFun} className='flex gap-3 mt-4'><ButtonComps values={valueButton} /></span>  }
-        {/* {showEditButton()} */}
-        {fetchdata && fetchdata?.is_owner && <ShowEditButton/>}
-        </div>
-        }
-        <div className='flex justify-end w-full'>
-      {role=='guest' && <Applyjob value={fetchdata?.is_applied}/>}
-  </div>
-      </article>
-    )
-  }
+           <div className='flex gap-6 text-sm text-slate-300'>
+        <span>Salary: {salary || 'N/A'}</span>
+        <span>Experience: {experience_years || '0'} yrs</span>
+      </div>
+        <p className='text-xl wrap-break-word text-slate-300 leading-relaxed block h-30 lg:h-40'>Description:
+              {description?.length<100 ?
+                description: 
+              <>
+              {!loaddesc && description?.slice(0, 100)}
+              {!loaddesc && <span onClick={()=>setLoadDesc(!loaddesc)}><Buttoncomps values='Load More'/></span>}
+              {loaddesc && description}
+              </>
+              } 
+        </p>
+          <div className='grid grid-cols-2'>
+            <div className='flex flex-wrap gap-2'>
+              <span>Skills</span>
+              {skills?.map((skill, i) => <span key={i} className=' px-3 py-1 bg-slate-700 rounded-full text-sm'>{skill}</span>)}
+            </div>
+            <p className='text-right text-slate-300 text-sm'>Location: {location || 'none'}</p>
+          </div>
+          <div className='min-h-2xl'>
+            <Applyjob data={data} execute={execute}/>
+          </div>
+          </div>
+      }
+    </article>
+  )
+}

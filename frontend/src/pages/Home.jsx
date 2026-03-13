@@ -18,7 +18,7 @@ export default function Home() {
   const { data: jobs, error: err, loading: loader, execute } = useFetchData(allJobsList)
   useEffect(() => {
     (() => {
-      execute()
+      execute(({page:1, limit:5}))
       if (error === 'Please Verify Your verification code.') {
         setIsVerify(true);
         setIsLogin(false);
@@ -31,7 +31,6 @@ export default function Home() {
       }
     })();
   }, []);
-
   const allLinks=[
         { name: 'Browse Jobs', path: '/jobs' },
         { name: 'Search Jobs', path: '/jobs/search' },
