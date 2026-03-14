@@ -66,7 +66,7 @@ export default function ProfilePhoto() {
   const originalName = getOriginalFileName(profile_pic_url)
   return (
     <div className='flex flex-col max-w-2xl mx-auto'>
-      <Link to='../'><Buttoncomps values='Go Back To Profile Page' /></Link>
+      <Link to='../profile'><Buttoncomps values='Go Back To Profile Page' /></Link>
       <Errorloading data={{ error: error || errState }} />
       <Successcomps data={data?.message} />
       <h3 className='text-gray-100 font-medium  hover:text-white transition-colors flex justify-center my-8'>Upload Your Profile Picture</h3>

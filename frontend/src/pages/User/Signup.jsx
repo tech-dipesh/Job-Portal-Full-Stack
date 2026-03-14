@@ -18,11 +18,11 @@ import Registerleftcomps from '../../components/common/User/Registerleftcomps';
 export default function Signup() {
   const navigate=useNavigate()
   const [value, setValue] = useState({
-    fname: "",
-    lname: "",
-    education: "",
-    email: "",
-    password: ""
+    fname: "Ocean",
+    lname: "Poudel",
+    education: "Matrix",
+    email: "ocean@gmail.com",
+    password: "Ocean@2431"
   })
 
   const [apiError, setAPIError]=useState("")
@@ -42,17 +42,19 @@ export default function Signup() {
       navigate("../verify-email", {state: "Please Verify Your Mail"})
     }
   }
+  console.log('value is', value)
+  console.log('errr', error)
   return (
     <div className='grid md:grid-cols-2 grid-cols-1 items-center min-h-screen bg-slate-700 p-6'>
-          <Registerleftcomps type='Login'/>
+          <Registerleftcomps type='Signup'/>
       <div className='bg-white/10 backdrop-blur m-8 rounded-2xl p-8 flex flex-col gap-4'>
       <form  onSubmit={submitForm} className='grid space-y-4'>
         <InputComps placeholder='First Name' type='text' name='fname' value={value.fname} click={setValue} error={setAPIError}/>
         <InputComps placeholder='Last Name' type='text' name='lname' value={value.lname} click={setValue} error={setAPIError}/>
         <InputComps placeholder='Email' type='email' name='email' value={value.email} click={setValue} error={setAPIError}/>
-        <Selectcomps value={value.education} change={setValue} option={EducationOption} multiple={true}/>
+        <Selectcomps value={value.education} name={'education'} change={setValue} option={EducationOption} multiple={true}/>
         <InputComps placeholder='Password' type='password' name='password' value={value.password} click={setValue} error={setAPIError}/>
-        <ButtonComps values='Submit' color='bg-cyan-500' text='text-black'/>
+        <ButtonComps values='Signup' color='bg-cyan-500' text='text-black'/>
       </form>
       <Errorloading data={{error: error || apiError, loading}}/>
       {<Successcomps  data={data?.message}/>}

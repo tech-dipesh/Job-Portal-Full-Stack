@@ -33,7 +33,7 @@ export const getloginUserController= async (req, res) => {
     if(!saltPassword){
       return res.status(404).json({message: "Please Enter a Correct Password."})
     }
-    const {uid, role, company_id}=rows[0];
+    const {uid, role, company_id=null}=rows[0];
     if(!role)role='guest'
     const userVerified=await isUserVerifiedEmail(uid)
    const content={uid, role, company_id, userVerified};
@@ -50,7 +50,6 @@ export const getParticularUserController=  async (req, res) => {
   const {id, company_id}=req.params;
   try {
     const { rows } = await connect.query("SELECT uid, profile_pic_url, fname, education, email, experience, resume_url, skills, company_id IS NOT NULL AS is_employee, uid AS job_uid FROM users WHERE uid =$1", [id]);
-    console.log('rows', rows)
     if(!rows) return res.status(404).json({message: "Please Enter Correct Uid"})
     return res.status(200).json(rows[0]);
   } catch (error) {
@@ -71,9 +70,6 @@ export const postSignupUserController= async (req, res) => {
       const message=validateuser.error.issues.map(m=>m.message);
       return res.status(422).json({message: message[0]})
     }
-    if (!fname || !lname || !education || !email || !password) {
-      return res.status(422).json({ message: "Please Enter All Values such as, fname, lname, education, email, password" });
-    }
     const domain = email.split('@')[1];
     try {
       const checkDomainExistance = await dns.resolveMx(domain);
@@ -84,7 +80,7 @@ export const postSignupUserController= async (req, res) => {
       return res.status(422).json({ message: `The email domain '${domain}' does not exist or is invalid.` });
     }
     
-    const {rowCount}=await connect.query("select * from users where email=$1", [email]);
+    const {rowCount}=await connect.query("select email from users where email=$1", [email]);
     if(rowCount>0){
       return res.status(401).json({message: `The User with same email of: ${email} already exist.`})
     }
@@ -94,14 +90,13 @@ export const postSignupUserController= async (req, res) => {
       [fname, lname, education, email, hashPassword],
     );
     const {uid, role, fname:firstName, lname:lastName, email:userEmail}=rows[0]
-    const response= sendMail(uid, firstName, lastName, userEmail, 'verify')
-    const userVerified=await isUserVerifiedEmail(uid)
-    const content={uid, role, company_id, userVerified};
+     sendMail(uid, firstName, lastName, userEmail, 'verify')
+    const content={uid, role, company_id:null, userVerified: false};
     VerifyJwt(res, content)
     return res.status(201).json({message: "Succssfully Signed Up, Verification Code have been sent to your mail"})
-    // return res.status(201).json({message: "User Succssfully Signup", firstName, lastName, userEmail});
   } catch (error) {
-    return res.status(400).json({ error: error.message });
+    console.log(error)
+    return res.status(500).json({ message: error.message });
   }
 };
 

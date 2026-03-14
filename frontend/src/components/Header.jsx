@@ -18,7 +18,7 @@ export default function Header() {
     navigate(0)
   } 
 
-  const { data, reexecute } = useAuth();
+  const { data, error, reexecute } = useAuth();
   const { userVerified, uid, company_id, role } = data ?? {};
 
   const allUserLinks = data ? (role=='guest' ?
@@ -32,7 +32,9 @@ export default function Header() {
     ] : role=='recruiter'?[
       {value: 'Dashboard', link:`companies/dashboard`},
       {value: 'Create New Job', link:`jobs/new`},
-    ] :[]
+    ] :error=="Please Verify Your verification code."?[
+      {value: 'Verify Email', link:`auth/verify-email`},
+    ]: []
   ):
   [
       {value: 'Login', link:`/auth/login`},
@@ -44,7 +46,7 @@ export default function Header() {
     uid && <div className='relative'>
               <FontAwesomeIcon icon={faUser}  onClick={() => setProfile(!profile)} size='2x' className='bg-slate-900 h-32 w-32 rounded-full cursor-pointer flex justify-center items-center'/>
             {profile &&
-              <nav className='absolute top-12 right-0 bg-gray-500 shadow-lg rounded-lg p-4 w-32 border z-50 justify-center'
+              <nav className='absolute top-12 right-4  bg-gray-500 shadow-lg rounded-lg p-4 w-32 border z-50 justify-center'
               //  onClick={()=>setProfile(!profile)}
                >
                 <span onClick={()=>setProfile(false)}><Linkcomps to={`/users/${uid}/profile`} content='Your Profile'/></span>
@@ -57,11 +59,16 @@ export default function Header() {
             }
             </div>
     }
-          {!uid &&
-            <>
+      {error=="Please Verify Your verification code." ?
+      <div className='mx-4'>
+        <Linkcomps to={'/auth/verify-email'} content={'Verify Email'}/>
+      </div>: ''
+      }
+          {(!uid && !error) &&
+            <div className='mx-4'>
               <Linkcomps to='/auth/login' content={'Login'}/>
               <Linkcomps to='/auth/signup' content={'Signup'}/>
-            </>
+            </div>
 }
     </>
 

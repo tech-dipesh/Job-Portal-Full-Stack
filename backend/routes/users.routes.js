@@ -44,7 +44,7 @@ router.patch("/:id", validateCorrectUid, patchUserController)
 
 router.post("/forget-password", limitUser, forgetEmailPassword)
 router.post("/forget-password/verify", limitUser, verifyForgetPassword)
-router.post("/verify", isUnverifiedUser, verifyEmailConfirmation)
+router.post("/verify", limitUser, isUnverifiedUser, verifyEmailConfirmation)
 router.post("/verify/resend", limitUser, isUnverifiedUser, resendVerificationCode)
 
 

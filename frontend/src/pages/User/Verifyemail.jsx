@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import validateVerifyMail from '../../auth/User/Validatecodeemail';
 import ButtonComps from "../../components/common/Button"
 import InputComps from '../../components/common/Input';
-import  {verifyUser, resendVerificationCode} from '../../api/auth.user';
+import { verifyUser, resendVerificationCode } from '../../api/auth.user';
 
 import { useLocation, useNavigate } from "react-router"
 import useFetchData from '../../hooks/useFetchData';
@@ -14,33 +14,34 @@ export default function VerifyEmail() {
   const [value, setValue] = useState();
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(null);
-  const [isResend, SetIsResend]=useState(false);
-  const [resendCode, setResendCode]=useState();
+  const [isResend, SetIsResend] = useState(false);
+  const [resendCode, setResendCode] = useState();
 
   const navigate = useNavigate()
 
-  const {state}=useLocation();
-  const {error:apierror, loading, data, execute}=useFetchData(verifyUser);
-  const {error:apiresend, loading:loadresend, data:resenddata, execute:resendexecute}=useFetchData(resendVerificationCode);
-  
-  useEffect(()=>{
- if(data) navigate(state?.from || "../")
-},[data])
+  const { state } = useLocation();
+  const { error: apierror, loading, data, execute } = useFetchData(verifyUser);
+  const { error: apiresend, loading: loadresend, data: resenddata, execute: resendexecute } = useFetchData(resendVerificationCode);
+
+  useEffect(() => {
+    if (data) navigate(state?.from || "../")
+  }, [data])
+
   const verifyYourMail = async (e) => {
-    e.preventDefault();
-    const err=validateVerifyMail(value);
-    if(err){
+    console.log('hello world')
+    const err = validateVerifyMail(value);
+    if (err) {
       setError(err)
       return;
     }
-  
-   await execute(value)
+
+    await execute(value)
   }
 
-  
-  const verifyResendCode=async ()=>{
+
+  const verifyResendCode = async () => {
     setError("")
-    const res= await resendexecute(value);
+    const res = await resendexecute(value);
 
     // if(res){
 
@@ -48,31 +49,27 @@ export default function VerifyEmail() {
   }
 
   return (
-    <div className='grid align-middle justify-center'>
-      <Successcomps data={resenddata?.message}/>
-      <Errorloading data={{error:apierror, loading}}/>
-        <div>
-        <h1 className='text-blue-500'>Verify Your Mail</h1>
-        <form onSubmit={verifyYourMail}>
-        <InputComps type='number' placeholder='Please Enter a Number' value={value} click={setValue} error={setError} />
-        {/* <input type="number" placeholder='' value={value} /> */}
-        <ButtonComps values='submit' />
-      </form>
-      {
-        success && <div>{success}</div>
-      }
-      <div>
+    <div className='flex flex-col items-center justify-center min-h-screen'>
+      <div className='bg-neutral-800 rounded-2xl p-10 w-full max-w-lg flex flex-col items-center gap-8'>
+      <Successcomps data={resenddata?.message || success} />
+      <div className='text-center'>
+        <h1 className='text-xl font-bold '>Verify Your Mail</h1>
+        <h2 className='text-sm my-1 opacity-85 justify-center'>We've sent a 6-digit code to your email</h2>
       </div>
-      {
-        error && <div className='text-red-500'>{error}</div>
-      }
+      <Errorloading data={{ error: apierror || error, loading }} />
+      <div className='w-full flex-col items-center justify-center gap-4'>
+        <InputComps type='number' placeholder='6 digit Code' value={value}  click={setValue} error={setError} />
+        <span className='flex justify-center'>
+          <ButtonComps values='submit' onClick={verifyYourMail}/>
+        </span>
       </div>
-         <div  className='flex align-middle my-24' >
-        <h2>Resend Veify Code</h2>
-      <div onClick={verifyResendCode}>
-      <ButtonComps values='Resend Verification Code'/>
+      <div className='grid justify-items-center bg-neutral-700 rounded-lg py-4 px-2 align-middle gap-4 my-4' >
+        <p className='opacity-80 text-gray-100'>Didn't receive code?</p>
+          <ButtonComps values='Resend Code' onClick={verifyResendCode}/> 
+          <p className='opacity-80 text-sm text-gray-300'>Please Check Your Spam Folder If You've not Recieved a Code</p>
       </div>
-        </div>
+      </div>
     </div>
   )
 }
+

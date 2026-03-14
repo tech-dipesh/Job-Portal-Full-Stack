@@ -152,6 +152,13 @@ with i make sure that if the role is recutier it must have company_id then is no
   - now i will make the page of responseive of the each page.
   - with the apply jobs and withdraw and all applied list also comes on the center of the page.
   - with backend where i've nto send a request on the withdraw and appply and also on the update jobs i've nto setup a location and experience years i've setup all that.
+-  with apply and withdraw and edit delete all the logic is working now. all loic is working now.
+- now i've move forwared to the user search with the better ui.
+- add the portal to the add the new skills page.
+- with a profile is set perfectly with the better uurl.
+- the email is better visisble with the add skilsls is become a new popp page with cance button.with like who you are also have impoove i with teh education si also comes with the better styleying.
+- on the profile pic page it'm restructuringe everthing with showing the more details.
+- on the upload image everything have perfecet with, with: `revokeObjectUrl` learn some small things .
 
 
 ## Portal:

@@ -13,7 +13,7 @@
 
 export const validateEditUser= ({fname, lname, education, email, experience, password}, type)=>{
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  const validEducation=['Matrix', 'High School', 'Undergraduation', 'Postgraduation'];
+  const validEducation=['Basic', 'Matrix', 'High School', 'Undergraduation', 'Postgraduation'];
   if(!fname){
     return "Please Enter a First Name"
   }

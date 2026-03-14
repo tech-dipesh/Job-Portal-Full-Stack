@@ -12,7 +12,6 @@ const authUserMiddleware = async(req, res, next) => {
     }
     next();
   } catch(err) {
-    (err)
     return res.status(403).json({ message: 'Invalid token Please Logged in First' });
   }
 };

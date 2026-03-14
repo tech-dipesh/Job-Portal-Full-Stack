@@ -50,7 +50,7 @@ export default function Individualuser() {
             <p className='text-gray-600 text-center mb-4'>{email}</p>
             <Textcomps content={`Education: ${education}`} />
             <Textcomps content={`Experience: ${experience_years ?? '0'} years`} />
-            <span className='my-4 justify-center grid cursor-pointer'> <Linkcomps to={'profile-picture'} content={<ButtonComps values='Edit Profille' />}></Linkcomps></span>
+            <span className='my-4 justify-center grid cursor-pointer'> <Linkcomps to={'edit'} content={<ButtonComps values='Edit Profille' />}></Linkcomps></span>
           </div>
           <div className='grid justify-items-center'>
             <h4 className='font-bold font-sans'>Skills:</h4>

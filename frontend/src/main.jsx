@@ -88,6 +88,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'applications',
+        element: <IsloggedinUser/>,
         children: [
           {
             path: 'me',
@@ -102,6 +103,7 @@ const router = createBrowserRouter([
       },
       {
         path: "companies",
+        element: <IsloggedinUser/>,
         children: [
           {
             path: "all",

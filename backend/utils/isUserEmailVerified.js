@@ -8,10 +8,14 @@ async function isUserVerifiedEmail(uid) {
     if(rowCount==0){
       return false;
     }
-    const { is_verified: isUserVerified } = rows[0];
-    return isUserVerified;
+    const { is_verified } = rows[0];
+    if(is_verified==true){
+      return true;
+    }
+    else {
+      return false;
+    }
   } catch (error) {
-    (error)
     return false;
   }
 }
