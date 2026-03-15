@@ -4,31 +4,34 @@ import ButtonComps from "../../components/common/Button"
 import InputComps from '../../components/common/Input';
 import { verifyUser, resendVerificationCode } from '../../api/auth.user';
 
-import { useLocation, useNavigate } from "react-router"
+import {Link, useLocation, useNavigate } from "react-router"
+import {useAuth} from "../../context/Authcontext"
 import useFetchData from '../../hooks/useFetchData';
 import Errorloading from '../../components/common/Errorloading';
 import Successcomps from '../../components/common/Success';
 import { useEffect } from 'react';
+import Loading from '../../components/Loading';
+import Buttoncomps from '../../components/common/Button';
 
 export default function VerifyEmail() {
   const [value, setValue] = useState();
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState(null);
-  const [isResend, SetIsResend] = useState(false);
-  const [resendCode, setResendCode] = useState();
 
   const navigate = useNavigate()
-
+  const {data:isUser, error: autherr}=useAuth();
+console.log('is user', isUser, autherr)
   const { state } = useLocation();
   const { error: apierror, loading, data, execute } = useFetchData(verifyUser);
   const { error: apiresend, loading: loadresend, data: resenddata, execute: resendexecute } = useFetchData(resendVerificationCode);
 
   useEffect(() => {
-    if (data) navigate(state?.from || "../")
+    if(isUser?.isVerified==true){
+      navigate(state?.from || "../")
+    }
+    // if (!isUser || isUser?.uid || error) 
   }, [data])
 
-  const verifyYourMail = async (e) => {
-    console.log('hello world')
+  const verifyYourMail = async () => {
     const err = validateVerifyMail(value);
     if (err) {
       setError(err)
@@ -36,27 +39,34 @@ export default function VerifyEmail() {
     }
 
     await execute(value)
+    if(data){
+      navigate("/")
+    }
   }
 
 
   const verifyResendCode = async () => {
     setError("")
-    const res = await resendexecute(value);
+    await resendexecute(value);
 
-    // if(res){
-
-    // }
+    if(resenddata){
+      navigate(state?.from || "../")
+    }
   }
 
+  if(loading || loadresend){
+    return <Loading/>
+  }
   return (
     <div className='flex flex-col items-center justify-center min-h-screen'>
+    <Link to='../login'><Buttoncomps values='Go Back To Login' /></Link>
       <div className='bg-neutral-800 rounded-2xl p-10 w-full max-w-lg flex flex-col items-center gap-8'>
-      <Successcomps data={resenddata?.message || success} />
+      <Successcomps data={resenddata || data} />
       <div className='text-center'>
         <h1 className='text-xl font-bold '>Verify Your Mail</h1>
         <h2 className='text-sm my-1 opacity-85 justify-center'>We've sent a 6-digit code to your email</h2>
       </div>
-      <Errorloading data={{ error: apierror || error, loading }} />
+      <Errorloading data={{ error: apierror || error || apiresend }} />
       <div className='w-full flex-col items-center justify-center gap-4'>
         <InputComps type='number' placeholder='6 digit Code' value={value}  click={setValue} error={setError} />
         <span className='flex justify-center'>

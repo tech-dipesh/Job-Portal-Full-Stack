@@ -10,38 +10,70 @@ import ButtonComps from '../../components/common/Button'
 import Jobcomps from '../../components/common/Jobcomps'
 import Errorloading from '../../components/common/Errorloading'
 import Loading from '../../components/Loading'
+import { ApplyLowerCasestatusOption, sortByFilter } from '../../Data/OptionList'
+import Selectcomps from "../../components/common/Selectcomps"
+import Buttoncomps from '../../components/common/Button'
+import Linkcomps from '../../components/common/Linkcomps'
 export default function Searchjobs() {
-  const [search, setSearch]=useState("")
-  const debounce=CustomDebounceHook(search, 300)
-const { data, error, loading, execute } = useFetchData(searchJobs);
+  const [search, setSearch] = useState("")
+  const [sortby, setSortBy] = useState("created_at")
+  const debounce = CustomDebounceHook(search, 300)
+  const { data, error, loading, execute } = useFetchData(searchJobs);
 
   useEffect(() => {
     if (debounce) {
-      execute(debounce);
+      execute({ title: debounce, order: sortby });
     }
   }, [debounce]);
- if(loading){
-  return <Loading/>
- }
+  if (loading) {
+    return <Loading />
+  }
+  const clearFilter = (e) => {
+    setSearch(""),
+      data.message = [];
+    setSortBy("created_at")
+  }
   return (
-  // <div className='bg-slate-700 min-h-screen'>
-    <div className='flex flex-col min-h-screen'>
-      <Textcomps content='Search a jobs'/>
-      <div className='max-w-2xl mx-auto w-full space-x-2'>
-      <InputComps placeholder='Your Search Term' type='text' click={setSearch} value={search} className='text-center text-gray-600 mt-2'/>
-      <span onClick={()=>{
-        setSearch(""),
-        data.message=[];
-        }}><ButtonComps values='Clear'/></span>
+    <div className='bg-neutral-800 min-h-screen max-w-5/6 py-4 mx-auto p-6'>
+      <div className='flex flex-col min-h-screen'>
+        <div className='mb-6'>
+          <Linkcomps content={'Go Back To all Jobs'} to={`../`} />
+        </div>
+        <div className='flex flex-col items-center'>
+          <span className='grid justify-items-center'>
+            <InputComps placeholder='Your Search Term' type='text' click={setSearch} value={search} className='text-center text-gray-600 mt-2' />
+          </span>
+          <div className='grid justify-items-center gap-3 my-3'>
+            <h2>Sort By:</h2>
+            <select value={sortby} onChange={(e) => setSortBy(e.target.value)} className='bg-neutral-700 text-white cursor-pointer p-3 border-none rounded-lg shadow-md hover:bg-neutral-600 focus:ring-2  transition-all duration-200'>
+              <>
+                <option hidden>Select Option</option>
+                {sortByFilter?.map((o, i) => (
+                  <option className='mb-4 p-2 border rounded cursor-pointer' key={i} value={o.backend}>{o.frontend}</option>
+                ))}
+              </>
+            </select>
+            <span onClick={clearFilter}><ButtonComps values='Clear' /></span>
+          </div>
+        </div>
+        <Errorloading data={{ error, loading }} />
+        {data?.message &&
+          <div className='flex gap-6 justify-center text-sm text-gray-300 my-3'>
+            <span>Search Term: <strong className='text-white'>{debounce || "-"}</strong></span>
+            <span>Results: <strong className='text-white'>{data?.message?.length ?? 0} Jobs</strong></span>
+          </div>
+        }
+        <div className='grid container mx-auto space-y-2 grid-cols-1 lg:grid-cols-2 gap-6 p-4'>
+          {data?.message?.length ? data?.message.map(({ uid, title, description, salary, job_type }) => (
+            <Jobcomps key={uid} uid={uid} title={title} description={description} salary={salary} job_type={job_type} />
+          ))
+            :
+            <div className='flex items-center justify-center text-gray-400 text-lg'>
+              No Results For: <span className='text-white  font-semibold'>{debounce && debounce}</span>
+            </div>
+          }
+        </div>
       </div>
-      <div>Search Term: {debounce}</div>
-      <Errorloading data={{error, loading}}/>
-      {!data && <div>No Result Found</div>}
-      <div className='grid container mx-auto space-y-2 grid-cols1 gap-6 p-4'>
-        {data && data?.message.map(({uid, title, description, salary, job_type})=>(
-          <Jobcomps uid={uid} title={title} description={description} salary={salary} job_type={job_type}/>
-        ))}
-    </div>
     </div>
   )
 }

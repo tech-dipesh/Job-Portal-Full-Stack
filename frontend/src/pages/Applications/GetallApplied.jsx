@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import useFetchData from '../../hooks/useFetchData'
 import { getAllAppliedJobs } from '../../api/auth.applications'
 import Jobcomps from '../../components/common/Jobcomps'
@@ -25,8 +25,12 @@ export default function GetallApplied() {
     <div className='my-5 mx-3'>
       <Errorloading data={{error, loading}}/>
       <Emptycomps data={filter} type={'Applied Jobs'}/>
-      <Selectcomps option={ApplystatusOption} value={application} change={setApplication}/>
-      <span onClick={()=>setApplication("")}><ButtonComps values='Clear Filter'/></span>
+      {data?.message.length &&
+      <Fragment>
+        <Selectcomps option={ApplystatusOption} value={application} change={setApplication}/>
+        <span onClick={()=>setApplication("")}><ButtonComps values='Clear Filter'/></span>
+      </Fragment>
+      }
       {!filter && (
         <div className='text-center py-12 text-gray-500'>
         <p>You haven't applied to any jobs yet.</p>

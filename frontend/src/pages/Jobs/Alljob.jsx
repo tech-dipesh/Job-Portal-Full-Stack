@@ -35,9 +35,6 @@ export default function Jobs() {
       <Link to='search'>
       <ButtonComps values='Search Job' className='text-4xl' />
       </Link>
-      <Link to='../applications/me' className='text-blue-500 underline'>
-      <ButtonComps values='Get All Applied Jobs' className='text-4xl' />
-      </Link>
     </div>
       
     <div className='container grid grid-cols-1 lg:grid-cols-2 gap-16 p-8'>

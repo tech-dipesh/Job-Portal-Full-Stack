@@ -176,4 +176,5 @@ with i make sure that if the role is recutier it must have company_id then is no
   3. fontaswesome: for adding a icons
   4. react-spinners for the loading icon.
   5. react icons adding some not have font aweome icon.
+  6. react-toastify: for adding the alert message for the better user interaction.
   

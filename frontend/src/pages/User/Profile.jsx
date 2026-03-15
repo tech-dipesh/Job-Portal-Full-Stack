@@ -73,7 +73,7 @@ export default function Individualuser() {
             {resume_url ? <Textcomps content={originalName} /> : <Textcomps style={'text-red-500'} content={'No Resume Added'} />}
             <div className='flex gap-6'>
               {resume_url && <Linkcomps content={'View Resume'} to={resume_url} />}
-              <Linkcomps to='resume' content={'Upload Resume'} />
+              <Linkcomps to='resume' content={<Buttoncomps  values={'Upload Resume'}/>}/>
             </div>
           </div>
         </div>

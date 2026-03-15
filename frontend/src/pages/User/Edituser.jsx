@@ -10,7 +10,7 @@ import Selectcomps from '../../components/common/Selectcomps'
 import { EducationOption } from '../../Data/OptionList'
 import Loading from '../../components/Loading'
 import Errorloading from '../../components/common/Errorloading'
-
+import Textcomps from "../../components/common/Textcomps"
 export default function Edituser() {
   const navigate=useNavigate()
   const { id } = useParams();
@@ -43,10 +43,9 @@ export default function Edituser() {
   return (
     <div className='flex flex-col items-center max-w-md mx-auto w-full'>
       <Errorloading data={{error: error || errorData || patchError}}/>
-      <h2 className='mb-8 relative'>Edit User: </h2>
-      <form onSubmit={submitForm} className='w-full h-full space-y-4 bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md'>
+        <Textcomps content='Edit User' style={'text-2xl mx-auto text-center w-full'}/>
+      <form onSubmit={submitForm} className='w-full h-full space-y-2 bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md'>
         <div className='flex flex-col gap-1'>
-
         <label className='text-sm font-medium mb-1'>First Name:</label>
         <InputComps
           placeholder='FirstName'
@@ -64,7 +63,9 @@ export default function Edituser() {
         <label className='text-sm font-medium mb-1'>Education:</label>
         <Selectcomps value={value.education} change={setValue} option={EducationOption} multiple={true}/>
       </div>
-        <ButtonComps values='Submit' />
+        <span className='justify-center flex'>
+          <ButtonComps values='Submit' />
+          </span>
       </form>
     </div>
   )
