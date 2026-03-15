@@ -39,10 +39,13 @@ import Isadmin from './components/auth/Isadmin'
 import Assignusertocompanies from './pages/Admin/Assignusertocompanies'
 import IsOwnerandloggedIn from './components/auth/isOwnerAndLoggedIn'
 import Popup from './components/Popup'
+import Admindashbaoard from './pages/Admin/Admindashboard'
+import Error404 from './pages/Error404'
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <Error404/>,
     children: [
       {
         index: true,
@@ -163,6 +166,10 @@ const router = createBrowserRouter([
         element: <Isadmin/>,
         children: [
         {
+          "path": "dashboard",
+          element: <Admindashbaoard/>
+        },
+        {
           path: "users/all",
           element: <Alluser/>
         },
@@ -174,7 +181,7 @@ const router = createBrowserRouter([
       },
       {
         path: "test",
-        element: <Popup/>
+        element: <Error404/>
       }
     ]
   }]);

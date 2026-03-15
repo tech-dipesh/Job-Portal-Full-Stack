@@ -24,10 +24,10 @@ export default function Companydashboard() {
   return (
     <div>
         <div className='px-8 pt-8 pb-4 border-b border-neutral-700 mb-6'>
-      <h2 className='text-3xl font-bold text-white'>{role=='admin'? "Admin": "Company"} Dashboard</h2>
-      <p className='text-neutral-400 mt-1'>{role=='admin'?"Admin Entire System Dashboard": "See Company All The Stats"}</p>
+      <h2 className='text-3xl font-bold text-white'>Company Dashb Dashboard</h2>
+      <p className='text-neutral-400 mt-1'>See Company All The Stats</p>
      </div>
-      <h2>Welcome Back:</h2>
+      <h2>Welcome Back To Company Dashboard:</h2>
       {(message && role=='recruiter') && 
       <div className='grid grid-cols-1 md:grid-cols-4 gap-4 mb-8 text-black'>
       <div className='bg-blue-100 p-4 rounded-lg'>Total Jobs: {message?.total_jobs || 'N/A'}</div>
@@ -38,18 +38,12 @@ export default function Companydashboard() {
       }
       <Errorloading data={{error:errdata, loading:loaddata}}/>
       <Errorloading data={{error, loading}}/>
-        {(role && role==='admin') ?
-        <span className='grid grid-cols-1 lg:grid-cols-2 my-4 gap-4'>
-        <Link to='/companies/all'><ButtonComps values='All Companies'/></Link>
-        <Link to='/companies/new'><ButtonComps values='New Company'/></Link>
-        <Link to={`/admin/users/all`}><ButtonComps values='All Users'/></Link>
-        </span>:
-        role=='recruiter' ?
+        {(role &&role=='recruiter') &&
          <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 justify-items-center gap-4 mt-6'>
           <Link to={`/companies/${company_id}/jobs`}><ButtonComps values='All Owned Jobs'/></Link>
           <Link to={`/companies/${company_id}/applications`}><ButtonComps values='All Applications'/></Link>
           <Link to={`/companies/${company_id}/users/all`}><ButtonComps values='All Employees'/></Link>
-          </div>: ''
+          </div>
         }
     </div>
   )

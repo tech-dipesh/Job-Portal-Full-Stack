@@ -1,76 +1,88 @@
 import useFetchData from '../../hooks/useFetchData';
 import { postNewCompany } from '../../api/auth.companies';
-import Inputcomps from "../../components/common/Input" 
-import { useState } from 'react';
+import Inputcomps from "../../components/common/Input"
+import { useRef, useState } from 'react';
 import ButtonComps from "../../components/common/Button"
 import validateCompany from '../../auth/ValidateCompany';
 import { useNavigate } from 'react-router';
 import Errorloading from '../../components/common/Errorloading';
 import { all } from 'axios';
+import Textcomps from '../../components/common/Textcomps';
+import { faFileArrowUp } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 export default function NewCompany() {
-  const [value, setValue]=useState({name: 'Usa', description: 'unisted states of america', website: 'https://usa.com', founded_year: '2000', location: 'usa', company_logo: {}})
-  const [Error, setError]=useState("")
-  const {data, error, loading, execute}=useFetchData(postNewCompany);
-  const navigate=useNavigate()
-  const submitForm=async(e)=>{
+  const refInput = useRef(null)
+  const [value, setValue] = useState({ name: 'Usa', description: 'unisted states of america', website: 'https://usa.com', founded_year: '2000', location: 'usa', company_logo: {} })
+  const [Error, setError] = useState("")
+  const { data, error, loading, execute } = useFetchData(postNewCompany);
+  const navigate = useNavigate()
+  const submitForm = async (e) => {
     e.preventDefault()
-  const fileInput = e.target.elements.company_logo;
-  const file = fileInput.files[0];
+    const fileInput = e.target.elements.company_logo;
+    const file = fileInput.files[0];
 
-    const err=validateCompany(value)
-    if(err){
+    const err = validateCompany(value)
+    if (err) {
       setError(err)
       return;
     }
-  const formData = new FormData();
-  formData.append('name', value.name);
-  formData.append('description', value.description);
-  formData.append('website', value.website);
-  formData.append('founded_year', value.founded_year);
-  formData.append('location', value.location);
-  formData.append('company_logo', file);
+    const formData = new FormData();
+    formData.append('name', value.name);
+    formData.append('description', value.description);
+    formData.append('website', value.website);
+    formData.append('founded_year', value.founded_year);
+    formData.append('location', value.location);
+    formData.append('company_logo', file);
     await execute(formData);
-    if(data){
+    if (data) {
       navigate("../all")
       return;
     }
-    if(error){
+    if (error) {
       setError(error)
       return;
     }
   }
-  
-  return (
-    <div>
-      <h1>New Company.</h1>
-      <form onSubmit={submitForm} className='w-full space-y-4 bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md' encType='multipart/form-data'>
-          <h3>Name</h3>
-          <Inputcomps placeholder='Name' name='name' type='text' value={value.name} click={setValue} error={setError}/>
-          <h3>Company Logo</h3>
-          <div className='border-2 border-dashed rounded-lg p-6 text-center hover:border-blue-500 cursor-pointer'>
-            <input type="file" name="company_logo"  className='bg-transparent h-11 w-full rounded-lg text-black placeholder-gray-400 ring-2 px-2  ring-gray-500' 
-            onChange={(e)=>{ 
-              const file = e.target.files[0];
-               const allContent={ name:file.name, type:file.type.split("/")[0], size: (file.size) / 1000 }
-               console.log('allcontent', allContent)
-                 setValue((prev)=>({...prev, company_logo:allContent}))
-               }}/>
 
-                  <p>Click Here or drag A Company Logo(Only image type allowed)</p>
+  const uploadCompanyLogo = (e) => {
+    const file = e.target.files[0];
+    const allContent = { name: file.name, type: file.type.split("/")[0], size: (file.size) / 1000 }
+    console.log('allcontent', allContent)
+    setValue((prev) => ({ ...prev, company_logo: allContent }))
+  }
+
+  return (
+    <div className='bg-slate-700 min-h-screen'>
+      <div className='max-w-6xl mx-auto px-4 py-8 space-y-8'>
+        <Textcomps content='Add New Company' style={'text-2xl mx-auto text-center w-full'} />
+        <form onSubmit={submitForm} className='w-full space-y-4 bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md' encType='multipart/form-data'>
+          <label htmlFor='name'>Name</label>
+          <Inputcomps placeholder='Name' name='name' id='name' type='text' value={value.name} click={setValue} error={setError} />
+          <div>
+            <label htmlFor='resume' className='border-2 my-8 border-dashed rounded-lg p-6 w-full flex flex-col gap-2 mx-auto justify-items-center items-center text-center cursor-pointer'>
+              <input ref={refInput} id='resume' type='file' name='resume' className='hidden' onChange={uploadCompanyLogo} />
+              <FontAwesomeIcon icon={faFileArrowUp} />
+              <p className='text-sm text-gray-400'>Supported formats: <span className='text-gray-200 font-medium'>PNG/JPG/JPEG</span></p>
+              <p className='text-xs text-gray-500 mt-1'>Maximum size: 2 MB</p>
+            </label>
           </div>
-          <h3>Description</h3>
-          <Inputcomps placeholder='Description' name='description' type='text' value={value.description} click={setValue} error={setError}/>
-          <h3>Website</h3>
-          <Inputcomps placeholder='Website' name='website' type='text' value={value.website} click={setValue} error={setError}/>
-          <h3>Founded Year</h3>
-          <Inputcomps placeholder='Founded Year' name='founded_year' type='number' value={value.founded_year} click={setValue} error={setError}/>
-          <h3>Location:</h3>
-          <Inputcomps placeholder='Company Location' name='location' type='text' value={value.location} click={setValue} error={setError}/>
+          
+          <label>Description</label>
+          <Inputcomps placeholder='Description' name='description' type='text' value={value.description} click={setValue} error={setError} />
+          <label>Website</label>
+          <Inputcomps placeholder='Website' name='website' type='text' value={value.website} click={setValue} error={setError} />
+          <label>Founded Year</label>
+          <Inputcomps placeholder='Founded Year' name='founded_year' type='number' value={value.founded_year} click={setValue} error={setError} />
+          <label>Location:</label>
+          <Inputcomps placeholder='Company Location' name='location' type='text' value={value.location} click={setValue} error={setError} />
           <hr />
-          <ButtonComps values='Submit'/>
-      </form>
-      <Errorloading data={{error, loading}}/>
-      <Errorloading data={{error:Error}}/>
+          <span className='flex justify-center'>
+          <ButtonComps values='Submit' />
+          </span>
+        </form>
+        <Errorloading data={{ error, loading }} />
+        <Errorloading data={{ error: Error }} />
+      </div>
     </div>
   )
 }

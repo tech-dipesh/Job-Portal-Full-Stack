@@ -7,14 +7,12 @@ export default function IsEmployee() {
   const navigate=useNavigate()
   const {company_id, role}=data || {}
   console.log('company id', company_id, role)
+  console.log('role is', role)
   useEffect(() => {
       if(error) navigate("/auth/login", { state: { from: location.pathname }, replace: true })
       if(error=='Please Verify Your verification code.') navigate("/auth/verify-email", {state: {from: location.pathname}, replace: true})
       }, [])
-    
+    if(role && (role!='recruiter' || role!='admin')) navigate("/")
     if (loading) return <p>Checking authentication</p>;
-    if(!company_id) {
-      navigate("/", {state: "You're not a Employee."})
-    }
     return <Outlet data={data}/>
 }

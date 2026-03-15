@@ -18,8 +18,9 @@ export default function Allapplications() {
   console.log('user', message)
   return (
     <div className='bg-neutral-700 min-h-screen p-8'>
-        <Link to='../../dashboard'><Buttoncomps values='Go Back'/></Link>
+      <Link to='../../dashboard'><Buttoncomps values='Go Back'/></Link>
       <Errorloading data={{error, loading}}/>
+      <Emptycomps data={data?.message} type={'Applications'}/>
     <div className='flex gap-6 mb-6 text-white'>
       <span>Total: {message?.length}</span>
       <span>Pending: {message?.filter(a => a.status === 'pending').length}</span>

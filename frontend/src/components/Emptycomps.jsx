@@ -1,10 +1,12 @@
+import { faPeopleGroup } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
 
 export default function Emptycomps({ data, type }) {
   return (
     <main className='grid grid-cols-1 gap-6 lg:inline'>
       <div className='flex flex-col lg:flex-row lg:items-center justify-between gap-6 py-6 border-b border-slate-700/60 mb-8'>
-        <div>
+        <div className='mx-4'>
           <h1 className='text-3xl font-bold text-white tracking-tight'>All {type}</h1>
           <p className='text-neutral-400 mt-1 text-sm'>View All {type}</p>
         </div>
@@ -14,7 +16,7 @@ export default function Emptycomps({ data, type }) {
       </div>
       {data?.length === 0 && (
         <div className='text-center py-20  text-neutral-400'>
-          <p className='text-3xl'>👥</p>
+          <p className='text-3xl'><FontAwesomeIcon icon={faPeopleGroup} /></p>
           <p className='mt-2 text-lg'>No Any {type} Exist</p>
         </div>
       )}

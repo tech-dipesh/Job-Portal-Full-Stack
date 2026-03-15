@@ -4,6 +4,8 @@ import Header from './components/Header';
 import { useAuth } from './context/Authcontext';
 import Footer from './components/Footer';
 import Loading from './components/Loading';
+import ToastConataine from './components/Toast';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
  const {data, loading}=useAuth()
@@ -15,6 +17,7 @@ function App() {
    <Header data={data}/>
   <main className='flex-1'>
     <Outlet />
+    <ToastConataine/>
   </main>
   <Footer data={data}/>
 </div>

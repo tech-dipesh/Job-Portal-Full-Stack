@@ -3,7 +3,7 @@ import { Link, NavLink, useNavigate } from 'react-router'
 import useFetchData from '../hooks/useFetchData'
 import { logoutUser } from '../api/auth.user'
 import { useAuth } from '../context/Authcontext'
-import { faArrowRotateRight, faBars, faBriefcase, faMagnifyingGlass, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRotateRight, faBars, faBriefcase, faMagnifyingGlass, faUser, faUserCheck, faUserXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import reactIcons from "../assets/react.svg"
 import Linkcomps from './common/Linkcomps'
@@ -20,7 +20,6 @@ export default function Header() {
 
   const { data, error, reexecute } = useAuth();
   const { userVerified, uid, company_id, role } = data ?? {};
-  console.log('data is',data, 'error is', error)
   const allUserLinks = data ? (role == 'guest' ?
     [
       { value: 'Visit Your Profile', link: `users/${uid}/profile` },
@@ -28,7 +27,7 @@ export default function Header() {
       { value: 'All Bookmarks', link: `/jobs/bookmarks` },
       { value: 'Get All Applied Jobs', link: `/applications/me` }
     ] : role == 'admin' ? [
-      { value: 'Dashboard', link: `companies/dashboard` },
+      { value: 'Admin Dashboard', link: `admin/dashboard` },
       { value: 'Assign User To Companies', link: `admin/users/assign` },
     ] : role == 'recruiter' ? [
       { value: 'Dashboard', link: `companies/dashboard` },
@@ -53,7 +52,8 @@ export default function Header() {
           <span onClick={() => setProfile(false)}><Linkcomps to={`/users/${uid}/profile`} content='Your Profile' /></span>
           <FontAwesomeIcon icon={faArrowRotateRight} onClick={() => reexecute()} className='cursor-pointer justify-center' />
           <div className='flex'><span className='px-2'>You're:</span><span className=''> {role == 'recruiter' ? <FontAwesomeIcon icon={faBriefcase} /> : role == 'admin' ? <GrUserAdmin /> : <FontAwesomeIcon icon={faMagnifyingGlass} />}</span></div>
-          <Link to='/' onClick={LogoutPage} className='block py-2 text-red-600'>
+          <span><FontAwesomeIcon icon={userVerified ? faUserCheck:faUserXmark} color={userVerified ?'green': 'red'}/>Verified</span>
+          <Link to='/' onClick={LogoutPage} className='block py-2 hover:underline'>
             Logout
           </Link>
         </nav>
@@ -88,13 +88,14 @@ export default function Header() {
     <nav className='hidden md:flex lg:flex gap-7 ml-auto items-center'>
       {role == 'admin' ?
         <>
-          <Linkcomps to='companies/dashboard' content={'Dashboard'} />
+          <Linkcomps to='admin/dashboard' content={'Admin Dashboard'} />
           <Linkcomps to='admin/users/assign' content={'Asssign User To Companies'} />
         </> :
+        role=='recruiter'?
         <>
           <Linkcomps to='companies/dashboard' content={'Dashboard'} />
           <Linkcomps to='jobs/new' content={'Create New Job'} />
-        </>}
+        </>: null}
       {userProfile}
     </nav>
 

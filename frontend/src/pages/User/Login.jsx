@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {Link, useNavigate} from "react-router"
+import {Link, useLocation, useNavigate} from "react-router"
 import validateLogin from "../../auth/User/Validateuser.js"
 import {loginUser} from "../../api/auth.user.js"
 import ButtonComps from '../../components/common/Button.jsx';
@@ -16,7 +16,7 @@ import Registerleftcomps from '../../components/common/User/Registerleftcomps.js
 
 export default function Login() {
   const {reexecute, data:checkuser}=useAuth()
-  
+  const {state}=useLocation
   const [value, setValue] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -34,7 +34,7 @@ export default function Login() {
   const result = await execute(value); 
   if (result) {
     await reexecute();
-    navigate("/");  
+    navigate(state?.from || "/");  
   } 
   setError(apierror)
   };

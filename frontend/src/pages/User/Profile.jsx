@@ -21,19 +21,35 @@ export default function Individualuser() {
   const navigate = useNavigate();
   const { id } = useParams();
   const { data: user } = useAuth()
+  const [value, setValue] = useState("")
+  const [error, setError] = useState("")
   const { data, loading, error: err, execute } = useFetchData(getIndividualUser);
+  const { data: skillsdata, loader, skilllerr, execute: addSkill } = useFetchData(postUserSkills)
+
   useEffect(() => {
     execute(id);
   }, [id])
 
   const isValid = authUid(id);
   if (!isValid) return <Errorloading data={{ error: 'Incorrect uid please enter correct uid' }} />
-  if (loading) {
-    return <Loading />
+
+  const submitSkill = async () => {
+    const validateErr = validateText(value);
+    console.log('error is', validateErr)
+    if (validateErr) {
+      return setError(validateErr)
+    }
+    await addSkill({ id, skill: value })
+    if (skillsdata) {
+      navigate(0)
+      return;
+    }
   }
   const { profile_pic_url, fname, lname, email, education, experience_years, resume_url, skills } = data || {}
-  const originalName=getOriginalFileName(profile_pic_url)
-
+  const originalName = getOriginalFileName(profile_pic_url)
+  if(loader || loading){
+    return <Loading/>
+  }
 
   return (
     <div className='max-w-3xl mx-auto p-6 space-y-6'>
@@ -63,17 +79,23 @@ export default function Individualuser() {
                 <Buttoncomps values={'Add Skills'} />
               </span>
               :
-              <Popup id={id} navigate={navigate} setOpen={setOpen} />
+              <Popup setOpen={setOpen} value={value} setValue={setValue} submitFunction={submitSkill} error={error} setError={setError} fetchError={skilllerr} type={'Skills'}>
+                <>
+                <Inputcomps click={setValue} value={value} type="text" error={setError} />
+                <span onClick={submitSkill} className="justify-center flex">
+                  <Buttoncomps values={`Add Skill`} color={'bg-red-500'} />
+               </span>
+                </>
+              </Popup>
             }
           </div>
           <Errorloading data={{ error: err }} />
-
           <div className='grid align-middle justify-items-center  gap-3 mt-6 pt-4 '>
             <Textcomps content={'Resume'} />
             {resume_url ? <Textcomps content={originalName} /> : <Textcomps style={'text-red-500'} content={'No Resume Added'} />}
             <div className='flex gap-6'>
               {resume_url && <Linkcomps content={'View Resume'} to={resume_url} />}
-              <Linkcomps to='resume' content={<Buttoncomps  values={'Upload Resume'}/>}/>
+              <Linkcomps to='resume' content={<Buttoncomps values={'Upload Resume'} />} />
             </div>
           </div>
         </div>

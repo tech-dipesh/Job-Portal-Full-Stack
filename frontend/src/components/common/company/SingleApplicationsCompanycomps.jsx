@@ -1,19 +1,15 @@
-import React, { useEffect, useState } from 'react'
-import Selectcomps from '../Selectcomps';
-import { ApplyLowerCasestatusOption, ApplystatusOption } from '../../../Data/OptionList';
+import { useEffect, useState } from 'react'
+import { ApplyLowerCasestatusOption } from '../../../Data/OptionList';
 import Linkcomps from '../Linkcomps';
 import useFetchData from '../../../hooks/useFetchData';
-import { useParams } from 'react-router';
 import Loading from '../../Loading';
 import Errorloading from '../Errorloading';
 import Successcomps from '../Success';
 import { changeApplicationStatus } from '../../../api/auth.applications';
 
 export default function SingleApplicationsCompanycomps({job_id, applicant_id, job_title, resume_url, status:oldstatus}) {
-  const {id}=useParams()
   let [status, setStatus]=useState(oldstatus)
   const {data, execute, error, loading}=useFetchData(changeApplicationStatus)
-  console.log('old status is', oldstatus)
   useEffect(()=>{
     (()=>{
       setStatus(oldstatus)

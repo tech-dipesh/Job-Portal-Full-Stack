@@ -105,6 +105,7 @@
   - with i make sure it have some level of responsive design nto that depth but very basic should not broke something when user ivsit fro the mobile.
   - now the next features that i'm planing is two features: `the companies person can change the user applied status and also will implement teh socket io features for real time notification system.`
   - implement hte fature of the company owener person can change the status of user applied.
+- with i add one more routes on teh admin dashboard for differnete paeg.
 
 ## The Card Stylying:
 ```html 
@@ -159,6 +160,24 @@ with i make sure that if the role is recutier it must have company_id then is no
 - the email is better visisble with the add skilsls is become a new popp page with cance button.with like who you are also have impoove i with teh education si also comes with the better styleying.
 - on the profile pic page it'm restructuringe everthing with showing the more details.
 - on the upload image everything have perfecet with, with: `revokeObjectUrl` learn some small things .
+- with i make sure on the upload a resume and the pofile picture are almost same just hte iframe different.
+- and also i fix minor link error on the resume and profile picture.
+- minor change on the profile of the edit profile link.
+- on the signup page i've forget to give the naeme which is not able to track ght education.
+- which i've delete a one trigger which set to recruiter i don't need that it cause lot of problem to me.
+- with the is user is not logged in or not i've done minor change.
+- where one logical errorr that is addedd a trigger on the role become a recruiter but condition i didn't add add which become to the every new page took lot of time to fix a bug.
+- with on the header i've also add the option.
+- with on the backedn whih i've not added the payload which i've added to it.
+- with the on resend once user is verify i can redirect to the homepage user.
+- redirect to user on the verify when user is not logged in.
+- with also i've add the go back page on the verify code.
+- add all applied jobs added to the header.
+- now on the empty filter tha tthe filter option i will not added as it's empty.
+- change teh entier style of the search list with lof of stylying.
+- minor change ont eh seach jobs which have grid 3 property.
+- theres' the naming which i'm giving: `exists but on code it's is_verified` which makes a conflict lukily i fixed that.
+- which edit user is now fix with the good ui level
 
 
 ## Portal:

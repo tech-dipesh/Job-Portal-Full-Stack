@@ -1,90 +1,75 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import useFetchData from '../../hooks/useFetchData'
-import { deleteCompany, getSingleCompany, updateCompany } from '../../api/auth.companies'
-import ButtonComps from '../../components/common/Button'
-import validateCompany from '../../auth/ValidateCompany'
-import InputComps from '../../components/common/Input'
+import { deleteCompany, getSingleCompany } from '../../api/auth.companies'
 import Errorloading from '../../components/common/Errorloading'
+import Linkcomps from '../../components/common/Linkcomps'
+import Buttoncomps from '../../components/common/Button'
+import AllCompanyJobs from './AllCompanyJobs'
+import { useAuth } from '../../context/Authcontext'
+import Popup from '../../components/Popup'
+import { faCalendarPlus } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import authUid from '../../auth/authUid'
 
 export default function Singlecompany() {
-  const {id}=useParams()
-  const navigate=useNavigate()
-  const [edit, SetEdit]=useState(false)
-  const [Error, setError]=useState("")
-  const {data, error, loading,execute}=useFetchData(getSingleCompany)
-  const {data:res, execute:delAction}=useFetchData(deleteCompany)
-  const {data:updatedata, execute:update, error: updateerr}=useFetchData(updateCompany)
-  useEffect(()=>{
+  const { id } = useParams()
+  const { data: insideValue } = useAuth()
+  const navigate = useNavigate()
+  const [open, setOpen] = useState(false)
+  const [error, setError] = useState("")
+  const { data, error: singleerr, loading, execute } = useFetchData(getSingleCompany)
+  const { execute: deleteaction, error: deleteerr, data: deleteoutput } = useFetchData(deleteCompany)
+  
+  useEffect(() => {
     execute(id)
   }, [id])
-
-  const [value, setValue]=useState({name: '', description: '', website: ''})
   
-  const deleteComp=()=>{
-    const con=confirm("Are you really want to delete it.")
-    if(!con){
-      return;
-    }
-      delAction(id)
-      navigate("../all", {state: res})
-  }
-  const ChangeFormat=()=>{
-    setValue({name: data?.name, description: data?.description, website: data?.website})
-    SetEdit(!edit)
+  if(!authUid(id)){
+    return <Errorloading data={{error: "Please Enter a Correct UID"}}/>
   }
 
-  const editForm=(event)=>{
-  event.preventDefault()
-  const err=validateCompany(value)
-    if(err){
-      setError(err)
-      return;
-    }
-    update({id, value});
-    if(updatedata){
-      navigate(0)
-      return;
-    }
-    if(updateerr){
-      setError(updateerr)
-      return;
+  const clickDelete = async () => {
+    await deleteaction(id);
+    if (deleteoutput) {
+      setTimeout(() => {
+        navigate(0)
+      }, 50);
     }
   }
+  
   return (
     <div>
-      <Errorloading data={{error, loading}}/>
+      <Errorloading data={{ error: error || singleerr, loading }} />
       {data &&
-        <div>
-            <h1>Name: {data.name}</h1>
-            <h1>Description: {data.name}</h1>
-            <Link to={`http://${data.website}`} className='text-blue-500 underline'>Website: {data.website}</Link>
-            <h3>Created: {data.created_at}</h3>
+        <div className='bg-slate-800 rounded-xl p-6 space-y-3'>
+          <h1 className='text-2xl font-bold text-white'>Name: {data.name}</h1>
+          <p className='text-gray-400 text-sm leading-relaxed'>Description: {data.description}</p>
+
+          <hr className='border-gray-700' />
+          <div className='flex items-center gap-6 text-sm text-gray-400 font-bold'>
+            <span><FontAwesomeIcon icon={faCalendarPlus} /><strong>Founded Year: {new Date(data?.created_at).toLocaleDateString()}</strong></span>
+            <Link to={`https://${data?.website}`} className='text-blue-500 hover:underline' target='_blank'>Visit Website</Link>
+          </div>
         </div>
       }
-      <div onClick={deleteComp}>
-        <ButtonComps values='deleteComp' color='bg-red-500'/>
-      </div>
-    
-
-    <div>
-      <div  onClick={ChangeFormat}>
-        <ButtonComps values={!edit ? 'Edit Content': 'Escape Edit'}/>
-      </div>
-    {edit && 
-    <form onSubmit={editForm} className='w-full space-y-4 bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md'>
-      <h3>Name</h3>
-      <InputComps placeholder='Name' name='name' type='text' value={value.name} click={setValue} error={setError}/>
-      <h3>Description</h3>
-      <InputComps placeholder='Description' name='description' type='text' value={value.description} click={setValue} error={setError}/>
-      <h3>Website</h3>
-      <InputComps placeholder='Website' name='website' type='text' value={value.website} click={setValue} error={setError}/>
-      <hr />
-      <ButtonComps values='Submit'/>
-    </form>
-    }
-    </div>
-    {(error || Error) && <div className='text-red-500'>{error || Error}</div>}
+      {insideValue?.role == 'admin' &&
+        <div className='flex gap-3 my-4'>
+          {!open ?
+            <span onClick={() => setOpen(true)}>
+              <Buttoncomps values={'Delete Company'} color={'bg-red-500'} />
+            </span>
+            :
+            <Popup setOpen={setOpen} error={error || singleerr} setError={setError} fetchError={deleteerr} type={'Company'}>
+              <span onClick={clickDelete} className="justify-center flex">
+                <Buttoncomps values="Delete Job" color={'bg-red-500'} />
+              </span>
+            </Popup>
+          }
+          <Buttoncomps values={<Linkcomps content={'Edit Company'} to={`edit`} />} />
+        </div>
+      }
+      <AllCompanyJobs />
     </div>
   )
 }
