@@ -6,12 +6,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default function Goback({to='../', content='Go Back'}) {
   return (
-    <Link to={to}>
+    <Link to={to} className='flex w-full gap-2'>
       <Buttoncomps values={
-      <Fragment >
+      <div className='gap-2'>
         <FontAwesomeIcon icon={faArrowLeft} />
          {content}
-      </Fragment>}
+      </div>}
     /></Link>
   )
 }

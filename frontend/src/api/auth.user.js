@@ -11,6 +11,8 @@ import api from "../lib/axios"
  export const deleteIndivualUser=(id)=>api.get(`/users/${id}`)
  export const putIndivualUser=(data, id)=>api.put(`/users/${id}`, {data})
  export const patchIndivualUser=({id, ...data})=>api.put(`/users/${id}`, data)
+export const listAlluserFollowingCompanies=()=>api.get(`users/following`)
+
  export const verifyUser = (code) =>api.post('/users/verify', { code });
  export const resendVerificationCode=(code)=>api.post('/users/verify/resend', {code})
  export const forgetPassword=(email)=>api.post('/users/forget-password', {email})

@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import useFetchData from '../../hooks/useFetchData'
 import { getAllAppliedJobs } from '../../api/auth.applications'
-import Jobcomps from '../../components/common/Jobcomps'
+import Jobcomps from '../../components/common/Jobs/Jobcomps'
 import Selectcomps from '../../components/common/Selectcomps'
 import { ApplystatusOption } from '../../Data/OptionList'
 import { Link } from 'react-router'

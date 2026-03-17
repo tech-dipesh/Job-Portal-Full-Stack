@@ -7,8 +7,10 @@ import { majorFeatures } from '../Data/Benifits';
 import useFetchData from '../hooks/useFetchData';
 import { allJobsList } from '../api/auth.job';
 import Textcomps from '../components/common/Textcomps';
-import Jobcomps from '../components/common/Jobcomps';
+import Jobcomps from '../components/common/Jobs/Jobcomps';
 import Linkcomps from '../components/common/Linkcomps';
+import Loading from '../components/Loading';
+import Errorpopup from '../components/Error/Errorpopup';
 
 export default function Home() {
   const { data, error, loading } = useAuth();
@@ -38,12 +40,14 @@ export default function Home() {
         { name: 'All Your Applications', path: '/applications/me' }
       ];
   const first5Job=jobs?.message?.slice(0, 5);
+  if(loader || loading){
+    return <Loading/>
+  }
   return (
     <div className='bg-slate-700 min-h-screen'>
   <div className='max-w-6xl mx-auto px-4 py-8 space-y-8'>
-      <Errorloading data={{ error: err, loading: loader }} />
       <Errorloading data={{ error: state }} />
-      <Errorloading data={{ error, loading }} />
+      <Errorpopup error={err}/>
       <Hero isVerify={isVerify} isLogin={isLogin} />
       <div className='grid grid-cols-2 md:grid-cols-4 gap-3'>
       {allLinks.map((item, i) => (

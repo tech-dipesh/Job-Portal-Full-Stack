@@ -7,7 +7,7 @@ import { searchJobs } from '../../api/auth.job'
 import { Link } from 'react-router'
 import Textcomps from '../../components/common/Textcomps'
 import ButtonComps from '../../components/common/Button'
-import Jobcomps from '../../components/common/Jobcomps'
+import Jobcomps from '../../components/common/Jobs/Jobcomps'
 import Errorloading from '../../components/common/Errorloading'
 import Loading from '../../components/Loading'
 import { ApplyLowerCasestatusOption, sortByFilter } from '../../Data/OptionList'
@@ -38,7 +38,7 @@ export default function Searchjobs() {
     <div className='bg-neutral-800 min-h-screen max-w-5/6 py-4 mx-auto p-6'>
       <div className='flex flex-col min-h-screen'>
         <div className='mb-6'>
-          <Goback to='/jobs'/>
+          <Goback to='/jobs' content='Go Back To Jobs'/>
         </div>
         <div className='flex flex-col items-center'>
           <span className='grid justify-items-center'>

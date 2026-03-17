@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import {allJobsList} from "../../api/auth.job"
 import UseFetchData from "../../hooks/useFetchData"
 import ButtonComps from '../../components/common/Button';
-import Jobcomps from '../../components/common/Jobcomps';
+import Jobcomps from '../../components/common/Jobs/Jobcomps';
 import Loading from '../../components/Loading';
 import Emptycomps from '../../components/Emptycomps';
 import Buttoncomps from '../../components/common/Button';

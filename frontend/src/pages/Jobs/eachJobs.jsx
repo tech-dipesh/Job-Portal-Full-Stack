@@ -1,64 +1,144 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router'
-import Applyjob from '../Applications/Applyjob';
+import { Link, useNavigate, useParams } from 'react-router'
 import Loading from '../../components/Loading';
 import Errorloading from '../../components/common/Errorloading';
 
 import Buttoncomps from '../../components/common/Button';
 import useFetchData from '../../hooks/useFetchData';
-import { individualJobs } from '../../api/auth.job';
+import { bookMarkJob, deleteExistingJobs, individualJobs, removeBookmark } from '../../api/auth.job';
 import Confirmation from '../../components/Confirmation';
 import Goback from '../../components/common/Goback';
+import defaultImage from "../../assets/default-image.webp"
+import Linkcomps from "../../components/common/Linkcomps"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowRight, faBookmark as solid, faClipboard, faCopy, faShareFromSquare, faShareNodes } from '@fortawesome/free-solid-svg-icons';
+import { faBookmark as regular } from '@fortawesome/free-regular-svg-icons';
+import Popup from '../../components/Popup';
+import Textcomps from '../../components/common/Textcomps';
+import { applyToParticularJob, withdrawToParticularJob } from '../../api/auth.applications';
+import { useAuth } from '../../context/Authcontext';
+import Errorpopup from '../../components/Error/Errorpopup';
+import EachJobAction from '../../components/common/Jobs/EachJobAction';
+
 export default function EachJob() {
   const { id } = useParams();
-  const { data, error, loading, execute } = useFetchData(individualJobs)
-  const [loaddesc, setLoadDesc]=useState(false)
+  const { data, loading, execute } = useFetchData(individualJobs)
   useEffect(() => {
     execute(id)
   }, [id])
 
-  if(loading){
-    return <Loading/>
+  const [action, setAction]=useState(null)
+  const [copy, setCopy]=useState(false)
+  const [open, setOpen] = useState(true);
+  const navigate = useNavigate()
+  const { data: applydata, loading: applyload, error: apiapplyerror, execute: applyexeecute } = useFetchData(applyToParticularJob)
+  const { data: output, loading: loader, error: withdrawerror, execute: withd } = useFetchData(withdrawToParticularJob)
+  const { data: bookmarkdata, error: errabookmark, loading: loadabookmark, execute: bookmark } = useFetchData(bookMarkJob)
+  const { data: removebookdata, error: removeerrbookmark, loading: loadremovebookmark, execute: removeBook } = useFetchData(removeBookmark)
+  const { data: datadelete, error: errdelete, loading: loaddelete, execute: deletes } = useFetchData(deleteExistingJobs)
+  const { data: initalValue = {}, reexecute } = useAuth()
+  const { role } = initalValue;
+
+  const confirmAnyActionPerform = async () => {
+    if (action === 'delete') {
+      await deletes(id)
+      await reexecute(id)
+      if (datadelete) setTimeout(() => navigate('..'), 250)
+    } else if (action === 'apply') {
+      await applyexeecute({ id })
+      await reexecute(id)
+      if (applydata) navigate(0)
+    } else if (action === 'withdraw') {
+      await withd(id)
+      await reexecute(id)
+      if (output) navigate(0)
+    } else if (action === 'bookmark') {
+      await bookmark(id)
+      await reexecute(id)
+      if (bookmarkdata) navigate(0)
+    } else if (action === 'withdrawbookmark') {
+      await removeBook(id)
+      await reexecute(id)
+      if (removebookdata) navigate(0)
+    }
+    setAction(null)
   }
-  const {description, title, job_type, salary, experience_years, location, skills}=data || {}
-  // console.log('description ')
+
+  const { title, job_type, location, salary, experience_years, logo_url, company_name, company_id, is_saved, is_owner } = data || {}
+  const valueButton = is_saved ? <FontAwesomeIcon icon={solid} /> : <FontAwesomeIcon icon={regular} />;
+
+  const clickCopy = () => {
+    const CorrectUrl = window.location.href;
+    navigator.clipboard.writeText(CorrectUrl)
+      setCopy(!copy)
+  }
+
+  if (loading || loadabookmark || loadremovebookmark || loaddelete || loader || applyload) {
+    return <Loading />
+  }
   return (
     <article className='min-w-screen min-h-screen px-6 py-8'>
-      <Goback/>
-      <Errorloading data={{ error: error }} />
+      <Goback />
+      <Errorpopup error={errabookmark || apiapplyerror || removeerrbookmark || errdelete || withdrawerror} />
       {data &&
         <div className='bg-slate-800 p-8 max-w-5xl min-h-[90vh] mx-auto  rounded-2xl space-y-5'>
           <span className='text-slate-400 text-xs text-center opacity-90'>Job Id: {data.uid}</span>
-          <div className='grid grid-cols-2'>
-            <p className='text-3xl font-bold tracking-wide'>Title: {title}</p>
-            <p className='font-semibold text-right text-gray-300'>Job Type: {job_type}</p>
-          </div>
-           <div className='flex gap-6 text-sm text-slate-300'>
-        <span>Salary: {salary || 'N/A'}</span>
-        <span>Experience: {experience_years || '0'} yrs</span>
-      </div>
-        <p className='text-xl wrap-break-word text-slate-300 leading-relaxed block min-h-30'>Description: 
-              {description?.length<100 ?
-                description: 
-              <>
-              {!loaddesc && description?.slice(0, 100)}
-              {!loaddesc && <span onClick={()=>setLoadDesc(!loaddesc)}><Buttoncomps values='Load More'/></span>}
-              {loaddesc && description}
-              {loaddesc && <span onClick={()=>setLoadDesc(!loaddesc)}><Buttoncomps values='Show Less'/></span>}
-              </>
-              } 
-        </p>
-          <div className='grid grid-cols-2'>
-            <div className='flex flex-wrap gap-2'>
-              <span>Skills</span>
-              {skills?.map((skill, i) => <span key={i} className=' px-3 py-1 bg-slate-700 rounded-full text-sm'>{skill}</span>)}
+          <div className='flex justify-between items-start'>
+            <div className='flex items-center gap-3'>
+              <img src={logo_url? logo_url : defaultImage} alt="Logo" className='h-10 w-10 rounded-full object-cover shrink-0' />
+              <div className='flex flex-col'>
+              <p className='font-bold text-sm'>{company_name}</p>
+              <Linkcomps to={`/companies/${company_id}`} content={<>Visit Company Profile: <FontAwesomeIcon icon={faArrowRight} /></>} />
+              </div>
             </div>
-            <p className='text-right text-slate-300 text-sm'>Location: {location || 'none'}</p>
+            <div className='grid lg:flex items-center gap-2'>
+              {open ?
+                <div onClick={() => setOpen(!open)}>
+                  < Buttoncomps values={
+                    < div className='flex items-center gap-2 p-2.5 rounded-lg border hover:bg-slate-700' >
+                      <span>Share</span>
+                      <FontAwesomeIcon icon={faShareNodes}/>
+                    </div >
+                  }
+                  />
+                </div >
+                :
+                <Popup setOpen={setOpen} type={'Share'} header={<Textcomps content={`Share Your Job:`} open={open} />
+                }>
+                  <>
+                    <span onClick={clickCopy} className="justify-center flex">
+                      <Buttoncomps values="Share Job" color={'bg-red-500'} />
+                    </span>
+                    <FontAwesomeIcon
+                      icon={copy ? faClipboard : faCopy}
+                      className='text-slate-400' />
+                  </>
+                </Popup>
+              }
+              {(!is_owner && role == 'guest') &&
+                <div className='flex items-center gap-2 p-2 rounded-lg border-slate-600 text-sm cursor-pointer'  onClick={() =>
+                      is_saved ? setAction("withdrawbookmark") : setAction("bookmark")
+                    } >
+                  <Buttoncomps values={valueButton}
+                   />
+                    <span>Save</span>
+                </div>
+              }
+            </div>
+
           </div>
-          <div className='min-h-2xl'>
-            <Applyjob data={data} execute={execute}/>
+          <div className='flex items-start justify-between'>
+            <p className='text-3xl font-bold tracking-wide'>{title}</p>
+            <span className='text-xs p-2 bg-green-600 text-white rounded-full mt-2 bg-text-white'> {job_type}</span>
           </div>
+          <div className='flex gap-6 text-sm text-slate-300'>
+            <span>Salary: <strong className='text-white'>{salary || '0'}</strong></span>
+            <span>Experience: <strong className='text-white'>{experience_years || '0'} yrs</strong></span>
+            <p className='text-right text-slate-300 text-sm'>Location: <strong className='text-white'>{location || 'none'}</strong></p>
           </div>
+              {action && <Confirmation type={action} confirm={confirmAnyActionPerform} cancel={() => setAction(null)} />}
+          <EachJobAction setAction={setAction} data={data}/>
+        </div>
       }
     </article>
   )

@@ -1,51 +1,62 @@
-import { StrictMode } from 'react'
+import { lazy, StrictMode, Suspense } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App'
 import { RouterProvider, createBrowserRouter } from "react-router"
-import Jobs from "./pages/Jobs/Alljob"
-import EachJob from './pages/Jobs/eachJobs'
-import Login from './pages/User/Login'
-import Signup from './pages/User/Signup'
-import VerifyEmail from './pages/User/Verifyemail'
+
 import ColorPaletteTester from './Colorsuggestion'
-import Home from './pages/Home'
-import Alluser from './pages/Admin/Alluser'
-import Individualuser from './pages/User/Profile'
-import Edituser from './pages/User/Edituser'
-import ProfilePhoto from './pages/User/addProfilePhoto'
-import Addresume from './pages/User/AddResume'
-import AllBookmarks from './pages/Jobs/AllBookmarks'
-import EditJob from './pages/Jobs/EditJob'
-import IsloggedinUser from './components/auth/isLoggedInUser'
-import IsownerUser from './components/auth/isOwnerAndLoggedIn'
-import Newjob from './pages/Jobs/Newjob'
-import Searchjobs from './pages/Jobs/Searchjobs'
-import GetallApplied from './pages/Applications/GetallApplied'
-import Jobapplicant from './pages/Applications/JobApplicant'
-import AuthProvider from './context/Authcontext'
-import Allcompanies from './pages/Companies/Allcompanies'
-import NewCompany from './pages/Admin/NewCompany'
-import Singlecompany from './pages/Companies/Singlecompany'
-import Companydashboard from './pages/Companies/Companydashboard'
-import Stats from './pages/Companies/Stats'
-import AllCompanyJobs from './pages/Companies/AllCompanyJobs'
-import Allapplications from './pages/Companies/Allapplicationscompany'
-import Resetpassword from './pages/User/Resetpassword'
-import IsEmployee from './components/auth/IsEmployee'
-import AllEmployees from './pages/Companies/AllEmployees'
-import Editcompany from './pages/Admin/Editcompany'
-import Isadmin from './components/auth/Isadmin'
-import Assignusertocompanies from './pages/Admin/Assignusertocompanies'
-import IsOwnerandloggedIn from './components/auth/isOwnerAndLoggedIn'
-import Popup from './components/Popup'
-import Admindashbaoard from './pages/Admin/Admindashboard'
+const Alluser = lazy(() => import('./pages/Admin/Alluser'))
+const Individualuser = lazy(() => import('./pages/User/Profile'))
+const Edituser = lazy(() => import('./pages/User/Edituser'))
+const ProfilePhoto = lazy(() => import('./pages/User/addProfilePhoto'))
+const Addresume = lazy(() => import('./pages/User/AddResume'))
+
+const GetallApplied = lazy(() => import('./pages/Applications/GetallApplied'))
+const Jobapplicant = lazy(() => import('./pages/Applications/JobApplicant'))
+const AuthProvider = lazy(() => import('./context/Authcontext'))
+const Allcompanies = lazy(() => import('./pages/Companies/Allcompanies'))
+const NewCompany = lazy(() => import('./pages/Admin/NewCompany'))
+const Singlecompany = lazy(() => import('./pages/Companies/Singlecompany'))
+const Companydashboard = lazy(() => import('./pages/Companies/Companydashboard'))
+const Stats = lazy(() => import('./pages/Companies/Stats'))
+const AllCompanyJobs = lazy(() => import('./pages/Companies/AllCompanyJobs'))
+const Allapplications = lazy(() => import('./pages/Companies/Allapplicationscompany'))
+const Resetpassword = lazy(() => import('./pages/User/Resetpassword'))
+const IsEmployee = lazy(() => import('./components/auth/IsEmployee'))
+const AllEmployees = lazy(() => import('./pages/Companies/AllEmployees'))
+const Editcompany = lazy(() => import('./pages/Admin/Editcompany'))
+const Isadmin = lazy(() => import('./components/auth/Isadmin'))
+const Assignusertocompanies = lazy(() => import('./pages/Admin/Assignusertocompanies'))
+const IsOwnerandloggedIn = lazy(() => import('./components/auth/isOwnerAndLoggedIn'))
+const Admindashbaoard = lazy(() => import('./pages/Admin/Admindashboard'))
+const Home = lazy(() => import('./pages/Home'))
+const Jobs = lazy(() => import("./pages/Jobs/Alljob"))
+const EachJob = lazy(() => import('./pages/Jobs/eachJobs'))
+const Login = lazy(() => import('./pages/User/Login'))
+const Signup = lazy(() => import('./pages/User/Signup'))
+const VerifyEmail = lazy(() => import('./pages/User/Verifyemail'))
+const IsloggedinUser = lazy(() => import("./components/auth/isLoggedInUser"))
+const AllBookmarks = lazy(() => import('./pages/Jobs/AllBookmarks'))
+const EditJob = lazy(() => import('./pages/Jobs/EditJob'))
+const Newjob = lazy(() => import('./pages/Jobs/Newjob'))
+const Searchjobs = lazy(() => import('./pages/Jobs/Searchjobs'))
+
+
 import Error404 from './pages/Error404'
+import Loading from './components/Loading'
+import CompanyFollowers from './pages/Companies/CompanyFollowers'
+import Notfound from './pages/Notfound'
+
+
+
+
+
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     // errorElement: <Error404/>,
+
     children: [
       {
         index: true,
@@ -76,7 +87,7 @@ const router = createBrowserRouter([
         path: "users",
         children: [
           // { path: "all", element: <IsownerUser/>, children: [{index: true, element: <Alluser/>}] },
-          { path: "all", element: <IsOwnerandloggedIn/>, children: [{index: true, element: <Alluser/>}] },
+          { path: "all", element: <IsOwnerandloggedIn />, children: [{ index: true, element: <Alluser /> }] },
           {
             path: ":id",
             element: <IsloggedinUser />,
@@ -91,7 +102,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'applications',
-        element: <IsloggedinUser/>,
+        element: <IsloggedinUser />,
         children: [
           {
             path: 'me',
@@ -106,7 +117,7 @@ const router = createBrowserRouter([
       },
       {
         path: "companies",
-        element: <IsloggedinUser/>,
+        element: <IsloggedinUser />,
         children: [
           {
             path: "all",
@@ -115,6 +126,10 @@ const router = createBrowserRouter([
           {
             path: "new",
             element: <NewCompany />
+          },
+          {
+            path: "followers",
+            element: <CompanyFollowers />
           },
           {
             path: "dashboard",
@@ -127,11 +142,11 @@ const router = createBrowserRouter([
           },
           {
             path: ":id",
-            element: <IsEmployee />,
+            element: <Singlecompany />,
             children: [
               {
                 index: true,
-                element: <Singlecompany />
+                element: <IsEmployee />
               },
               {
                 path: "edit",
@@ -142,15 +157,11 @@ const router = createBrowserRouter([
                 element: <Stats />
               },
               {
-                path: "jobs",
-                element: <AllCompanyJobs />
-              },
-              {
                 path: "applications",
                 element: <Allapplications />,
-                children:[{
-                    // path: "/:id",
-                    // element: <Singleapplicationscompany/>
+                children: [{
+                  // path: "/:id",
+                  // element: <Singleapplicationscompany/>
                 }]
               },
               {
@@ -159,39 +170,49 @@ const router = createBrowserRouter([
               },
             ],
           },
+          {
+            path: ":id/jobs",
+            element: <AllCompanyJobs />
+          }
         ]
       },
       {
         path: "admin",
-        element: <Isadmin/>,
+        element: <Isadmin />,
         children: [
-        {
-          "path": "dashboard",
-          element: <Admindashbaoard/>
-        },
-        {
-          path: "users/all",
-          element: <Alluser/>
-        },
-        {
-          path: "users/assign",
-          element: <Assignusertocompanies/>
-        },
-      ]
+          {
+            "path": "dashboard",
+            element: <Admindashbaoard />
+          },
+          {
+            path: "users/all",
+            element: <Alluser />
+          },
+          {
+            path: "users/assign",
+            element: <Assignusertocompanies />
+          },
+        ]
       },
       {
         path: "test",
-        element: <Error404/>
+        element: <Error404 />
+      },
+      {
+        path: "*",
+        element: <Notfound/>
       }
     ]
   }]);
-      
+
 //  { path: "dev/colors",  element: <ColorPaletteTester />}
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
+    <Suspense fallback={<Loading />}>
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
+    </Suspense>
   </StrictMode>,
 )

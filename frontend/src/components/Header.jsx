@@ -25,7 +25,9 @@ export default function Header() {
       { value: 'Visit Your Profile', link: `users/${uid}/profile` },
       { value: 'All Jobs', link: `/jobs` },
       { value: 'All Bookmarks', link: `/jobs/bookmarks` },
-      { value: 'Get All Applied Jobs', link: `/applications/me` }
+      { value: 'Get All Applied Jobs', link: `/applications/me` },
+      { value: 'All Companies', link: `/companies/all` },
+
     ] : role == 'admin' ? [
       { value: 'Admin Dashboard', link: `admin/dashboard` },
       { value: 'Assign User To Companies', link: `admin/users/assign` },
@@ -79,6 +81,7 @@ export default function Header() {
         <Linkcomps to={'/jobs'} content='Jobs' />
         <Linkcomps to={'/jobs/bookmarks'} content='Bookmarks' />
         <Linkcomps to={'/applications/me'} content='Get All Applied Jobs' />
+        <Linkcomps to={'/companies/all'} content='All Companies' />
       </>
     }
     {userProfile}

@@ -17,7 +17,6 @@ export default function Companycomps({ uid, name, description, website, created_
   const { data } = useAuth();
   const { role } = data || {}
 
-
   return (
     <div className='bg-slate-800/60 border border-slate-700 rounded-2xl p-6 flex flex-col gap-5'>
       <div>

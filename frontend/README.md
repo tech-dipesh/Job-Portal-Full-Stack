@@ -198,6 +198,22 @@ with i make sure that if the role is recutier it must have company_id then is no
 - enw companies have hte repsonive design.
 - which now skills are not going outside of teh box on teh all user page which is issue on the registered users page.
 - add the go back new component page.
+-- i make sure on the toast i set to the useEffect Which only mount once and also one things that i added is there: `toatId` which make sure to only run once
+- with also i added to the successs compes.
+- also another one things that i added the autofocus mode on the search previusluy wihch it doesn't have.
+- which the load more featurs on the companies have with the pagination i've done that.
+- the laod more and load less on the eah description which have not on the correct style i fix that.
+- mionr style change on the apply job and withdraw jobs.
+- on the all applicant list, i've a link to the applicant uid rather it should be the job id.
+-    - the single company where from all the companies i've to link to the visit company page which other have but visit company doesn't have.
+   -  remove the https://on the all companies page.
+ - and the input, page of the companies ui the input is also comes on the one line which i've to fix it.
+- with assign user to companies minro brake on the mobiel fix that.
+- add new go back component page.
+
+
+
+
 
 
 ## Portal:

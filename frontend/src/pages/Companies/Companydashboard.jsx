@@ -21,6 +21,12 @@ export default function Companydashboard() {
   }
   const {company_id, uid, role}=authdata ?? {};
   const {message}=data || {}
+  const allRecruiterLink=[
+    {to: `/companies/${company_id}/jobs`, value: 'All Owned Jobs'},
+    {to: `/companies/${company_id}/applications`, value: 'All Applications'},
+    {to: `/companies/${company_id}/users/all`, value: 'All Employees'},
+    {to: `/companies/followers`, value: 'Followers'},
+  ]
   return (
     <div>
         <div className='px-8 pt-8 pb-4 border-b border-neutral-700 mb-6'>
@@ -40,9 +46,9 @@ export default function Companydashboard() {
       <Errorloading data={{error, loading}}/>
         {(role &&role=='recruiter') &&
          <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 justify-items-center gap-4 mt-6'>
-          <Link to={`/companies/${company_id}/jobs`}><ButtonComps values='All Owned Jobs'/></Link>
-          <Link to={`/companies/${company_id}/applications`}><ButtonComps values='All Applications'/></Link>
-          <Link to={`/companies/${company_id}/users/all`}><ButtonComps values='All Employees'/></Link>
+          {allRecruiterLink.map(({to, value}, i)=>
+          <Link key={i} to={to}><ButtonComps values={value}/></Link>
+        )}
           </div>
         }
     </div>
