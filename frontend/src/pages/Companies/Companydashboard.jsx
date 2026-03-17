@@ -7,8 +7,8 @@ import { useAuth } from '../../context/Authcontext';
 import ButtonComps from '../../components/common/Button';
 
 export default function Companydashboard() {
-  const navigate=useNavigate()
-   const {data:authdata, error:errdata, loading:loaddata}=useAuth();
+  const navigate = useNavigate()
+  const { data: authdata, error: errdata, loading: loaddata } = useAuth();
   const { execute, data, error, loading } = useFetchData(getCompanyDashboard);
   useEffect(() => {
     // (async () =>{
@@ -16,41 +16,47 @@ export default function Companydashboard() {
     // })()
     execute()
   }, [])
-  if(error=="You're not a employee of the company"){
+  if (error == "You're not a employee of the company") {
     return navigate("/")
   }
-  const {company_id, uid, role}=authdata ?? {};
-  const {message}=data || {}
-  const allRecruiterLink=[
-    {to: `/companies/${company_id}/jobs`, value: 'All Owned Jobs'},
-    {to: `/companies/${company_id}/applications`, value: 'All Applications'},
-    {to: `/companies/${company_id}/users/all`, value: 'All Employees'},
-    {to: `/companies/followers`, value: 'Followers'},
+  const { company_id, uid, role } = authdata ?? {};
+  const { message } = data || {}
+  const allRecruiterLink = [
+    { to: `/companies/${company_id}/jobs`, value: 'All Owned Jobs' },
+    { to: `/companies/${company_id}/applications`, value: 'All Applications' },
+    { to: `/companies/${company_id}/users/all`, value: 'All Employees' },
+    { to: `/companies/followers`, value: 'Followers' },
+  ]
+  const allStats = [
+    { bg: 'bg-blue-100', value: `Total Jobs: ${message?.total_jobs || 'N/A'}` },
+    { bg: 'bg-green-100', value: `Total Applications: ${message?.total_applications || 'N/A'}` },
+    { bg: 'bg-yellow-100', value: `Open Jobs: ${message?.open_jobs || 'N/A'}` },
+    { bg: 'bg-purple-100', value: `Total Employees: ${message?.total_employees || 'N/A'}` },
+    { bg: 'bg-gray-100', value: `Total Followers: ${message?.total_followers || 'N/A'}` },
   ]
   return (
     <div>
-        <div className='px-8 pt-8 pb-4 border-b border-neutral-700 mb-6'>
-      <h2 className='text-3xl font-bold text-white'>Company Dashb Dashboard</h2>
-      <p className='text-neutral-400 mt-1'>See Company All The Stats</p>
-     </div>
+      <div className='px-8 pt-8 pb-4 border-b border-neutral-700 mb-6'>
+        <h2 className='text-3xl font-bold text-white'>Company Dashb Dashboard</h2>
+        <p className='text-neutral-400 mt-1'>See Company All The Stats</p>
+      </div>
       <h2>Welcome Back To Company Dashboard:</h2>
-      {(message && role=='recruiter') && 
-      <div className='grid grid-cols-1 md:grid-cols-4 gap-4 mb-8 text-black'>
-      <div className='bg-blue-100 p-4 rounded-lg'>Total Jobs: {message?.total_jobs || 'N/A'}</div>
-      <div className='bg-green-100 p-4 rounded-lg'>Total Applications: {message?.total_applications || 'N/A'}</div>
-      <div className='bg-yellow-100 p-4 rounded-lg'>Open Jobs: {message?.open_jobs || 'N/A'}</div>
-      <div className='bg-purple-100 p-4 rounded-lg'>Total Employees: {message?.total_employees || 'N/A'}</div>
-     </div>
-      }
-      <Errorloading data={{error:errdata, loading:loaddata}}/>
-      <Errorloading data={{error, loading}}/>
-        {(role &&role=='recruiter') &&
-         <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 justify-items-center gap-4 mt-6'>
-          {allRecruiterLink.map(({to, value}, i)=>
-          <Link key={i} to={to}><ButtonComps values={value}/></Link>
+      {(message && role == 'recruiter') &&
+        <div className='grid grid-cols-1 md:grid-cols-4 gap-4 mb-8 text-black'>
+          {allStats.map(({ bg, value }, i)=>
+          <div className={`${bg} p-4 rounded-lg`} key={i}>{value}</div>
         )}
-          </div>
-        }
+        </div>
+      }
+      <Errorloading data={{ error: errdata, loading: loaddata }} />
+      <Errorloading data={{ error, loading }} />
+      {(role && role == 'recruiter') &&
+        <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 justify-items-center gap-4 mt-6'>
+          {allRecruiterLink.map(({ to, value }, i) =>
+            <Link key={i} to={to}><ButtonComps values={value} /></Link>
+          )}
+        </div>
+      }
     </div>
   )
 }

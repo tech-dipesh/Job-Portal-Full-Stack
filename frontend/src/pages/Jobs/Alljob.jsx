@@ -38,8 +38,8 @@ export default function Jobs() {
     </div>
       
     <div className='container grid grid-cols-1 lg:grid-cols-2 gap-16 p-8'>
-      {data && data?.message.map(({ uid, title, description, salary, job_type, total_job_views, skills, is_job_open, experience_years, company_name }) => (
-        <Jobcomps key={uid} uid={uid} title={title} description={description} salary={salary} job_type={job_type} total_job_views={total_job_views} skills={skills} is_job_open={is_job_open} experience_years={experience_years} company_name={company_name}/>
+      {data && data?.message.map(({ uid, title, description, salary, job_type, total_job_views, skills, is_job_open, experience_years, company_name, expired_at }) => (
+        <Jobcomps key={uid} uid={uid} title={title} description={description} salary={salary} job_type={job_type} total_job_views={total_job_views} skills={skills} is_job_open={is_job_open} experience_years={experience_years} company_name={company_name} expired_at={expired_at}/>
       ))}
     </div>
      {data?.page*data?.limit<data?.total &&

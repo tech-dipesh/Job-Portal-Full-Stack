@@ -30,7 +30,7 @@ export default function SingleApplicationsCompanycomps({job_id, applicant_id, jo
     <div>
       <Errorloading data={{error}}/>
       <Successcomps data={data?.message}/>
-      <div key={job_id} className='bg-neutral-800 text-white rounded-xl shadow-lg flex justify-between items-start flex-col gap-3 border border-neutral-600 p-8 w-82'>
+      <div className='bg-neutral-800 text-white rounded-xl shadow-lg flex justify-between items-start flex-col gap-3 border border-neutral-600 p-8 w-82'>
           <Linkcomps to={`/jobs/${job_id}`} content={'Visit Jobs Description'}/>
           <h2>Title: {job_title}</h2>
           {resume_url ? <Linkcomps to={resume_url} content={'View Resume'}/>:<div className='block h-6'></div>}

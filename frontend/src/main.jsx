@@ -119,18 +119,14 @@ const router = createBrowserRouter([
         path: "companies",
         element: <IsloggedinUser />,
         children: [
-          {
-            path: "all",
-            element: <Allcompanies />
-          },
+          { path: "all", element: <Allcompanies /> },
+          { path: "followers", element: <CompanyFollowers /> },
           {
             path: "new",
-            element: <NewCompany />
+            element: <Isadmin />,
+            children: [{ index: true, element: <NewCompany /> }]
           },
-          {
-            path: "followers",
-            element: <CompanyFollowers />
-          },
+
           {
             path: "dashboard",
             element: <IsEmployee />,
@@ -141,13 +137,17 @@ const router = createBrowserRouter([
               }]
           },
           {
+            path: ":id/jobs",
+            element: <AllCompanyJobs />
+          },
+          {
             path: ":id",
-            element: <Singlecompany />,
+            element: <Singlecompany/>
+          },
+          {
+            path: ":id",
+            element: <IsEmployee />,
             children: [
-              {
-                index: true,
-                element: <IsEmployee />
-              },
               {
                 path: "edit",
                 element: <Editcompany />
@@ -159,10 +159,6 @@ const router = createBrowserRouter([
               {
                 path: "applications",
                 element: <Allapplications />,
-                children: [{
-                  // path: "/:id",
-                  // element: <Singleapplicationscompany/>
-                }]
               },
               {
                 path: "users/all",
@@ -170,10 +166,6 @@ const router = createBrowserRouter([
               },
             ],
           },
-          {
-            path: ":id/jobs",
-            element: <AllCompanyJobs />
-          }
         ]
       },
       {
@@ -200,7 +192,7 @@ const router = createBrowserRouter([
       },
       {
         path: "*",
-        element: <Notfound/>
+        element: <Notfound />
       }
     ]
   }]);

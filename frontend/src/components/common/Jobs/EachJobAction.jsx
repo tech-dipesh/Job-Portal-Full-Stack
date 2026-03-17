@@ -10,7 +10,7 @@ export default function EachJobAction({ setAction, data, }) {
   const { description, salary, skills, company_id, is_applied, is_owner, total_job_views } = data || {}
   return (
     <>
-      <p className='text-xl wrap-break-word text-slate-300 leading-relaxed block min-h-30'>
+      <div className='text-xl wrap-break-word text-slate-300 leading-relaxed block min-h-30'>
         <p className='text-xs tracking-widest text-slate-500 my-1'>Description:</p>
         {description?.length < 100 ?
           <p className='text-slate-500 leading-relaxed'>{description}</p> :
@@ -21,7 +21,7 @@ export default function EachJobAction({ setAction, data, }) {
             {loaddesc && <span onClick={() => setShowDesc(!loaddesc)}><Buttoncomps values='Show Less' /></span>}
           </>
         }
-      </p>
+      </div>
       <div className='flex flex-col gap-2'>
         <span className='tracking-widest text-xs text-slate-500 my-2'>Skills</span>
         <div className='flex flex-wrap gap-2'>

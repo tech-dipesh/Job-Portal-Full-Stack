@@ -18,11 +18,11 @@ import Registerleftcomps from '../../components/common/User/Registerleftcomps';
 export default function Signup() {
   const navigate=useNavigate()
   const [value, setValue] = useState({
-    fname: "Ocean",
-    lname: "Poudel",
-    education: "Matrix",
-    email: "ocean@gmail.com",
-    password: "Ocean@2431"
+    fname: "",
+    lname: "",
+    education: "",
+    email: "",
+    password: ""
   })
 
   const [apiError, setAPIError]=useState("")

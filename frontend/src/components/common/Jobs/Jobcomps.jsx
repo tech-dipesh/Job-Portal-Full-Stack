@@ -5,9 +5,10 @@ import Textcomps from '../Textcomps'
 import { useAuth } from '../../../context/Authcontext'
 import { faBuilding, faEye } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-
-export default function Jobcomps({ uid, title, description, salary, job_type, total_job_views, skills, is_job_open, status, experience_years, company_name, applied_at }) {
+export default function Jobcomps({ uid, title, description, salary, job_type, total_job_views, skills, is_job_open, status, experience_years, company_name, applied_at, expired_at }) {
   const { data } = useAuth()
+const totalDaysLeft = Math.ceil((new Date(expired_at).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)); 
+
   return (
     <div key={uid} className='bg-neutral-700  rounded-xl shadow-lg transition-shadow flex  justify-between items-start flex-col gap-3 border border-gray-200 p-8 min-h-auto w-full'>
       <div className='flex items-center justify-between w-full'>
@@ -45,7 +46,9 @@ export default function Jobcomps({ uid, title, description, salary, job_type, to
       <hr className='border-gray-500 w-full'/>
       <div className='flex justify-between w-full text-xs text-gray-500'>
       {applied_at && <span className=''>Applied: {new Date(applied_at).toLocaleDateString()}</span>}
+      <span className={`text-white p-1 rounded-xs ${totalDaysLeft<0? 'bg-red-500': 'bg-slate-500'}`}>{totalDaysLeft<0 ?'expired': `${totalDaysLeft} days left`}</span>
       {(data?.role == 'admin' || data?.role == 'recruiter') &&<span><FontAwesomeIcon icon={faEye}/> {total_job_views} views</span>
+
     }
 
       </div>
