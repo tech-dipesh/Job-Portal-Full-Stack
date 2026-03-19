@@ -11,7 +11,7 @@ import Goback from '../../components/common/Goback';
 import defaultImage from "../../assets/default-image.webp"
 import Linkcomps from "../../components/common/Linkcomps"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight, faBookmark as solid, faClipboard, faCopy, faShareFromSquare, faShareNodes } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faBookmark as solid, faClipboard, faCopy, faShareFromSquare, faShareNodes, faClipboardCheck } from '@fortawesome/free-solid-svg-icons';
 import { faBookmark as regular } from '@fortawesome/free-regular-svg-icons';
 import Popup from '../../components/Popup';
 import Textcomps from '../../components/common/Textcomps';
@@ -70,12 +70,6 @@ export default function EachJob() {
   const { title, job_type, location, salary, experience_years, logo_url, company_name, company_id, is_saved, is_owner } = data || {}
   const valueButton = is_saved ? <FontAwesomeIcon icon={solid} /> : <FontAwesomeIcon icon={regular} />;
 
-  const clickCopy = () => {
-    const CorrectUrl = window.location.href;
-    navigator.clipboard.writeText(CorrectUrl)
-      setCopy(!copy)
-  }
-
   if (loading || loadabookmark || loadremovebookmark || loaddelete || loader) {
     return <Loading />
   }
@@ -84,7 +78,7 @@ export default function EachJob() {
       <Goback />
       <Errorpopup error={ removeerrbookmark || errdelete || withdrawerror || errabookmark} />
       {data &&
-        <div className='bg-slate-800 p-8 max-w-5xl min-h-[90vh] mx-auto  rounded-2xl space-y-5'>
+        <div className='bg-slate-800 p-8 max-w-5xl min-h-[90vh] mx-auto rounded-2xl flex flex-col gap-5'>
           <span className='text-slate-400 text-xs text-center opacity-90'>Job Id: {data.uid}</span>
           <div className='flex justify-between items-start'>
             <div className='flex items-center gap-3'>
@@ -95,29 +89,20 @@ export default function EachJob() {
               </div>
             </div>
             <div className='grid lg:flex items-center gap-2'>
-              {open ?
-                <Popup setOpen={setOpen} header={<Textcomps open={open} />
-                }>
-                  <>
-                    <span onClick={clickCopy} className="justify-center flex">
-                      <Buttoncomps values="Share Job" color={'bg-red-500'} />
-                    </span>
-                    <FontAwesomeIcon
-                      icon={copy ? faClipboard : faCopy}
-                      className='text-slate-400' />
-                  </>
-                </Popup>
-                :
                 <div onClick={() => setOpen(!open)}>
                   < Buttoncomps values={
-                    < div className='flex items-center gap-2 p-2.5 rounded-lg border hover:bg-slate-700' >
-                      <span>Share</span>
-                      <FontAwesomeIcon icon={faShareNodes}/>
+                    <div className='flex items-center gap-2 p-2.5 rounded-lg border hover:bg-slate-700' 
+                    onClick={()=>{
+                       const CorrectUrl = window.location.href;
+                      navigator.clipboard.writeText(CorrectUrl)
+                        setCopy(!copy)
+                    }}>
+                      <span>{open ?'Shared':'Share'}</span>
+                      <FontAwesomeIcon icon={open ? faClipboardCheck:faShareNodes} style={''} className='transition-all'/>
                     </div >
                   }
                   />
                 </div >
-              }
               {(!is_owner && role == 'guest') &&
                 <div className='flex items-center gap-2 p-2 rounded-lg border-slate-600 text-sm cursor-pointer'  onClick={() =>
                       is_saved ? setAction("withdrawbookmark") : setAction("bookmark")
@@ -140,7 +125,9 @@ export default function EachJob() {
             <p className='text-right text-slate-300 text-sm'>Location: <strong className='text-white'>{location || 'none'}</strong></p>
           </div>
               {action && <Confirmation type={action} confirm={confirmAnyActionPerform} cancel={() => setAction(null)} />}
-          <EachJobAction setAction={setAction} data={data}/>
+            <div className='flex flex-col flex-1'>
+              <EachJobAction setAction={setAction} data={data} />
+            </div>
         </div>
       }
     </article>

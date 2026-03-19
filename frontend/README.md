@@ -233,6 +233,20 @@ with i make sure that if the role is recutier it must have company_id then is no
 ## More Features:
 - with on the profiel picture option i've also make sure to add the previosu page of the previous page with the: `URL.revokeObjectURL` REmove Old and add new object with: `URL.createObjectURL`
 
+
+
+## Future Features That I Would Like to Work But Not Feasable From My Current Knowldege:
+- Trying to make the ats socing for the any user profiel with their background jobs.
+- user can add a their employment_history and shows that employment history to the user page, which is feasalbe now and also can add the new table of the education 
+- inteview shechduling system with auomated email remainder and video call link generation from google clander api.
+- resume parsing analysisx with exrrac skills education, ats.
+- make the company alsert to send the email to the user about notificy their feed.
+- make the notification page about inform user about latest events.
+- profile completneess score based on the badged applicant top skilsl and active jobs seeker.
+- real time chat between recuriters and the applicant.
+-
+
+
   ## Libraries Used:
   1. axios: for data fetching:
   2. tailwindcss: for styling

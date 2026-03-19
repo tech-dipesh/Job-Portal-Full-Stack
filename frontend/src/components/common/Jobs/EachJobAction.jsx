@@ -69,7 +69,7 @@ export default function EachJobAction({ setAction, data, }) {
           {skills?.map((skill, i) => <span key={i} className=' px-3 py-1 bg-slate-700 rounded-full justify-center flex align-middle  text-sm'>{skill}</span>)}
         </div>
       </div>
-      <div className='grid min-h-24 lg:flex lg:flex-wrap items-center justify-between  bg-slate-700 rounded-lg lg:min-h-16'>
+      <div className='mt-auto flex flex-wrap items-center justify-between  bg-slate-700 rounded-lg lg:min-h-16'>
         {is_owner ?
           <div className='flex items-center justify-between w-full'>
             <Link to={`/companies/${company_id}/applications`} className='flex-1'>
@@ -92,8 +92,9 @@ export default function EachJobAction({ setAction, data, }) {
               </p>
             </div>
             <span onClick={() => is_applied ? setAction("withdraw"):setApply(true)}
-              className='lg:my-10 text-nowrap text-2xl my-6 justify-end'>
-              <Buttoncomps values={is_applied ? 'Withdraw Apply' : "Apply Job"} color={is_applied ? 'bg-yellow-500' : 'bg-green-500'} />
+              // className='lg:my-10 text-nowrap text-2xl my-6 justify-end'
+              >
+              <Buttoncomps values={is_applied ? 'Withdraw Apply' : "Apply Job"} color={is_applied ? 'bg-red-500' : 'bg-blue-500'} />
             </span>
           </div>
         }

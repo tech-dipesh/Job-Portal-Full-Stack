@@ -8,7 +8,7 @@ import Buttoncomps from '../../components/common/Button'
 import AllCompanyJobs from './AllCompanyJobs'
 import { useAuth } from '../../context/Authcontext'
 import Popup from '../../components/Popup'
-import { faCalendarPlus } from '@fortawesome/free-solid-svg-icons'
+import { faCalendarPlus, faClipboardCheck, faShareNodes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import authUid from '../../auth/authUid'
 import Errorpopup from '../../components/Error/Errorpopup'
@@ -20,6 +20,7 @@ export default function Singlecompany() {
   const navigate = useNavigate()
   const [open, setOpen] = useState(false)
   const [error, setError] = useState("")
+  const [copy, setCopy]=useState(false)
   const { data, error: singleerr, loading, execute } = useFetchData(getSingleCompany)
   const { execute: deleteaction, error: deleteerr, loading: deleteload, data: deletedata } = useFetchData(deleteCompany)
   const { execute: followaction, error: followerr, data: followdata, loading: followload } = useFetchData(followCompany)
@@ -73,9 +74,26 @@ export default function Singlecompany() {
               <Link to={website} className='text-blue-500 hover:underline' target='_blank'>Visit Website</Link>
             </div>
           </div>
+          <div>
+
           <div className='flex justify-center md:justify-end md:shrink-0' onClick={is_followed ? clickUnFollow : clickFollow}>
             <Buttoncomps values={is_followed ? 'UnFollow' : 'Follow'} color={is_followed && 'bg-red-500'} />
           </div>
+           <div onClick={() => setOpen(!open)}>
+          < Buttoncomps values={
+            <div className='flex items-center gap-2 p-1 rounded-lg border hover:bg-slate-700' 
+            onClick={()=>{
+              const CorrectUrl = window.location.href;
+              navigator.clipboard.writeText(CorrectUrl)
+              setCopy(!copy)
+            }}>
+              <span>{open ?'Shared':'Share'}</span>
+              <FontAwesomeIcon icon={open ? faClipboardCheck:faShareNodes} style={''} className='transition-all'/>
+            </div >
+          }
+          />
+          </div>
+        </div >
         </div>
       }
       {insideValue?.role == 'admin' &&
