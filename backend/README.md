@@ -444,3 +444,12 @@ for allow all teh credentiants now work.
 - with: `uid, user_id, compny_id, created_at` table where it's having a unique of user_id and company_id which only once user can follow a company.
 - with foreign key referecens.
 - where both follow/unfollow company backend logic is written now i've to write logic for my client side code.
+
+
+
+## Dockerize Our Nodejs Application: March/19:
+- use `npm ci` instead of: `npm i`: for the faster smaller image optimization
+- add the .dockerignore for ignore a multiple of files 
+- i should add the dockerignore to teh node_modules env and the dockerfile itself.
+- i've build my application with: `docker build -t job_portal  .`
+
