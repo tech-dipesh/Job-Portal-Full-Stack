@@ -22,7 +22,7 @@ import EachJobAction from '../../components/common/Jobs/EachJobAction';
 
 export default function EachJob() {
   const { id } = useParams();
-  const { data, loading, execute } = useFetchData(individualJobs)
+  const { data, loading, execute, error } = useFetchData(individualJobs)
   useEffect(() => {
     execute(id)
   }, [id])
@@ -39,32 +39,36 @@ export default function EachJob() {
   const { role } = initalValue;
   
   const confirmAnyActionPerform = async () => {
+    let success=false;
     if (action === 'delete') {
       const res=await deletes(id)
       if (res){
-        await reexecute(id)
-       window.location.reload()
+        navigate("/jobs")
       }
     } else if (action === 'withdraw') {
-    const res=  await withd(id)
+      const res=  await withd(id)
       if (res) {
-        await reexecute(id)
-     window.location.reload()
-    }
+        navigate(0); 
+        success=true;
+        return;
+      }
+      
     } else if (action === 'bookmark') {
-     const res= await bookmark(id)
+      const res= await bookmark(id)
       if (res) {
-       window.location.reload()
-        await reexecute(id)
+        success=true;
       }
     } else if (action === 'withdrawbookmark') {
       const res=await removeBook(id)
       if (res) {
-        await reexecute(id)
-       window.location.reload()
+        success=true;
       }
     }
     setAction(null)
+    if(success){
+      await execute(id) 
+      await reexecute() 
+    }
   }
 
   const { title, job_type, location, salary, experience_years, logo_url, company_name, company_id, is_saved, is_owner } = data || {}
@@ -76,7 +80,7 @@ export default function EachJob() {
   return (
     <article className='min-w-screen min-h-screen px-6 py-8'>
       <Goback />
-      <Errorpopup error={ removeerrbookmark || errdelete || withdrawerror || errabookmark} />
+      <Errorpopup error={error|| removeerrbookmark || errdelete || withdrawerror || errabookmark} />
       {data &&
         <div className='bg-slate-800 p-8 max-w-5xl min-h-[90vh] mx-auto rounded-2xl flex flex-col gap-5'>
           <span className='text-slate-400 text-xs text-center opacity-90'>Job Id: {data.uid}</span>

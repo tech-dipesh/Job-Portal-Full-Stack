@@ -125,7 +125,7 @@ with i make sure that if the role is recutier it must have company_id then is no
   - with all owned jobs i've improve some minor ui.
   - make the dashboard to cente of all teh contnt.
   - with make all jobs applicant point to the correct area.
-  - and the header option should see a valid option.
+  - and the header option should see a valid option.E
   - add the go back option to all 3 page on the dashboar page.
   - make sure to have a valid status option and user can change a status.
   - repsonsive page of teh all application status.

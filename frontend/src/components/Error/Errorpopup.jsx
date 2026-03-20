@@ -10,7 +10,6 @@ export default function Errorpopup({error}) {
   }, [error])
   return (
     <>
-    {error && <span>{error}</span>}
     </>
   )
 }

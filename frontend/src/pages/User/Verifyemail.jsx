@@ -20,17 +20,16 @@ export default function VerifyEmail() {
 
   const navigate = useNavigate()
   const {data:isUser, error: autherr}=useAuth();
-console.log('is user', isUser, autherr)
   const { state } = useLocation();
   const { error: apierror, loading, data, execute } = useFetchData(verifyUser);
   const { error: apiresend, loading: loadresend, data: resenddata, execute: resendexecute } = useFetchData(resendVerificationCode);
 
   useEffect(() => {
-    if(isUser?.isVerified==true){
+    if(isUser?.isVerified==true || data){
       navigate(state?.from || "../")
     }
     // if (!isUser || isUser?.uid || error) 
-  }, [data])
+  }, [data, isUser, navigate, state?.from])
 
   const verifyYourMail = async () => {
     const err = validateVerifyMail(value);
@@ -49,9 +48,8 @@ console.log('is user', isUser, autherr)
   const verifyResendCode = async () => {
     setError("")
     await resendexecute(value);
-
-    if(resenddata){
-      navigate(state?.from || "../")
+    if(apierror){
+      setError(apierror)
     }
   }
 

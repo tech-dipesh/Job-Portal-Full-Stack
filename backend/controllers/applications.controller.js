@@ -51,11 +51,12 @@ export const withdrawJobApplicationController= async (req, res)=>{
   try {
     const {rows}=await connect.query("select exists(select 1 from applications where job_id=$1 and user_id=$2);", [job_id, uid]);
     if(!rows[0].exists){
-      return res.status(204).json({message: "No id Data Exist"})
+      return res.status(200).json({message: "No id Data Exist"})
     }
     await connect.query("delete from applications where job_id=$1 and user_id=$2", [job_id, uid])
-    return res.status(204).json({message: 'Successfully Withdraw from applications'});
+    return res.status(200).json({message: 'Successfully Withdraw from applications'});
   } catch (error) {
+    console.log('error ', error)
     res.status(500).json({message: error.message})
   }
 }

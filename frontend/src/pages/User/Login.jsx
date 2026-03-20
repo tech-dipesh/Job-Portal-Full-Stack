@@ -16,28 +16,26 @@ import Registerleftcomps from '../../components/common/User/Registerleftcomps.js
 
 export default function Login() {
   const {reexecute, data:checkuser}=useAuth()
-  const {state}=useLocation
+  const {state}=useLocation()
   const [value, setValue] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const {data, loading, error:apierror, execute}=useFetchData(loginUser)
+  console.log('user location', state)
   useEffect(()=>{
-    if(checkuser){
-      navigate("/")
+    if(checkuser || data){
+      navigate(state?.from || "/")
     }
-  }, [])
+  }, [checkuser, data, navigate, state])
+  
   const submitForm = async (e) => {
     e.preventDefault();
     const err = validateLogin(value);
     if (err) return setError(err);
-  const result = await execute(value); 
-  if (result) {
-    await reexecute();
-    navigate(state?.from || "/");  
-    Successcomps(data)
-  } 
-  setError(apierror)
+    await execute(value)
+    if(apierror) setError(apierror)
+    else await reexecute()
   };
 
 

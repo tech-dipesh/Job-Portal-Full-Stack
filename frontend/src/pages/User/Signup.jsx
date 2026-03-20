@@ -42,8 +42,6 @@ export default function Signup() {
       navigate("../verify-email", {state: "Please Verify Your Mail"})
     }
   }
-  console.log('value is', value)
-  console.log('errr', error)
   return (
     <div className='grid md:grid-cols-2 grid-cols-1 items-center min-h-screen bg-slate-700 p-6'>
           <Registerleftcomps type='Signup'/>
