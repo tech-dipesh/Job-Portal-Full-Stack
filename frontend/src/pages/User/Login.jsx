@@ -43,7 +43,7 @@ export default function Login() {
       <div className='grid md:grid-cols-2 grid-cols-1 items-center min-h-screen bg-slate-700 p-6'>
         <Registerleftcomps type={'Login'}/>
         <div className='border border-white/20 rounded-2xl p-6  flex flex-col gap-4 flex-1 self-stretch w-full'>
-        <h1 className='font-semibold justify-center align-middle'>Welcome Back To The Jobify.</h1>
+        <h1 className='font-semibold justify-center align-middle'>Welcome Back To The YetiJobs.</h1>
         <Successcomps data={data}/>
         <form onSubmit={submitForm} className='flex flex-col gap-4 align-middle'>
           <h2>Email</h2>

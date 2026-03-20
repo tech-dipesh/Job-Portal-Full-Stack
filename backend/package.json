@@ -1,6 +1,6 @@
 {
   "name": "job-portal",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "- Phase 1:\r   Backend:",
   "main": "app.js",
   "scripts": {

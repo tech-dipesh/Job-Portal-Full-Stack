@@ -28,7 +28,7 @@ export default function Footer({data}) {
           </div>
           <div className='lg:grid lg:none'>
           <p className='text-gray-500  font-sans'><FontAwesomeIcon icon={faCreativeCommons}/>2026 Dipesh Sharma. All rights reserved.</p>
-          <div className='flex'>
+          <div className=''>
           {company_id &&  <Linkcomps to='companies/dashboard' content={<ButtonComps values='Dashboard'/>}/>}
           <Linkcomps to={'/jobs/search'} content={<ButtonComps values='Search Jobs'/>}/>
           </div>

@@ -29,7 +29,7 @@ const Isadmin = lazy(() => import('./components/auth/Isadmin'))
 const Assignusertocompanies = lazy(() => import('./pages/Admin/Assignusertocompanies'))
 const IsOwnerandloggedIn = lazy(() => import('./components/auth/isOwnerAndLoggedIn'))
 const Admindashbaoard = lazy(() => import('./pages/Admin/Admindashboard'))
-const Home = lazy(() => import('./pages/Home'))
+import Home from './pages/Home'
 const Jobs = lazy(() => import("./pages/Jobs/Alljob"))
 const EachJob = lazy(() => import('./pages/Jobs/eachJobs'))
 const Login = lazy(() => import('./pages/User/Login'))

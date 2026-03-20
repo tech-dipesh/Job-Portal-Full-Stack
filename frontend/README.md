@@ -219,7 +219,12 @@ with i make sure that if the role is recutier it must have company_id then is no
 - with only rexecute data is valid. which causing the errror.
 - one things that i add is the modal for apply a jobs.
 
-
+- with change the icon to the simpel small page tnot eh entire ocmps.
+- also add the shaer to the any particular company which i also make have a sharable features.
+- make sure that i add from the logic where user coming from redirect themm after login
+- also update on the veriy email where user is coming from.
+- i've to make sure send non: 204 status on the withdraw applicatioon as 204 mean data will send nothing on the frontend.
+- add the new logo that i create from the canva
 
 
 
@@ -254,6 +259,7 @@ with i make sure that if the role is recutier it must have company_id then is no
   4. react-spinners for the loading icon.
   5. react icons adding some not have font aweome icon.
   6. react-toastify: for adding the alert message for the better user interaction.
-  7. date-fns: for perfomr a some acion on the date-fns.
+  7. date-fns: for perfomr a some acion on the date-fns. remove later.
+  
   
   

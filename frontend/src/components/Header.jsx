@@ -5,7 +5,6 @@ import { logoutUser } from '../api/auth.user'
 import { useAuth } from '../context/Authcontext'
 import { faArrowRotateRight, faBars, faBriefcase, faMagnifyingGlass, faUser, faUserCheck, faUserXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import reactIcons from "../assets/react.svg"
 import Linkcomps from './common/Linkcomps'
 import { GrUserAdmin } from 'react-icons/gr'
 import LogoRounded from "../assets/logo-rounded.png"
@@ -106,7 +105,7 @@ export default function Header() {
   return (
     <div className='mt-1 sticky top-0 z-50 md:w-screen sm:w-screen w-full overflow-y-visible flex justify-end items-center px-4 py-4 bg-neutral-700'>
       <header className='flex w-full overflow-y-visible font-semibold items-center justify-between'>
-        <Link to={'/'} onClick={() => setProfile(false)}><img src={LogoRounded} className='h-10 w-10' alt="Profile" /></Link>
+        <Link to={'/'} onClick={() => setProfile(false)}><img src={LogoRounded} className='h-8 w-8' alt="Profile" /></Link>
         <div className='flex md:hidden items-center justify-center'>
           <div className='flex md:hidden items-center'>
             <FontAwesomeIcon icon={faBars} className='cursor-pointer text-white text-xl' onClick={() => setIsMobileMenu(!isMobileMenu)} />

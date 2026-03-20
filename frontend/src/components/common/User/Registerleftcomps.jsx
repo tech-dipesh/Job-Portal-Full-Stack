@@ -10,7 +10,7 @@ export default function Registerleftcomps({type}) {
       <h2 className='text-3xl font-bold text-gray-300 text-sm`'>Welcome to the {type} page:</h2>
       <div className="flex items-center gap-3">
      <img src={reactIcons} className="w-10 h-10" alt='Logo'/>
-     <span className="text-2xl font-bold text-cyan-400">Jobify</span>
+     <span className="text-2xl font-bold text-cyan-400">YetiJobs</span>
     </div>
       {Benifits.map((benefit, i)=>(
         <div className="flex items-center gap-3" key={i}>
