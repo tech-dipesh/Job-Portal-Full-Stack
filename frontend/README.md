@@ -229,6 +229,9 @@ with i make sure that if the role is recutier it must have company_id then is no
 
 
 
+
+
+
 - change the email template logo to the new logo
 - give the name to: `yetijobs.com`
 - remove the inline search on homepage which don't have any representation.
@@ -236,6 +239,11 @@ with i make sure that if the role is recutier it must have company_id then is no
 - with not found page i make sure to add the appripate message and lot better ui.
 
 
+
+
+- make the footer ato add issue feeatures page and also make the mobiel responvei
+- make the error page litlbe bit of improve page.
+- 
 
 
 ## Portal:

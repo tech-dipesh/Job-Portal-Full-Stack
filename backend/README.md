@@ -6,7 +6,7 @@
 ## All Api Endpoints: 2025/feb/26
 - applications: `lists, id/apply, id/withdraw, `
 - companies: `/, id/dashbaord, id/employees, id/jobs, id/applications, id: get company all, id: post new company, / delete company, /id put new company`
-- jobs: `saved_jobs/list, id/bookmark_job, id/remove_from_bookmar, /: all listing, /search, id/ particular listing jobs, id: new jobs, id/ deelete, /id update`
+- jobs: `saved_jobs/list, id/bookmark_job, id/remove_from_bookmarks, /: all listing, /search, id/ particular listing jobs, id: new jobs, id/ deelete, /id update`
 - users: `/logout, /login, /signup, /: all user, /:id individual user details, /skills add the user skills, /id, delete a user, /put, update user, /patch, update particular list, /forget-password, /forget-password-verify, /email-verify, /email-verify/resend, /upload-resume, /upload-profile-picture`
 - admin: `/verify-admin, /users/search, /company/search, /admin/dashboard`
 
@@ -73,19 +73,6 @@
 
 
 
-- sample data: 
-```js
-  {
-  "fname": "admin",
-  "lname": "admin",
-  "password": "Admin@123",
-  "education": "Undergraduation",
-  "email": "admin@gmail.com"
-}
-```
-
-
-
 - i've make sure that each users have the company_id that connect a foreign ke to the companies by default it can be the null value
 - also make sure i add the created_at company when they created 
 
@@ -109,9 +96,6 @@ and i've also create a middlewar with different use case.
 
 
 ## Total api endpoints:
-- users: `delete, getAll, getlogin, getParticular, patch, postSignup, put`
-- companies: `delete, get, post, put`
-- listings/jobs: ` deleteListingController, getAllListingController, getListingController, postListingController, putListingController`
 
 - every list have must have user should be authenticated  and also the authorized for addding a companies only adming can add the companies,, 
 
@@ -452,4 +436,9 @@ for allow all teh credentiants now work.
 - add the .dockerignore for ignore a multiple of files 
 - i should add the dockerignore to teh node_modules env and the dockerfile itself.
 - i've build my application with: `docker build -t job_portal  .`
+
+
+## Important:
+- `npm audit`: checks all the vulneratlibty we can get the all the audit
+- `npm prune` chesk all the latest details.
 
