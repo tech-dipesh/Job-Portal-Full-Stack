@@ -51,8 +51,8 @@ The Project is a Job Portal Platform **with** all the features needed to build a
   - Get All **Followers** Company
 
 3. Admin:
-   - Assign User to companies.
-   - edit/delete/create/update Company
+  - Assign User to companies.
+  - edit/delete/create/update Company
   - Company Entire Overview dashboard
   
 4. Common:
@@ -82,31 +82,31 @@ The Project is a Job Portal Platform **with** all the features needed to build a
 - The Project is built on top of the PERN stack with a layered architecture where I've used React for the UI state and Node/Express for backend (API, auth logic), PostgreSQL (data logic).
 - with REST API **layers**, JWT for auth, and modular services for handling jobs, applications, companies, resume parsing, profile picture upload.
 - With total more than **40** API endpoints with **proper** validation on both client and server side
-- i've to make sure to addd the diagram of the  architecture.
- with also teh how frontend backend and db is interact
+- i've to make sure to add the diagram of the  architecture. 
+  - with also add the how frontend backend and db is interact
 
 
 ## Folder Structure
 
 ### Backend:
-- app.js: Main file Which Runs Our Server
-- controllers: All our business Logic
-- Middleware: custom Middleware between two middleware for security.
-- Models: Data Validation
-- routes: All Routes
-- services: External Business Logic
-- utils: Reusable Function
+- `app.js`: Main file Which Runs Our Server
+- `controllers`: All our business Logic
+- `Middleware`: custom Middleware between two middleware for security.
+- `Models`: Data Validation
+- `routes`: All Routes
+- `services`: External Business Logic
+- `utils`: Reusable Function
 ### Frontend:
-- api: All the Api calling to the server request
-- assets: Images to used on the project
-- auth: Validate Data
-- components: Reusuable components
-- context: UseContext central state mangment
-- Data: Form of array static data which used multiple places
-- hooks: Custom hooks such as fetching a data.
-- lib: Axios Default Api
-- pages: Final Output pages that client will see:
-- services: Reusuable Function.
+- `api`: All the Api calling to the server request
+- `assets`: Images to used on the project
+- `auth`: Validate Data
+- `components`: Reusuable components
+- `context`: UseContext central state mangment
+- `Data`: Form of array static data which used multiple places
+- `hooks`: Custom hooks such as fetching a data.
+- `lib`: Axios Default Api
+- `pages`: Final Output pages that client will see:
+- `services`: Reusuable Function.
 
 
 
@@ -164,9 +164,9 @@ The Project is a Job Portal Platform **with** all the features needed to build a
 
 
 
-## Instalation & Setup:
-- As It's based on the PERN Stack we've, required above all things to run our server.
-- Requirements: **Node.js**, Postgres Server, Supabase Keys, Nodemailer Keys"
+## Installation & Setup:
+- To Run the System to a Local Server, we've to make sure have the muliple of systems for differnet purpose.
+- Requirements: **Node.js**, Postgres Server, Supabase Keys, Nodemailer Keys
 
 ### Backend Configuration:
 ``` bash
@@ -200,7 +200,9 @@ vim .env
 
 ## Docker Setup:
 - Dockerbase have only one single container of the nodejs configuration.
-- 
+- With Use the Image of the `node` image 
+- in the coming time i'm plan to migrate my database to the dockrize.
+
 
 
 ## Api Documentation:
@@ -227,25 +229,25 @@ vim .env
 
 ### Companies Table:
 - all the list of the companies which exist on the platform with their relvent other information.
-- with teh routes of: `admin` which only accessible to the role of teh admin.
+- with the routes of: `admin` which only accessible to the role of the admin.
 
 ### Email Verified Table:
-- for track the email verified users, and also have the when user is try a forget password i've also store on teh email verified tables.
-- with the enum type whether email verify or forget password with link to the user id and teh random code and relevent other information.
+- for track the email verified users, and also have the when user is try a forget password i've also store on the email verified tables.
+- with the enum type whether email verify or forget password with link to the user id and the random code and relevent other information.
 
 ### Jobs Table:
 - jobs is one of the most importatn table, which content lot of column on the single table.
-- with the company id to teh user id who created and other basic jobs such as title, desc, salary, type and lot more.
+- with the company id to the user id who created and other basic jobs such as title, desc, salary, type and lot more.
 
 ### Saved jobs Table:
 - with user have the option to bookmark a any jobs.
-- on the bookmark with foreign relation of teh jobs and the user id and otehr relevent info.
+- on the bookmark with foreign relation of the jobs and the user id and other relevent info.
 ### User Companies Follow or Followers Table:
 - with i've add the lately of the following and the followers system for the following only company and by only the users.
 
 ### Users Table:
 - with the user info and also the role whehter the user is guest, admin or the recruiter.
-- with the profile pic and also teh resume have.
+- with the profile pic and also the resume have.
 - education skills and the company id which only be valid for the enum recruiter.
 - and lot of other information.
 ### Extra
@@ -258,14 +260,15 @@ vim .env
 
 ## Cron Task:
 - The cron task mean it'll run on that particular time which we've specified.
-the operation that I'm using cron for is on jobs which have an **expiry** time of 30 days, which checks every night at **midnight**.
-- on the every noon cron node check whterh the jobs time have expired or not if expired change the that job set to teh closeed of is_job_active
-
+- the operation that I'm using cron for is on jobs which have an **expiry** time of 30 days, which checks every night at **midnight**.
+- on the every noon cron node check which jobs time have expired or not if expired change the that job set to the closeed of is_job_active colum from `jobs` table.
 
 
 ## Testing:
-- As of now I **have** no testing. I plan to add integration testing with Jest and Supertest.
-- if it's become a time constraint for me only main routes such as: `login, signup, jobs, new jobs` will have the testing but it might take time as i'm currently learning a Testing Fundmental.
+- As of now I **have** no testing integrated to the system.
+- I plan to add integration testing with Jest and Supertest.
+- if it's become a time constraint for me to only main routes such as: `login, signup, jobs, new jobs` will have the testing but it might take time as i'm currently learning a Testing Fundmental.
+- 
 
 ## Deployment:
 - for the deployment i'm plan to use the `vercel` for the both frontend and the backend project.
@@ -275,85 +278,84 @@ the operation that I'm using cron for is on jobs which have an **expiry** time o
 
 ## Security:
 - use **Helmet** for the response purpose which removes **X-Powered-By** so the client will not know which framework we've built with.
-### validatin Security:
+### validation Security:
 - Every major table will have validation from Zod which **checks** the integrity of our data.
-- beside teh client side validat, server side validation, i aloso make suer to add the database validatino,
-- even if user bypass a both client and server validation it can't insert due to teh database validation.
-- with checking a pattern, blank, min length max length which are common i've implemented.
+- beside the client side validate, server side validation, i also make sure to add the database validation.
+- even if user bypass a both client and server validation it can't insert due to the database validation.
+- With checking a text pattern, blank/undefined, correct data type, unique constraint,min length max length which are common for the data validation i've implemented.
 - i make sure to every single data to enforce the database integrity.
 
 
 ### System Security:
-- The Most important thigns that i added here is the rate limiting.
-> Security
+- The Most important things that i added here is the rate limiting.
+> Rate Limiting:
 >> Rate limiting: 200 req/min globally
 >>> Reset password: 2 req/min strictly
-- also add the rate limiting for the reset password and the forget password only can send the request twice per minute which enforce tha lot of times that user can't send the request.
-- use the helemtn for the reponse purpose which remove teh x powered by that the client will nto knwo which frameworkd we've build without this it'll show it build from the express.
- - and also haev one more feature ao it alls the 12 more repsonse header, for better secuirty epurpsoe of prevent from teh xss attack.
-- Use the cors for only allow my client url dont' allow any external api endponkts which also have a better security featuer.s
+- use the helmet  for the reponse purpose which remove the `X-Powered` by that the client will not konw which framework we've build without this it'll show it build from the express.
+  - Also have  one more feature  it's add 12 more repsonse header, for better secuirty purpose of prevent from the `xss attack`.
+- Use the `cors` library for only allow my client url dont' allow any external api endpoints which also have a better security feature for avoid a cross side attack.
 
 
 
 ### Middlewares:
-- i make sure to validate every incomonign  request to the both cilent side and the server side have teh middleware.
+- i make sure to validate every incomoning  request to the both cilent side and the server side have the middleware.
 #### Client Valdiation:
-- on the client valdiation guest cant' visit the page of the admin dashboard and the other admin restricted page and also teh employee restricted page.
-- while the employees only restrict to perfomr a employee cant' apply to teh jbos or can't perfmor a the neither a guest or the admin action.
-- admin which have little bit of the freedom but also enforce  cant' visit the page of the guest or the employee action.
+- on the client valdiation guest can't visit the page of the admin dashboard and the other admin restricted page and also the employee restricted page.
+- while the employees only restrict to perform a employee can't apply to the jobs or can't perform and also neither a guest or the admin action.
+- admin which have little bit of the freedom but also enforce data on control integrity can't visit the page of the guest or the employee action.
 #### Server MIddleware:
 - i've more than the 9 middleware for the server validation.
-- with make the controller user action to teh only isJobSekkker, companeis contoller to teh isEmployee and the admin contoller tot eh ony isAdmin.
-- with i also valdiation whether the use is logged in or not, and also whter the user logged in but not verified, whtehr teh user is owner of that routes or not, whetehr the user given a correct uuid which i also validatino that also save some time for invalid ui to check from teh database.
+- With make the controller user action to the only isJobSekkker, companies contoller to the isEmployee and the admin contoller to the isAdmin.
+- with i also valdiation whether the use is logged in or not, and also whether the user logged in but not verified, whether the user is owner of that routes or not, whether the user given a correct `uuid` which i also validaion that also save some time for invalid ui to check from the database.
 
 
-<h2 align="center">⚡ Performance Optimization</h2>
-- for the perfomacne i've make sure that
-- add the indexing purpose which use to query a any data with teh faster time.
-- Add the lazy loading and also the suspense loading for only fetch data when needed dont' request to server when don't need that.
+<div align="center">⚡ Performance Optimization</div>
+- for the performance i've make sure that
+- add the indexing purpose which use to query a any data with the faster time.
+- Add the lazy loading and also the suspense loading for only fetch data when needed don't request to server when don't need that.
 - use the useContext for centralize  for the check a whether a user is verifed, logged in and the user role.
-- Used the Pagination for the preofmrance optimization for the jobs specifally.
+- Used the Pagination for the performance optimization for the jobs specifically.
 - i make sure indexing a search query that also do the faster operation.
-- i've ized my signup of the: `dns/promises` using a library of in build to verify a whether the given user email domain is valid or nto before even try to send a mail.
-- with rather then chekcing a entire select statement i've used a: `select exists(select 1)` which can be used for condition match return true and don't fetch all else false which also imporove the perofmaance of the system.
+- i've ized my signup of the: `dns/promises` using a library of in build to verify a whether the given user email domain is valid or not before even try to send a mail.
+- with rather then checking a entire select statement i've used a: `select exists(select 1)` which can be used for condition match return true and don't fetch all else false which also imporove the perofmaance of the system.
 
 
 
-## Sclabality Considration:
-- For scalability consideration, it's a very scalable system. Done proper API versioning and follow the MVC pattern for building a REST architecture.
-- with done the proper api versisong and teh follow the mvc (mrc) pattern for buildign a rest architecture.
-- With have the global error handling on the both client and server error event if it's error occured it'll catch and dont' crash a system on teh both side.
+## Sclabality Consideration:
+- For scalability consideration, it's a very scalable system. - Done proper API versioning and follow the MVC pattern for building a REST architecture.
+- with done the proper api versisong and the follow the mvc (mrc) pattern for building a rest architecture.
+- With have the global error handling on the both client and server error event if it's error occured it'll catch and dont' crash a system on the both side.
 - Use PostgreSQL full text search with GIN index for searching jobs, which bypasses prefix search from ILIKE
 -  on the every request it's sending a correct message as well with also the correct status code which range from 200, 400, 500.
-- check teh multiple command such as join, group by, nested query witht eh : `explain analyze` for the perofmance analysis which can have the faster query.
-- 
+- check the multiple command such as join, group by, nested query with the : `explain analyze` for the performance analysis which can have the faster query.
 
 ## Known Issue:
-- The Major Issue i've only faced on only on teh ui design.
+- The Major Issue i've only faced on only on the ui design.
 - with only the minor patch issue face on the backend.
 - while on the frontend especially Tailwind CSS has known issues specifically with position and display.
 - Sometimes PostgreSQL `$1` placeholder doesn't work as expected, requiring template literals, but this has SQL injection risks which I prevent by validating user input.
 - during a building a email template for the backend i've also face a lot of issue on there.
-- One Issue that i sitll have is, for sending a mail, iv'et eh synchrounous, mean i'm not waiting for that request, as but when the email is invalid it's tryign to send a mail that still a issue.
+- One Issue that i sitll have is, for sending a mail, i'vee the synchronous, mean i'm not waiting for that request, as but when the email is invalid it's trying to send a mail that still a issue.
  - i can use the `promise.all` which i'm plan to use for the better perofmace 
 -  during the email resend token, i've to make sure send the updated token, rather i'm sending a old token.
-- with i make sure to send the: `withCredntiatils` from the frontend on the every request which i use teh axios create function for sending at oncee.
+- With i make sure to send the: `withCredntiatils` from the frontend on the every request which i use the axios create function for sending at oncee.
 - for sending a file i've to mandatory to send a file on the: `formData` which sometmes it becmoe a silent error.
 
 
 ## LImitation:
 - as i'm using a everywher the free tier for database/MAU at one time, which is efficient for the smaller student level projects.
--
+- Other Limitation as of now that it can't connect to the job sekker and hr directly just have user informatino such as email, name but not direct connection which i will be adding to it.
+
 
 ## Someting Go Beyond Features:
-- i've make sure to dockerize my sytem with also ignore some files that dont' needed.
-- as of now i only dockerize to teh nodejs, coming days might be also teh dbms let's see.
-- also have the controller and also the abot feature if the request takes longer time dont' wat for more than  a 10 sec.
+- i've make sure to dockerize my system with also ignore some files that dont' needed with: `.dockerignore`
+- as of now i only dockerize to the nodejs, coming days might be also the dbms let's see.
+- also have the controller and also the abort feature if the request takes longer time dont' wat for more than  a 10 sec.
 - now on the react 19 we dont' need: `auth.provider rather it also work a auth` 
 - use the portal system for the popup of the some features.
 - for previous a page on the profile picturee of the resume to change it i can use: `createObjectURL` to print show it.
 - add the vercel analytics for the get the stats about the frontend application.
-
+- With hr have the full control which use to reject which to move forward to the interview or the hired or rejected hr have full control.
 
 > [!NOTE]
 > ## Future Improvements:
@@ -371,6 +373,7 @@ the operation that I'm using cron for is on jobs which have an **expiry** time o
 > - Add the notification page list about notified user about recent events, followed companies notification, recruiter viewed your resume.
 > - profile completneess score based on the badged applicant top skills and how much active jobs seeker.
 > - On the edit content page if user try to submit a content without any change don't allow them which reduce a less backend request.
+> - Adding a phone number of the user that can send to hr when ur is accepted.
 
 
 # Thanks 
