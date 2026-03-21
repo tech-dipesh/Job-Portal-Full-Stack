@@ -1,6 +1,14 @@
 # Yeti Jobs:
 Full stack Job Portal **Connecting** job **seekers** to recruiters with smart search, built with PERN stack, scalable job posting, resume analysis, real-time application management.
 
+<p align="center">
+    <picture>
+        <img src="frontend/public/logo-rounded.png" alt="Yeti Jobs" width="250" height='250'>
+    </picture>
+</p>
+<p align="center">
+  <strong>Climb your career like a Yeti climbs a mountain.</strong>
+</p>
 
 ## Overview:
 The Project is a Job Portal Platform **with** all the features needed to build a job portal platform, such as CRUD operations, **role-based** access control, jobs, companies, apply, withdraw, create a job, create a new company, admin controller, and a cron queue.
@@ -119,36 +127,41 @@ The Project is a Job Portal Platform **with** all the features needed to build a
   - JWT: JSON Web Token (JWT) for securely signed tamper proof information
    - JWT_SECRET_KEY:
   - COMMON:  Client URL to server that only **requests** port and also **how long** our cache should **be** stored"
-    - CLIENT_BASE_URL
+    ```diff
+    + CLIENT_BASE_URL=http://localhost:5173
+    - CLIENT_BASE_URL=https://vercel.app
+    ```
     - PORT
     - MAXAGE
 
 ### Frontend:
   - VITE_SERVER_URL: Server url which we'll send a request
+## 📦 Libraries Used
 
-## Libraries Used:
-- `react`: `19.2.0`
-- `fontawesomeicon`: `7.2.0`
-- `axios`: `1.13.5`
-- `react-icons`: `5.6.0`
-- `react-router`: `7.13.1`
-- `react-spinners`: `0.17.0`
-- `react-toastify`: `11.0.5`
-- `tailwindcss`: `4.2.1`
-- `@supabase/supabase-js`: `^2.97.0`
-- `bcryptjs`: `^3.0.3`
-- `cookie-parser`: `^1.4.7`
-- `cors`: `^2.8.6`
-- `dotenv`: `^17.3.1`
-- `express`: `^5.2.1`
-- `express-rate-limit`: `^8.2.1`
-- `helmet`: `^8.1.0`
-- `jsonwebtoken`: `^9.0.3`
-- `multer`: `^2.0.2`
-- `node-cron`: `^4.2.1`
-- `nodemailer`: `^8.0.1`
-- `pg`: `^8.18.0`
-- `zod`: `^4.3.6`
+| Package | Version | Category |
+| ------- | ------- | -------- |
+| [![react](https://img.shields.io/npm/v/react.svg?label=react)](https://npmjs.com/package/react) | `19.2.0` | Frontend |
+| [![axios](https://img.shields.io/npm/v/axios.svg?label=axios)](https://npmjs.com/package/axios) | `1.13.5` | Frontend |
+| [![react-router](https://img.shields.io/npm/v/react-router.svg?label=react-router)](https://npmjs.com/package/react-router) | `7.13.1` | Frontend |
+| [![react-icons](https://img.shields.io/npm/v/react-icons.svg?label=react-icons)](https://npmjs.com/package/react-icons) | `5.6.0` | Frontend |
+| [![react-toastify](https://img.shields.io/npm/v/react-toastify.svg?label=react-toastify)](https://npmjs.com/package/react-toastify) | `11.0.5` | Frontend |
+| [![react-spinners](https://img.shields.io/npm/v/react-spinners.svg?label=react-spinners)](https://npmjs.com/package/react-spinners) | `0.17.0` | Frontend |
+| [![tailwindcss](https://img.shields.io/npm/v/tailwindcss.svg?label=tailwindcss)](https://npmjs.com/package/tailwindcss) | `4.2.1` | Frontend |
+| [![express](https://img.shields.io/npm/v/express.svg?label=express)](https://npmjs.com/package/express) | `^5.2.1` | Backend |
+| [![jsonwebtoken](https://img.shields.io/npm/v/jsonwebtoken.svg?label=jsonwebtoken)](https://npmjs.com/package/jsonwebtoken) | `^9.0.3` | Backend |
+| [![bcryptjs](https://img.shields.io/npm/v/bcryptjs.svg?label=bcryptjs)](https://npmjs.com/package/bcryptjs) | `^3.0.3` | Backend |
+| [![zod](https://img.shields.io/npm/v/zod.svg?label=zod)](https://npmjs.com/package/zod) | `^4.3.6` | Backend |
+| [![helmet](https://img.shields.io/npm/v/helmet.svg?label=helmet)](https://npmjs.com/package/helmet) | `^8.1.0` | Security |
+| [![express-rate-limit](https://img.shields.io/npm/v/express-rate-limit.svg?label=express-rate-limit)](https://npmjs.com/package/express-rate-limit) | `^8.2.1` | Security |
+| [![cors](https://img.shields.io/npm/v/cors.svg?label=cors)](https://npmjs.com/package/cors) | `^2.8.6` | Security |
+| [![multer](https://img.shields.io/npm/v/multer.svg?label=multer)](https://npmjs.com/package/multer) | `^2.0.2` | Upload |
+| [![nodemailer](https://img.shields.io/npm/v/nodemailer.svg?label=nodemailer)](https://npmjs.com/package/nodemailer) | `^8.0.1` | Mail |
+| [![node-cron](https://img.shields.io/npm/v/node-cron.svg?label=node-cron)](https://npmjs.com/package/node-cron) | `^4.2.1` | Jobs |
+| [![pg](https://img.shields.io/npm/v/pg.svg?label=pg)](https://npmjs.com/package/pg) | `^8.18.0` | Database |
+| [![cookie-parser](https://img.shields.io/npm/v/cookie-parser.svg?label=cookie-parser)](https://npmjs.com/package/cookie-parser) | `^1.4.7` | Middleware |
+| [![dotenv](https://img.shields.io/npm/v/dotenv.svg?label=dotenv)](https://npmjs.com/package/dotenv) | `^17.3.1` | Config |
+| [![@supabase/supabase-js](https://img.shields.io/npm/v/@supabase/supabase-js.svg?label=supabase-js)](https://npmjs.com/package/@supabase/supabase-js) | `^2.97.0` | Storage |
+
 
 
 ## Instalation & Setup:
@@ -156,18 +169,31 @@ The Project is a Job Portal Platform **with** all the features needed to build a
 - Requirements: **Node.js**, Postgres Server, Supabase Keys, Nodemailer Keys"
 
 ### Backend Configuration:
-``` cd backend ```
-``` touch .env  ```: create a environment variables.
-``` vim .env ``` (Insert all the env keys on here) 
-```npm i``` Install all our node libraries
-- ```node app.js```: Run our nodesj server
+``` bash
+  cd backend
+  touch .env # Create Env File
+  vim .env (Insert all the env keys on here)
+```
+- After inserting all the env keys
+``` bash
+npm i # Install all our node libraries
+node app.js # Run our nodejs server
+```
+
 
 ### Frontend:
-``` cd frontend ```
-``` touch .env```: create a env variables.
-``` vim .env ```: Insert a server url path
-``` npm i```: Install all our node libraires
-``` npm run dev ```: load our react page to browser
+``` bash
+cd frontend
+touch .env
+vim .env
+```
+- Insert a: VITE_SERVER_URL on .env file.
+
+``` bash
+ npm i:  # Install all our node libraires
+ npm run dev  # load our react page to browser
+```
+
 >:white_check_mark: your client page will run on the http://localhost:5173
 
 
@@ -183,7 +209,9 @@ The Project is a Job Portal Platform **with** all the features needed to build a
 
 ## Database Design:
 - For the Database Design, I made sure to have separation of concerns with only single tables doing a single task, not multiple.
-### Database Tables:
+<details>
+
+<summary> Database Tables:</summary>
 - applications
 - companies
 - email_verified
@@ -226,6 +254,7 @@ The Project is a Job Portal Platform **with** all the features needed to build a
 - Have the Muliple level of constraint/check to validate a inserted data with the data integrity.
 - with also i use the `on delete cascase or on delete restrict` on the foreign relation if the foreign relation data is delete dshould we allow that linked data to be deleted or what.
 
+</details>
 
 ## Cron Task:
 - The cron task mean it'll run on that particular time which we've specified.
@@ -256,8 +285,9 @@ the operation that I'm using cron for is on jobs which have an **expiry** time o
 
 ### System Security:
 - The Most important thigns that i added here is the rate limiting.
-- which hacker even cant' try to do the brute force with the strict method.
-  - for any request, on the backend only can send the request of the 200 per minutes, which i feel it still high, but considerign we've to request on the development mode lot of time i plan to make the 100 request per minute.
+> Security
+>> Rate limiting: 200 req/min globally
+>>> Reset password: 2 req/min strictly
 - also add the rate limiting for the reset password and the forget password only can send the request twice per minute which enforce tha lot of times that user can't send the request.
 - use the helemtn for the reponse purpose which remove teh x powered by that the client will nto knwo which frameworkd we've build without this it'll show it build from the express.
  - and also haev one more feature ao it alls the 12 more repsonse header, for better secuirty epurpsoe of prevent from teh xss attack.
@@ -277,14 +307,14 @@ the operation that I'm using cron for is on jobs which have an **expiry** time o
 - with i also valdiation whether the use is logged in or not, and also whter the user logged in but not verified, whtehr teh user is owner of that routes or not, whetehr the user given a correct uuid which i also validatino that also save some time for invalid ui to check from teh database.
 
 
-## Performance Optimization:
+<h2 align="center">⚡ Performance Optimization</h2>
 - for the perfomacne i've make sure that
 - add the indexing purpose which use to query a any data with teh faster time.
 - Add the lazy loading and also the suspense loading for only fetch data when needed dont' request to server when don't need that.
 - use the useContext for centralize  for the check a whether a user is verifed, logged in and the user role.
 - Used the Pagination for the preofmrance optimization for the jobs specifally.
 - i make sure indexing a search query that also do the faster operation.
-- i've optimzed my signup of the: `dns/promises` using a library of in build to verify a whether the given user email domain is valid or nto before even try to send a mail.
+- i've ized my signup of the: `dns/promises` using a library of in build to verify a whether the given user email domain is valid or nto before even try to send a mail.
 - with rather then chekcing a entire select statement i've used a: `select exists(select 1)` which can be used for condition match return true and don't fetch all else false which also imporove the perofmaance of the system.
 
 
@@ -315,7 +345,7 @@ the operation that I'm using cron for is on jobs which have an **expiry** time o
 - as i'm using a everywher the free tier for database/MAU at one time, which is efficient for the smaller student level projects.
 -
 
-## Someting Go Beyond Featuers:
+## Someting Go Beyond Features:
 - i've make sure to dockerize my sytem with also ignore some files that dont' needed.
 - as of now i only dockerize to teh nodejs, coming days might be also teh dbms let's see.
 - also have the controller and also the abot feature if the request takes longer time dont' wat for more than  a 10 sec.
@@ -325,24 +355,38 @@ the operation that I'm using cron for is on jobs which have an **expiry** time o
 - add the vercel analytics for the get the stats about the frontend application.
 
 
-## Future Improvemnts:
-- Add notification/email when a company posts a new job. Real-time chat between recruiters and applicants.
--  Move from useContext to Redux. 
-- Add logging/monitoring/observability. 
-Socket.io for real-time features.
-- socker io feature for the real tiem whic i also plan
-ATS scoring for any user profile with their background jobs" and "interview scheduling system with automated email reminders and video call link generation from Google Calendar API.
-- user can add a their employment_history and shows that employment history to the user page, which is feasalbe now and also can add the new table of the education 
-- inteview shechduling system with auomated email remainder and video call link generation from google clander api.
-- resume parsing analysisx with exrrac skills education, ats.
-- make the company alsert to send the email to the user about notificy their feed.
-- make the notification page about inform user about latest events.
-- profile completneess score based on the badged applicant top skilsl and active jobs seeker.
-- real time chat between recuriters and the applicant.
-- with for better optimizatino for te mainly edit option if user don't change anything from the input and just try to submit don't allow them as it's just wastinr a resoruces only allow after somthings chnage else cancel the action.
+> [!NOTE]
+> ## Future Improvements:
+>-  Add notification/email when a company posts a new job.
+> - Real-time chat between recruiters and applicants.
+> -  Move from useContext to Redux. 
+> - Add logging/monitoring/observability. 
+> - Socket.io for real-time features.
+> - ATS scoring for any user profile with background jobs queue.
+> - interview scheduling system with automated email reminders and video call link generation from Google Calendar API.
+> - User can add a their employment_history and shows that employment history to the user page.
+> - List of the education history with the college cgpa and degree.
+> - Resume parsing Analysis with extract skills education from: `pdf-parser` library.
+> - Alert a user only to those which user followed their company with new jobs, must be the background jobs else it'll block the main block.
+> - Add the notification page list about notified user about recent events, followed companies notification, recruiter viewed your resume.
+> - profile completneess score based on the badged applicant top skills and how much active jobs seeker.
+> - On the edit content page if user try to submit a content without any change don't allow them which reduce a less backend request.
 
 
 # Thanks 
+
+
+<div align="center">
+
+<div align="center">
+  <a href="https://yeti-jobs.vercel.app">
+    <picture>
+      <img alt="Next.js logo" src="frontend/public/logo-rounded.png" height="128">
+    </picture>
+  </a>
+  <h1>Yeti Blues</h1>
+<a href="https://github.com/tech-dipesh/yeti-jobs/issues"><img alt="Request Issue on Github" src="frontend/public/Documents/readme-bar.png" height='50'></a>
+</div>
 
 
 ## Add this:
