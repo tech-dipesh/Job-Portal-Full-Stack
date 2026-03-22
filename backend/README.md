@@ -293,6 +293,8 @@ FOR EACH ROW EXECUTE FUNCTION title_search_function_update();
 10. express-rate-limit
 11. node-cron
 12. nodemailer
+13. yamljs
+14. 
 
 
 ## Post-Feb 26 Features

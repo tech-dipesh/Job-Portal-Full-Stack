@@ -6,7 +6,6 @@ import companyRouter from "./routes/companies.routes.js"
 import applicationRouter from "./routes/applications.routes.js"
 import "dotenv/config"
 import "./services/cron-task.js"
-
 import cookieParser from "cookie-parser";
 import authUserMiddleware from "./Middleware/isLoggedIn.js";
 import rateLimit from "express-rate-limit";
@@ -14,6 +13,9 @@ import cors from "cors";
 import "./services/email-verification.js"
 import isAdminMIddleware from "./Middleware/isAdmin.js";
 import adminRoutes from "./routes/admin.routes.js";
+import { serve, setup } from "swagger-ui-express";
+import YAML from "yamljs";
+const swaggerInYAML=YAML.load("./swagger.yaml")
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -30,6 +32,8 @@ app.use(limitUser);
 app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
+
+app.use("/api/v1/swagger",serve, setup(swaggerInYAML));
 app.use("/api/v1/jobs",  jobListingRouter)
 app.use("/api/v1/users", usersListingRouter)
 app.use("/api/v1/companies", authUserMiddleware, companyRouter)

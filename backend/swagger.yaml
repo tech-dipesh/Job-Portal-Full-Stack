@@ -2,6 +2,9 @@ openapi: 3.0.0
 info:
   title: swagger
   version: 1.0.0
+servers:
+  - url: http://localhost:3000/api/v1
+
 paths:
   /admin/dashboard:
     get:
@@ -13,6 +16,7 @@ paths:
       responses:
         "200":
           description: ""
+
   /admin/assign-user:
     post:
       summary: Assign Company User
@@ -23,19 +27,13 @@ paths:
       responses:
         "200":
           description: ""
-  /companies/e0ff1a5f-6920-4f75-bf47-bb110f3a8769:
-    delete:
-      summary: Delete Companies
-      operationId: deleteCompanies
-      description: ""
-      tags:
-        - Admin
-      responses:
-        "200":
-          description: ""
+      requestBody:
+        $ref: "#/components/requestBodies/assign_company_user"
+
   /admin/search/users:
     get:
       summary: Search Users
+      operationId: searchUsers
       description: ""
       tags:
         - Admin
@@ -50,8 +48,6 @@ paths:
           schema:
             type: string
           example: g
-      requestBody:
-        $ref: "#/components/requestBodies/search_users"
   /admin/verify:
     get:
       summary: Verify Admin
@@ -62,6 +58,7 @@ paths:
       responses:
         "200":
           description: ""
+
   /companies/new:
     post:
       summary: Add New Company
@@ -74,7 +71,24 @@ paths:
           description: ""
       requestBody:
         $ref: "#/components/requestBodies/add_new_company"
-  /companies/ab0c12c7-62c8-4748-8d53-04c429bbf90d:
+
+  /companies/{companyId}:
+    parameters:
+      - name: companyId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    delete:
+      summary: Delete Companies
+      operationId: deleteCompanies
+      description: ""
+      tags:
+        - Admin
+      responses:
+        "200":
+          description: ""
     put:
       summary: Update company list
       operationId: updateUsers
@@ -86,61 +100,83 @@ paths:
           description: ""
       requestBody:
         $ref: "#/components/requestBodies/update_company_list"
+
   /companies/followers:
     get:
       summary: All Followers
-      operationId: >-
-        getAllCompanyfollowers
+      operationId: getAllCompanyfollowers
       description: ""
       tags:
         - Companies
       responses:
         "200":
           description: ""
-  /companies/735b5472-07a9-4759-ad45-548aef42d11b/employees:
+
+  /companies/{companyId}/employees:
     get:
       summary: All Employees
-      operationId: >-
-        allEmployees
+      operationId: allEmployees
       description: ""
       tags:
         - Companies
       responses:
         "200":
           description: ""
-  /companies/735b5472-07a9-4759-ad45-548aef42d11b/jobs:
+      parameters:
+        - name: companyId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+
+  /companies/{companyId}/jobs:
     get:
       summary: All Jobs
-      operationId: >-
-        allJobs
+      operationId: allJobs
       description: ""
       tags:
         - Companies
       responses:
         "200":
           description: ""
+      parameters:
+        - name: companyId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+
   /companies/dashboard:
     get:
       summary: Dashboard company
-      operationId: >-
-        dashboardCompany
+      operationId: dashboardCompany
       description: ""
       tags:
         - Companies
       responses:
         "200":
           description: ""
-  /companies/735b5472-07a9-4759-ad45-548aef42d11b/applications:
+
+  /companies/{companyId}/applications:
     get:
       summary: Job Applications
-      operationId: >-
-        jobApplication
+      operationId: jobApplication
       description: ""
       tags:
         - Companies
       responses:
         "200":
           description: ""
+      parameters:
+        - name: companyId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+
   /companies/all:
     get:
       summary: Get All Companies
@@ -151,7 +187,35 @@ paths:
       responses:
         "200":
           description: ""
-  /applications/89e3d733-bfdc-4ea3-a0a6-7dc3bd09e755/apply:
+
+  /companies/{companyId}/follow:
+    parameters:
+      - name: companyId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    post:
+      summary: Follow Company
+      operationId: followcompany
+      description: ""
+      tags:
+        - Users
+      responses:
+        "200":
+          description: ""
+    delete:
+      summary: Unfollow Company
+      operationId: unfollowCompany
+      description: ""
+      tags:
+        - Users
+      responses:
+        "200":
+          description: ""
+
+  /applications/{jobId}/apply:
     post:
       summary: Apply to the job
       operationId: applyJob
@@ -161,9 +225,17 @@ paths:
       responses:
         "200":
           description: ""
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
       requestBody:
         $ref: "#/components/requestBodies/apply_to_the_job"
-  /applications/89e3d733-bfdc-4ea3-a0a6-7dc3bd09e755/status:
+
+  /applications/{applicationId}/status:
     post:
       summary: Change Applicant Status
       operationId: changeApplicantStatus
@@ -173,8 +245,16 @@ paths:
       responses:
         "200":
           description: ""
+      parameters:
+        - name: applicationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
       requestBody:
         $ref: "#/components/requestBodies/change_applicant_status"
+
   /applications/lists:
     get:
       summary: Get All Applications
@@ -185,18 +265,26 @@ paths:
       responses:
         "200":
           description: ""
-  /applications/251e0eaf-8f56-4f11-a7f0-fd0cb835d9b2/applist:
+
+  /applications/{jobId}/applist:
     get:
       summary: Single Job All the applicant
-      operationId: >-
-        singleJobAlApplicant
+      operationId: singleJobAlApplicant
       description: ""
       tags:
         - Applications
       responses:
         "200":
           description: ""
-  /applications/2f2f65c2-e8b8-4264-badd-63930832a3fb/withdraw:
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+
+  /applications/{applicationId}/withdraw:
     delete:
       summary: Withdraw application
       operationId: withdrawApplication
@@ -206,6 +294,14 @@ paths:
       responses:
         "200":
           description: ""
+      parameters:
+        - name: applicationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+
   /jobs/saved_jobs/list:
     get:
       summary: All Bookmarks
@@ -216,17 +312,26 @@ paths:
       responses:
         "200":
           description: ""
-  /jobs/3a2c3343-76c7-43f9-921f-c345075c453c/bookmark_job:
+
+  /jobs/{jobId}/bookmark_job:
     post:
       summary: Bookmark Job
       operationId: bookMarkJob
       description: ""
       tags:
-        - Saved Jobs
+        - Jobs
       responses:
         "200":
           description: ""
-  /jobs/3a2c3343-76c7-43f9-921f-c345075c453c/remove_from_bookmark:
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+
+  /jobs/{jobId}/remove_from_bookmark:
     delete:
       summary: Remove Bookmark
       operationId: removeBookmark
@@ -236,10 +341,18 @@ paths:
       responses:
         "200":
           description: ""
-  /jobs?limit=10&page=1&sortby=job_type:
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+
+  /jobs:
     get:
       summary: All Jobs
-      operationId: c_users_dipesh_bruno_job_portal_jobs_all_jobs_bru
+      operationId: allJobsList
       description: ""
       tags:
         - Jobs
@@ -263,7 +376,6 @@ paths:
             type: integer
             format: int32
           example: "1"
-
         - name: sortby
           in: query
           description: ""
@@ -271,6 +383,7 @@ paths:
           schema:
             type: string
           example: job_type
+
   /jobs/new:
     post:
       summary: Create New Job
@@ -283,7 +396,8 @@ paths:
           description: ""
       requestBody:
         $ref: "#/components/requestBodies/create_new_job"
-  /jobs/6c9d7d54-7f44-42f3-83fe-b5607f465d8d/delete:
+
+  /jobs/{jobId}/delete:
     delete:
       summary: Delete Each Job
       operationId: deleteEachJobs
@@ -293,7 +407,15 @@ paths:
       responses:
         "200":
           description: ""
-  /jobs/b8cc0732-2360-4837-9ea3-aadad7c35dce:
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+
+  /jobs/{jobId}:
     get:
       summary: Individual Job
       operationId: IndividualJobs
@@ -303,6 +425,14 @@ paths:
       responses:
         "200":
           description: ""
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+
   /jobs/search:
     get:
       summary: Search Job
@@ -321,7 +451,8 @@ paths:
           schema:
             type: string
           example: data
-  /jobs/0ddbea15-d866-45a5-8fad-a843faeea4e8/edit:
+
+  /jobs/{jobId}/edit:
     put:
       summary: Update Existing Jobs
       operationId: updateExistingJobs
@@ -331,9 +462,17 @@ paths:
       responses:
         "200":
           description: ""
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
       requestBody:
         $ref: "#/components/requestBodies/update_existing_jobs"
-  /jobs/5082aaad-0b35-4fc9-aaca-f5d63d1e8a03/verify-owner:
+
+  /jobs/{jobId}/verify-owner:
     get:
       summary: Verify User Routes
       operationId: verifyUserRoutes
@@ -343,16 +482,14 @@ paths:
       responses:
         "200":
           description: ""
-  /jobs/9355c944-b11b-482d-92b1-20eaf2eaaba3/bookmark_job:
-    post:
-      summary: Bookmark Job
-      operationId: bookMarkJobList
-      description: ""
-      tags:
-        - Jobs
-      responses:
-        "200":
-          description: ""
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+
   /users/all:
     get:
       summary: All Users
@@ -363,7 +500,15 @@ paths:
       responses:
         "200":
           description: ""
-  /users/79617393-7998-4870-b659-60320b3f8ae5:
+
+  /users/{userId}:
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
     patch:
       summary: Edit User Info
       operationId: editUserInfo
@@ -375,32 +520,29 @@ paths:
           description: ""
       requestBody:
         $ref: "#/components/requestBodies/edit_user_info"
-  /companies/{companyId}/follow:
-    post:
-      summary: Follow Company
-      operationId: followcompany
+    get:
+      summary: Profiles
+      operationId: Profiles
+      description: ""
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: ""
+    put:
+      summary: Update user
+      operationId: updateUser
       description: ""
       tags:
         - Users
       responses:
         "200":
           description: ""
-    delete:
-      summary: Unfollow Company
-      operationId: unfollowCompany
-      description: ""
-      parameters:
-      - name: companyId
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-      tags:
-        - Users
-      responses:
-        "200":
-          description: ""
+      requestBody:
+        $ref: "#/components/requestBodies/update_user"
+
   /users/following:
     get:
       summary: Following
@@ -411,6 +553,7 @@ paths:
       responses:
         "200":
           description: ""
+
   /users/login:
     post:
       summary: Login
@@ -423,6 +566,7 @@ paths:
           description: ""
       requestBody:
         $ref: "#/components/requestBodies/login"
+
   /users/logout:
     get:
       summary: Logout
@@ -430,48 +574,12 @@ paths:
       description: ""
       tags:
         - Users
+      security:
+        - bearerAuth: []
       responses:
         "200":
           description: ""
-      parameters:
-        - name: Authorization
-          in: header
-          description: ""
-          required: true
-          schema:
-            type: string
-          example: >-
-            eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI0Yzg2ZjNjMy1hZTcwLTQwM2QtYjgyMC0wNjFlYmQ0NTZmODEiLCJyb2xlIjoiZ3Vlc3QiLCJpYXQiOjE3NzE1NzI1NDEsImV4cCI6MTc3MTY1ODk0MX0.ccZj6uSATz3RPAl2FZyO2VhpdjGxaAz5g1zIIwuzgs4
-  /users/5082aaad-0b35-4fc9-aaca-f5d63d1e8a03:
-    get:
-      summary: Profiles
-      operationId: Profiles
-      description: ""
-      tags:
-        - Users
-      responses:
-        "200":
-          description: ""
-      parameters:
-        - name: Authorization
-          in: header
-          description: ""
-          required: true
-          schema:
-            type: string
-          example: >-
-            eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI0Yzg2ZjNjMy1hZTcwLTQwM2QtYjgyMC0wNjFlYmQ0NTZmODEiLCJyb2xlIjoiZ3Vlc3QiLCJpYXQiOjE3NzE1NzI1NDEsImV4cCI6MTc3MTY1ODk0MX0.ccZj6uSATz3RPAl2FZyO2VhpdjGxaAz5g1zIIwuzgs4
-    put:
-      summary: Update user
-      operationId: updateUser
-      description: ""
-      tags:
-        - Users
-      responses:
-        "200":
-          description: ""
-      requestBody:
-        $ref: "#/components/requestBodies/update_user"
+
   /users/forget-password:
     post:
       summary: Request Forget Password
@@ -484,6 +592,7 @@ paths:
           description: ""
       requestBody:
         $ref: "#/components/requestBodies/request_forget_password"
+
   /users/verify/resend:
     post:
       summary: Resend
@@ -494,6 +603,7 @@ paths:
       responses:
         "200":
           description: ""
+
   /users/signup:
     post:
       summary: Signup
@@ -501,21 +611,15 @@ paths:
       description: ""
       tags:
         - Users
+      security:
+        - bearerAuth: []
       responses:
         "200":
           description: ""
-      parameters:
-        - name: Authorization
-          in: header
-          description: ""
-          required: true
-          schema:
-            type: string
-          example: >-
-            eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI0Yzg2ZjNjMy1hZTcwLTQwM2QtYjgyMC0wNjFlYmQ0NTZmODEiLCJyb2xlIjoiZ3Vlc3QiLCJpYXQiOjE3NzE1NzI1NDEsImV4cCI6MTc3MTY1ODk0MX0.ccZj6uSATz3RPAl2FZyO2VhpdjGxaAz5g1zIIwuzgs4
       requestBody:
         $ref: "#/components/requestBodies/signup"
-  /users/0abca7c0-ea2a-4dab-b903-95dd362a30df/skills:
+
+  /users/{userId}/skills:
     post:
       summary: Skills Add
       operationId: addSkills
@@ -525,8 +629,16 @@ paths:
       responses:
         "200":
           description: ""
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
       requestBody:
         $ref: "#/components/requestBodies/skills_add"
+
   /users/verify:
     post:
       summary: Verify code
@@ -539,6 +651,7 @@ paths:
           description: ""
       requestBody:
         $ref: "#/components/requestBodies/verify_code"
+
   /users/forget-password/verify:
     post:
       summary: Verify Forget Password
@@ -551,6 +664,7 @@ paths:
           description: ""
       requestBody:
         $ref: "#/components/requestBodies/verify_forget_password"
+
   /users/login-status:
     get:
       summary: Verify User Logged Status
@@ -561,6 +675,7 @@ paths:
       responses:
         "200":
           description: ""
+
   /users/profile-picture:
     post:
       summary: Profile Picture
@@ -573,6 +688,7 @@ paths:
           description: ""
       requestBody:
         $ref: "#/components/requestBodies/profile_picture"
+
   /users/resume:
     post:
       summary: Upload Resume
@@ -585,7 +701,7 @@ paths:
           description: ""
       requestBody:
         $ref: "#/components/requestBodies/upload_resume"
-servers: [{http://localhost:3000/api/v1}]
+
 components:
   schemas:
     assign_company_user:
@@ -595,6 +711,7 @@ components:
           type: string
         uid:
           type: string
+
     search_users:
       type: object
       properties:
@@ -602,6 +719,7 @@ components:
           type: string
         uid:
           type: string
+
     add_new_company:
       type: object
       properties:
@@ -622,6 +740,7 @@ components:
           type: string
         founded_year:
           type: string
+
     update_company_list:
       type: object
       properties:
@@ -635,6 +754,7 @@ components:
           type: string
         founded_year:
           type: number
+
     apply_to_the_job:
       type: object
       properties:
@@ -646,6 +766,7 @@ components:
           type: string
         expected_salary:
           type: number
+
     change_applicant_status:
       type: object
       properties:
@@ -653,6 +774,7 @@ components:
           type: string
         user_id:
           type: string
+
     create_new_job:
       type: object
       properties:
@@ -673,6 +795,7 @@ components:
               type: string
             "1":
               type: string
+
     update_existing_jobs:
       type: object
       properties:
@@ -689,7 +812,10 @@ components:
         experience_years:
           type: number
         skills:
-          type: string
+          type: array
+          items:
+            type: string
+
     edit_user_info:
       type: object
       properties:
@@ -701,15 +827,24 @@ components:
           type: string
         email:
           type: string
+
     login:
       type: object
       required: [email, password]
-      properties: {}
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+
     request_forget_password:
       type: object
       properties:
         email:
           type: string
+
     signup:
       type: object
       properties:
@@ -723,11 +858,15 @@ components:
           type: string
         email:
           type: string
+
     skills_add:
       type: object
       properties:
         skills:
-          type: string
+          type: array
+          items:
+            type: string
+
     update_user:
       type: object
       properties:
@@ -739,11 +878,13 @@ components:
           type: string
         email:
           type: string
+
     verify_code:
       type: object
       properties:
         code:
           type: number
+
     verify_forget_password:
       type: object
       properties:
@@ -753,17 +894,14 @@ components:
           type: string
         newpassword:
           type: string
+
     profile_picture:
       type: object
       properties:
         profile:
           type: string
           format: binary
-          items:
-            type: string
-          properties:
-            "0":
-              type: string
+
     upload_resume:
       type: object
       properties:
@@ -774,6 +912,7 @@ components:
           properties:
             "0":
               type: string
+
   requestBodies:
     assign_company_user:
       content:
@@ -782,6 +921,7 @@ components:
             $ref: "#/components/schemas/assign_company_user"
       description: ""
       required: true
+
     search_users:
       content:
         application/json:
@@ -789,6 +929,7 @@ components:
             $ref: "#/components/schemas/search_users"
       description: ""
       required: true
+
     add_new_company:
       content:
         multipart/form-data:
@@ -796,6 +937,7 @@ components:
             $ref: "#/components/schemas/add_new_company"
       description: ""
       required: true
+
     update_company_list:
       content:
         application/json:
@@ -803,6 +945,7 @@ components:
             $ref: "#/components/schemas/update_company_list"
       description: ""
       required: true
+
     apply_to_the_job:
       content:
         application/json:
@@ -810,6 +953,7 @@ components:
             $ref: "#/components/schemas/apply_to_the_job"
       description: ""
       required: true
+
     change_applicant_status:
       content:
         application/json:
@@ -817,6 +961,7 @@ components:
             $ref: "#/components/schemas/change_applicant_status"
       description: ""
       required: true
+
     create_new_job:
       content:
         application/json:
@@ -824,6 +969,7 @@ components:
             $ref: "#/components/schemas/create_new_job"
       description: ""
       required: true
+
     update_existing_jobs:
       content:
         application/json:
@@ -831,6 +977,7 @@ components:
             $ref: "#/components/schemas/update_existing_jobs"
       description: ""
       required: true
+
     edit_user_info:
       content:
         application/json:
@@ -838,6 +985,7 @@ components:
             $ref: "#/components/schemas/edit_user_info"
       description: ""
       required: true
+
     login:
       content:
         application/json:
@@ -845,6 +993,7 @@ components:
             $ref: "#/components/schemas/login"
       description: ""
       required: true
+
     request_forget_password:
       content:
         application/json:
@@ -852,6 +1001,7 @@ components:
             $ref: "#/components/schemas/request_forget_password"
       description: ""
       required: true
+
     signup:
       content:
         application/json:
@@ -859,6 +1009,7 @@ components:
             $ref: "#/components/schemas/signup"
       description: ""
       required: true
+
     skills_add:
       content:
         application/json:
@@ -866,6 +1017,7 @@ components:
             $ref: "#/components/schemas/skills_add"
       description: ""
       required: true
+
     update_user:
       content:
         application/json:
@@ -873,6 +1025,7 @@ components:
             $ref: "#/components/schemas/update_user"
       description: ""
       required: true
+
     verify_code:
       content:
         application/json:
@@ -880,6 +1033,7 @@ components:
             $ref: "#/components/schemas/verify_code"
       description: ""
       required: true
+
     verify_forget_password:
       content:
         application/json:
@@ -887,6 +1041,7 @@ components:
             $ref: "#/components/schemas/verify_forget_password"
       description: ""
       required: true
+
     profile_picture:
       content:
         multipart/form-data:
@@ -894,6 +1049,7 @@ components:
             $ref: "#/components/schemas/profile_picture"
       description: ""
       required: true
+
     upload_resume:
       content:
         multipart/form-data:
@@ -901,4 +1057,9 @@ components:
             $ref: "#/components/schemas/upload_resume"
       description: ""
       required: true
-  securitySchemes: {}
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
