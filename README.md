@@ -268,7 +268,8 @@ vim .env
 - As of now I **have** no testing integrated to the system.
 - I plan to add integration testing with Jest and Supertest.
 - if it's become a time constraint for me to only main routes such as: `login, signup, jobs, new jobs` will have the testing but it might take time as i'm currently learning a Testing Fundmental.
-- 
+- Written All The Swagger Ui Testinf for the entire day,
+
 
 ## Deployment:
 - for the deployment i'm plan to use the `vercel` for the both frontend and the backend project.

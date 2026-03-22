@@ -87,6 +87,74 @@
 - Separated controller code from router
 - Only owner can view/edit applications
 
+## All The Updated Routes:
+/jobs:
+/saved_jobs/list
+/:id/bookmark_job
+/:id/remove_from_bookmark
+/
+/search
+/:id
+new
+/:id/delete
+/:id/edit
+/:id/verify-owner
+
+
+/users:
+/
+/logout
+/login
+/signup
+/all
+/forget-password
+/forget-password/verify
+/verify
+/verify/resend
+/following
+/resume
+/profile-picture
+/:id/skills
+/:id
+  : get
+  : put
+  :patch
+
+
+
+companies:
+/all
+/new
+/dashboard
+/followers
+/:id 
+  :get
+  :putKW
+  :delete
+/:id/follow
+  : post
+  :delete
+/:id/analytics
+/:id/employees
+/:id/jobs
+/:id/applications
+
+
+
+/ application
+/applylist
+/:id/applist
+/:id/apply
+/:id/status
+/:id/withdraw
+
+/admin
+/verify
+/search/company
+/search/users
+/assign-user
+/dashboard
+
 
 ## File Upload (Resume & Profile Picture)
 - Used Supabase for file storage
