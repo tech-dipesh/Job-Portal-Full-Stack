@@ -56,7 +56,6 @@ export const getListingController= async (req, res) => {
 export const postListingController= async (req, res) => {
   let {title, description, job_type, salary, skills, experience_years}=req.body;
   const {company_id, uid}=req.user;
-  // it's due to the client side sometimes send a cache data where it's sendint a string data even i've try.
   if (typeof skills === 'string') {
     skills = skills.split(',').map(skill => skill.trim());
 }
@@ -64,8 +63,8 @@ export const postListingController= async (req, res) => {
   const allListing={title, description, job_type, salary, skills, experience_years}
   const validateListing=listingSchema.safeParse(allListing);
   if(!validateListing.success){
-      const message=validateListing.error.issues.map(m=>m.message);
-      return res.status(404).json({message: message[0]})
+      const message=validateListing.error.issues[0].message;
+      return res.status(404).json({message})
     }
   try {
     // await client.query("Insert into Jobs (title, description, salary, job_type, company_id, updated_at) values ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)", [title, description, salary, job_type, company_id ])
@@ -80,10 +79,12 @@ export const postListingController= async (req, res) => {
 export const deleteListingController= async (req, res) => {
   const {id}=req.params;
   try {
-    const {rows: query}=await client.query("delete FROM jobs where uid=$1", [id])
-    if(query.length===0){
+    const {rows:query}=await client.query("select exists(select 1 from jobs where uid=$1)", [id]);
+    console.log('exist', query)
+    if(!query[0].exists){
         return res.json({message: "Id Doesn't exist"})
     }
+    const {rows}=await client.query("delete FROM jobs where uid=$1", [id])
     const data= await tableDataFetch('jobs')
    return res.status(200).json({data})
   } catch (error) {
@@ -95,23 +96,25 @@ export const deleteListingController= async (req, res) => {
 
 export const putListingController= async (req, res) => {
   const {id}=req.params;
+    if (typeof req.body.skills === 'string') {
+    req.body.skills = req.body.skills.split(',').map(s => s.trim());
+  }
   let {title, description, job_type, salary, skills, experience_years, location}=req?.body;
-  const allListing={title, description, job_type, salary, skills, experience_years, location}
-  const validateListing=listingSchema.safeParse(allListing);
+  const validateListing=listingSchema.safeParse(req?.body);
   if(!validateListing.success){
-    const message=validateListing.error.issues.map(m=>m.message);
-    return res.status(404).json({message: message[0]})
+    const message=validateListing.error.issues[0].message;
+    return res.status(404).json({message})
   }
   try {
-    await client.query("update jobs set title=$1, description=$2, job_type=$3, salary=$4, skills=$5, location=$6 where uid=$7", [title, description, job_type, salary, skills, location, id])
+    await client.query("update jobs set title=$1, description=$2, job_type=$3, salary=$4, skills=$5::text[], location=$6 where uid=$7", [title, description, job_type, salary, skills, location, id])
     const {rows}=await client.query("select * from jobs where uid=$1", [id])
     if(!rows){
       return res.status(404).json({message: "Please Enter Id For Get a information"})
     }
-    res.status(200).json({message: rows[0]})
+   return res.status(200).json({message: rows[0]})
   } catch (error) {
-    (error)
-    res.json({message: error.message})
+    console.log(error)
+   return res.json({message: error.message})
   }
 };
 
@@ -119,9 +122,9 @@ export const verifyOwnerController=async(req, res)=>{
   const {id}=req.params;
   const {company_id}=req.user;
   try {
-    const {rows}=await client.query("select exists ( select 1 from jobs where uid = $1 and company_id = $2);", [id, company_id])
+    const {rows}=await client.query("select exists (select 1 from jobs where uid = $1 and company_id = $2);", [id, company_id])
     if(!rows[0].exists){
-        return res.status(401).json({message: "You Don't have access to routes."})
+        return res.status(401).json({message: "You're Not a Owner of Routes."})
     }
       return res.status(200).json({message: "You owned this route."})
   } catch (error) {

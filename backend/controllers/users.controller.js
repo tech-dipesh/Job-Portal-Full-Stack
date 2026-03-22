@@ -1,14 +1,19 @@
 import bcrypt from "bcryptjs";
 import connect from "../db.js";
 import tableDataFetch from "../utils/tableDataFetch.js";
-import userSchema from "../Models/users.models.js";
+import userSchema, { updateUserSchema } from "../Models/users.models.js";
 import sendMail from "../services/email-verification.js";
 import isUserVerifiedEmail from "../utils/isUserEmailVerified.js";
 import dns from "dns/promises"
 import VerifyJwt from "../services/verifyJwt.js";
+import { promise } from "zod";
 export const getAllUserController= async (req, res)=>{
-  const {rows}=await connect.query("select uid as userId, fname as firstName, lname as lastName, education, email, role, resume_url, profile_pic_url, skills, experience from users")
-  return res.status(200).json(rows)
+  try {
+    const {rows}=await connect.query("select uid as userId, fname as firstName, lname as lastName, education, email, role, resume_url, profile_pic_url, skills, experience from users")
+    return res.status(200).json(rows)
+  } catch (error) {
+    return res.status(201).json({message: error.message})
+  }
 }
 
 export const sendUserLoggedInStatus=async (req, res)=>{
@@ -32,12 +37,10 @@ export const getloginUserController= async (req, res) => {
     const {uid, role, company_id=null}=rows[0];
     if(!role)role='guest'
     const userVerified=await isUserVerifiedEmail(uid)
-    console.log('is user verified', userVerified)
    const content={uid, role, company_id, userVerified};
    VerifyJwt(res, content)
     return res.status(200).json(rows[0]);
   } catch (error) {
-    (error)
     return res.status(500).json({message: error.message}) 
   }
 };
@@ -48,7 +51,7 @@ export const getParticularUserController=  async (req, res) => {
   try {
     const { rows } = await connect.query("SELECT uid, profile_pic_url, fname, education, email, experience, resume_url, skills, company_id IS NOT NULL AS is_employee, uid AS job_uid FROM users WHERE uid =$1", [id]);
     if(!rows) return res.status(404).json({message: "Please Enter Correct Uid"})
-    return res.status(200).json(rows[0]);
+    return res.status(200).json({message: rows[0]});
   } catch (error) {
     console.log(error)
     return res.status(500).json({message: error.message})
@@ -106,7 +109,7 @@ export const deleteUserController= async (req, res) => {
     return res.status(204).json(data);
   } catch (error) {
     (error);
-    res.status(500).json(error);
+   return res.status(500).json(error);
   }
 };
 
@@ -125,7 +128,7 @@ export const addUserSkills=async (req, res)=>{
       return res.status(401).status(200).json({message: "Skills Already Exist"});
     }
     const {rows}=await connect.query("update users set skills=array_append(skills, $1) where uid=$2 returning *", [skills, uid])
-    res.status(201).send({message: rows[0]})
+   return res.status(201).send({message: rows[0]})
   } catch (error) {
     return res.status(501).json({message: error.message})
   }
@@ -133,23 +136,22 @@ export const addUserSkills=async (req, res)=>{
 
 export const putUserController= async(req, res) => {
    const {id}=req.params;
-  const {fname, lname, education, email, password }=req.body;
-   const allUser={fname, lname, education, email, password}
-    const validateuser=userSchema.safeParse(allUser);
-    if(!validateuser.success){
-      const message=validateuser.error.issues.map(m=>m.message);
-      return res.status(422).json(message)
-    }
-   if(!fname || !lname || !education || !email || !password){
-    return res.status(422).json({message: "Please Enter a value"})
+  const {fname, lname, education, email }=req.body;
+    const validateuser=updateUserSchema.safeParse(req?.body);
+  if(!validateuser.success){
+    const message=validateuser.error.issues[0].message;
+    return res.status(422).json({message});
   }
   try {
-    await connect.query("update users set fname=$1, lname=$2, education=$3, email=$4 where uid=$5", [fname, lname, education, email, id, password])
-    const data=await tableDataFetch('users')
-    res.status(200).json(data)
+    const {rows:query}=await connect.query("select exists(select 1 from users where uid=$1)", [id]);
+   if(!query[0].exists){
+    return res.status(201).json({message: "Invalid User Id"})
+   }
+    const {rows}=await connect.query("update users set fname=$1, lname=$2, education=$3, email=$4 where uid=$5 returning *", [fname, lname, education, email, id])
+   return res.status(200).json({message: rows})
   } catch (error) {
     console.log(error)
-    res.status(500).json(error)
+    return res.status(500).json(error)
   }
 };
 
@@ -164,12 +166,17 @@ export const patchUserController= async(req, res)=>{
     return res.status(422).json({message: "Please Enter the Id"})
   }
   try {
+    const {rows: query}=await connect.query("select exists(select 1 from users where uid=$1)", [id])
+    if(!query[0].exists){
+      return res.status(404).json({message: "Invalid User Id or You're not a owner"})
+    }
     const fields = Object.keys(req.body);
     const values = Object.values(req.body);
     const setClause = fields.map((f, i) => `${f} = $${i + 1}`)
     const length=fields.length+1;
     await connect.query(`UPDATE users SET ${setClause} WHERE uid = $${length}`, [...values, id]);
     const {rows}=await connect.query(`select * from users WHERE uid=$1`, [id]);
+    console.log('rows is', rows)
     return res.status(201).json(rows[0])
   } catch (error) {
     console.log(error)

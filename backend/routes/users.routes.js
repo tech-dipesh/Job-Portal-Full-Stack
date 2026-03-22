@@ -15,19 +15,16 @@ import isJobSeeker from "../Middleware/isJobSeeker.js";
 const limitUser=rateLimit({
   windowMs: 1000*60,
   limit: 2,
-  message: {message:"You only can send resend request once per minute"}
+  message: {message:"You only can send resend request twice per minute"}
 })
 
 const router = express.Router();
 
-router.get("/", authUserMiddleware, sendUserLoggedInStatus)
+router.get("/login-status", authUserMiddleware, sendUserLoggedInStatus)
 router.get("/logout", userLoggedOutcontroller);
-
 router.post("/login", alreadyLoggedIn, getloginUserController);
 router.post("/signup", alreadyLoggedIn, postSignupUserController);
 router.get("/all", authUserMiddleware, isAdminMIddleware, getAllUserController)
-
-
 
 
 

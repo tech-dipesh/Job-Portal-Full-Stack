@@ -9,7 +9,6 @@ export const updateCompany=({id, ...content})=>api.put(`companies/${id}`, conten
 export const getAllCompanies=()=>api.get(`companies/all`);
 export const getCompanyDashboard=()=>api.get(`companies/dashboard`)
 export const getCompanyEmployee=(id)=>api.get(`companies/${id}/employees`)
-export const companyStats=(id)=>api.get(`companies/${id}/analytics`)
 export const getCompanyJobs=(id)=>api.get(`companies/${id}/jobs`)
 export const getCompanyApplications=(id)=>api.get(`companies/${id}/applications`)
 

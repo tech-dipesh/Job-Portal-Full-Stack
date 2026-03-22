@@ -47,7 +47,7 @@ export default function Individualuser() {
       return;
     }
   }
-  const { profile_pic_url, fname, lname, email, education, experience_years, resume_url, skills } = data || {}
+  const { profile_pic_url, fname, lname, email, education, experience_years, resume_url, skills } = data?.message || {}
   const originalName = getOriginalFileName(profile_pic_url)
   const {role}=globalContext ?? {};
   if(loader || loading){

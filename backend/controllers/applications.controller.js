@@ -66,17 +66,24 @@ export const changeApplicationStatus=async (req, res)=>{
   const {id:job_id}=req.params;
   let {status, user_id}=req?.body;
   const err=validateFunUid(user_id);
+  if(!user_id){
+    return res.status(404).json({message: "Please Enter a User Id"});
+  }
   if(err){
     return res.status(422).json({message: err})
   }
+  const validateApplication=validateAllInputApplicationStatus.safeParse({status});
+  if(!validateApplication.success){
+    const message=validateApplication.error.issues.map(m=>m.message);
+    return res.status(422).json({message: message[0]})
+  }
   try {
-    const validateApplication=validateAllInputApplicationStatus.safeParse({status});
-    if(!validateApplication.success){
-      const message=validateApplication.error.issues.map(m=>m.message);
-      return res.status(422).json({message: message[0]})
+    const {rows:query}=await connect.query("select exists(select 1 from applications where job_id=$1)", [job_id]);
+    if(!query[0].exists){
+      return res.status(422).json({message: "Invalid Job Id."})
     }
-    const {rowCount, rows}=await connect.query("select job_id, status from applications where user_id=$1 and job_id=$2", [user_id, job_id])
-    if(rows.length==0){
+    const {rows}=await connect.query("select exists(select 1 from applications where user_id=$1 and job_id=$2)", [user_id, job_id])
+    if(!rows[0].exists){
       return res.status(422).json({message: "You've Not Applied Please First Apply."})
     }
     if( rows[0].status==status){

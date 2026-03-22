@@ -8,7 +8,7 @@ import isJobSeeker from "../Middleware/isJobSeeker.js";
 const router = express.Router();
 
 router.get("/all", getAllCompaniesList);
-router.post("/new", upload.single("company_logo"), postCompanyController);
+router.post("/new", upload.single("company_logo"),  postCompanyController);
 router.get("/dashboard", isCompanyEmployee, companyDashBoard);
 router.get("/followers", isCompanyEmployee, getAllCompaniesFollowers);
 
@@ -21,7 +21,6 @@ router.route("/:id/follow")
 .post(validateCorrectUid, isJobSeeker, followCompany)
 .delete(validateCorrectUid, isJobSeeker, unFollowCompany)
 
-router.get("/:id/analytics", validateCorrectUid, isCompanyEmployee, companyStatsController)
 router.get("/:id/employees", validateCorrectUid, isCompanyEmployee, getAllEmployeesList)
 router.get("/:id/jobs", validateCorrectUid,  getAllJobsList)
 router.get("/:id/applications", validateCorrectUid, isCompanyEmployee, getallApplicationsList)

@@ -4,7 +4,7 @@ import validateFunUid from "../utils/ValidateFunUid.js";
 export const verifyAdminController = (req, res) => {
   const {role}=req.user;
   if(role!='admin'){
-    return res.status(201).json({message: "UnAuthorized, You're not a Admin, You Don't Have Access."})
+    return res.status(201).json({message: "Unauthorized, You're not a Admin, You Don't Have Access."})
   }
   else{
     return res.status(200).json({message: 'Success'})

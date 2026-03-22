@@ -2,9 +2,9 @@
 Full stack Job Portal **Connecting** job **seekers** to recruiters with smart search, built with PERN stack, scalable job posting, resume analysis, real-time application management.
 
 <p align="center">
-    <picture>
-        <img src="frontend/public/logo-rounded.png" alt="Yeti Jobs" width="250" height='250'>
-    </picture>
+  <picture>
+      <img src="frontend/public/logo-rounded.png" alt="Yeti Jobs" width="250" height='250'>
+  </picture>
 </p>
 <p align="center">
   <strong>Climb your career like a Yeti climbs a mountain.</strong>
@@ -374,6 +374,7 @@ vim .env
 > - profile completneess score based on the badged applicant top skills and how much active jobs seeker.
 > - On the edit content page if user try to submit a content without any change don't allow them which reduce a less backend request.
 > - Adding a phone number of the user that can send to hr when ur is accepted.
+> - testing even it's not complete only the important routes to test in the coming days.
 
 
 # Thanks 
@@ -394,6 +395,9 @@ vim .env
 
 ## Add this:
 - postman collection link of the api endpoints documentatino link.
+edit company have not implemented yet which i've to fix that..
+
 - testing even it's nto complete with mentodion my plan and coverae and frameword.
-- with on the deployment of detilas production vs development setup, also 
+- with on the deployment of details production vs development setup, also 
   -- include the database migration steps.
+- i've nto written a manual swagger ui docs rather i've don the proper api fetching from: `bruno` and convert that burno postman like file to swagger from online converter tool.

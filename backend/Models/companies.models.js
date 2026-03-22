@@ -4,21 +4,23 @@ const websitePattern=/^(https?:\/\/)?(www\.)?[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})(\/[^\
 const companiesSchema=z.object({
     name:z
     .string({ error: "Name is required" })
-    .min(2, {message: "Name must be a 2 characters"}),
-  // description:z 
-  //   .string({required_error: "Please Add a Description"}),
+    .min(2, {error: "Name must be a 2 characters"}),
+  description:z 
+    .string({error: "Please Add a Description"})
+    .min(25, {error: "Minimum Letter Should be 25 Letter of Description"})
+    .max(250, {error: "Maximum Letter Should be 250 Letter of Description"})
+    ,
     website:z
-    .string({required_error: "Please Enter a Website"})
+    .string({error: "Please Enter a Website Name"})
     .regex(websitePattern, "Please Enter Correct Url Type Type"),
     location:z
-    .string({error: "Please Enter a Location"})
-    .min(3, {message: "Location Must be The 5 Letters.."})
+    .string({error: "Please Enter a Location Name"})
+    .min(3, {error: "Location Must be The 5 Letters.."})
     ,
     founded_year:z.coerce
     .number({error: "Please Enter a Founded Year Number"})
-    .min(0, {error: "Number Can't be Negative"})
+    .min(1900, {error: "Number Can't be Below 1900"})
     .max(2026, {error: "Founded Year Can't be Future Date."})
-
 })
 
 

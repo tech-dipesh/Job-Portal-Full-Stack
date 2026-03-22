@@ -32,7 +32,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use("/api/v1/jobs",  jobListingRouter)
 app.use("/api/v1/users", usersListingRouter)
-app.use("/api/v1/companies", authUserMiddleware,  companyRouter)
+app.use("/api/v1/companies", authUserMiddleware, companyRouter)
 app.use("/api/v1/applications", authUserMiddleware,  applicationRouter)
 app.use("/api/v1/admin", authUserMiddleware,  isAdminMIddleware, adminRoutes)
 

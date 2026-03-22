@@ -1,6 +1,7 @@
 const isJobSeeker= (req, res, next)=>{
-  if(req.user.company_id){
-    return res.status(403).json({message: "Recruiter Can't Perform a User Action"})
+  const {role}=req?.user;
+  if(role!='guest'){
+    return res.status(403).json({message: "Recruiter or Admin Can't Perform a User Action"})
   }
   next()
 }

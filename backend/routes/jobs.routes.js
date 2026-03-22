@@ -6,11 +6,12 @@ import authUserMiddleware from "../Middleware/isLoggedIn.js";
 import { getallSaveJob, storeSaveJob, unsaveListJob } from "../controllers/saveJobs.controller.js";
 import isCompanyEmployee from "../Middleware/isCompanyEmployee.js";
 import validateCorrectUid from "../Middleware/validateCorrectUid.js";
+import isJobSeeker from "../Middleware/isJobSeeker.js"
 const router=express.Router();
 
-router.get("/saved_jobs/list", authUserMiddleware, getallSaveJob);
-router.post("/:id/bookmark_job", validateCorrectUid, authUserMiddleware,  storeSaveJob);
-router.delete("/:id/remove_from_bookmark", validateCorrectUid, authUserMiddleware, isOwnwerMiddleware, unsaveListJob);
+router.get("/saved_jobs/list", authUserMiddleware, isJobSeeker, getallSaveJob);
+router.post("/:id/bookmark_job", validateCorrectUid, authUserMiddleware, isJobSeeker, storeSaveJob);
+router.delete("/:id/remove_from_bookmark", validateCorrectUid, authUserMiddleware, isJobSeeker, isOwnwerMiddleware, unsaveListJob);
 
 router.get("/", getAllListingController);
 router.get("/search", searchJobsListing);

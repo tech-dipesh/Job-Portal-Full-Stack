@@ -4,14 +4,17 @@ import bcrypt from "bcryptjs";
 import currentDate from "../utils/currentDateFormat.js";
 import VerifyJwt from "../services/verifyJwt.js";
 async function verifyEmailConfirmation(req, res) {
-const {uid, role, company_id}=req.user;
+  const {code}=req.body;
+  const {uid, role, company_id, userVerified}=req?.user;
+  if(!code){
+   return res.status(404).json({message: "Please Enter Verification Code"})
+  }
+ if(userVerified==true){
+  return res.status(404).json({message: "You've Already Verified"})
+ }
   try {
-    const {code}=req.body;
-    if(!code){
-      return res.status(404).json({message: "Please Enter Verification Code"})
-    }
-  const {rows} =await connect.query("select e.verified_code, e.is_verified, e.expired_at, e.uid, e.user_id, u.email from email_verified e inner join users u on u.uid=e.user_id where e.user_id=$1  order by e.created_at desc limit 1", [uid])
-  const {verified_code, is_verified:userVerified, expired_at}=rows[0];
+   const {rows} =await connect.query("select e.verified_code, e.is_verified, e.expired_at, e.uid, e.user_id, u.email from email_verified e inner join users u on u.uid=e.user_id where e.user_id=$1  order by e.created_at desc limit 1", [uid])
+   const {verified_code=false, is_verified:userVerified, expired_at}=rows[0];
   if(verified_code!=code){
     return res.status(422).json({message: "Please Enter Correct Code"})
   }
@@ -35,19 +38,19 @@ const {uid, role, company_id}=req.user;
 
 
 export const resendVerificationCode=async (req, res)=>{
-  const {uid}=req.user;
-  if(!uid){
-    return res.status(401).json({message: "Please First Logged In"});
+  const {uid, userVerified}=req?.user;
+  if(userVerified==true){
+  return res.status(404).json({message: "You've Already Verified"})
   }
   try {
-    const {rowCount, rows:output}=await connect.query("select is_verified from email_verified where is_verified=true and user_id=$1", [uid])
-    console.log('row count', rowCount, 'output', output)
-    if(rowCount>0){
+
+    const {rows:query}=await connect.query("select exists(select 1 from email_verified where is_verified=true and user_id=$1)", [uid])
+    if(query[0].exists){
       return res.status(403).json({message: "You've Already Verified Your Code."});
     }
     const {rows}=await connect.query("select fname, lname, email from users where uid=$1", [uid])
     const {fname, lname, email}=rows[0];
-     await sendMail(uid, fname, lname, email, 'verify');
+     sendMail(uid, fname, lname, email, 'verify');
    return res.status(201).json({message: 'Resend Verification Code Have Been sent to your mail'})
   } catch (error) {
     console.log(error)
@@ -85,12 +88,11 @@ export const verifyForgetPassword=async (req,res)=>{
     if(!isEmail[0].exists){
       return res.status(422).json({message: "Invalid Email Please First Logged in."})
     }
-    const {rows: rowList, rowCount}=await connect.query("select e.is_verified, e.expired_at, u.uid from users u inner join email_verified e on e.user_id=u.uid where u.email=$1 and e.verified_code=$2 order by e.expired_at desc limit 1;", [email, code])
-    const {uid}=rowList[0]
-    if(rowCount==0){
+    const {rows: rowList}=await connect.query("select e.is_verified, e.expired_at, u.uid from users u inner join email_verified e on e.user_id=u.uid where u.email=$1 and e.verified_code=$2 order by e.expired_at desc limit 1;", [email, code])
+    if(rowList.length==0){
       return res.status(400).json({message: "Please Enter Correct Code."})
     }
-    const {is_verified, expired_at}=rowList[0] || {};
+    const {is_verified, expired_at, uid}=rowList[0] ?? {};
     if(is_verified==true){
       return res.status(403).json({message: "You've already Used a Token."})
     }

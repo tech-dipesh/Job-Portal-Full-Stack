@@ -1,6 +1,6 @@
 import api from "../lib/axios"
 
- export const isUserLoggedIn = () =>api.get('/users');
+ export const isUserLoggedIn = () =>api.get('/users/login-status');
  export const loginUser = ({ email, password }) => api.post('/users/login', { email, password });
  export const signupUser=({fname, lname, education, email, password})=> api.post('/users/signup', {fname, lname, education, email, password})
  export const getAllUser=()=>api.get('/users/all')

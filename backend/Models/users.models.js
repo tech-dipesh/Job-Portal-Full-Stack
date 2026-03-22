@@ -25,4 +25,26 @@ const userSchema=z.object({
 })
 
 
+
+export const updateUserSchema=z.object({
+  fname: z
+  .string({ error: "Name is required" })
+  .min(2, { message: "Name must be at least 2 characters" })
+  .optional(),
+  lname:z
+  .string({ error: "Name is required" })
+  .min(2, {message: "Last Name must be a 2 characters"})
+  .optional(),
+  education:z 
+    // .string({required_error: "Please Add a education"})
+    // .enum(allAvaibleEducationtype, {error: "Please Enter All Values such as, Basic, Matrix, High School, Undergraduation, Postgraduation"}),
+    .enum(allAvaibleEducationtype, {error: "Please Only Enter a Avaible Option such as, Basic, Matrix, High School, Undergraduation, Postgraduation"})
+    .optional(),
+  email:z
+    .string({error: "Please Enter a Email"})
+    .regex(z.regexes.email, "Please Match the Email Format Type")
+    .optional(),
+})
+
+
 export default userSchema;
