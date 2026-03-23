@@ -4,7 +4,6 @@ import './index.css'
 import App from './App'
 import { RouterProvider, createBrowserRouter } from "react-router"
 
-import ColorPaletteTester from './Colorsuggestion'
 const Alluser = lazy(() => import('./pages/Admin/Alluser'))
 const Individualuser = lazy(() => import('./pages/User/Profile'))
 const Edituser = lazy(() => import('./pages/User/Edituser'))
