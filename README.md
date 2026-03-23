@@ -61,7 +61,8 @@ The Project is a Job Portal Platform **with** all the features needed to build a
 - Search Jobs
 - Edit Profile And Other Credentials
 - Add a Resume, Profile Picture
-- See All Applied jobs
+- View all jobs
+- View all applicants
 - All Companies List
 - Individual Company jobs and Description About Company
 - view Job
@@ -102,17 +103,17 @@ The Project is a Job Portal Platform **with** all the features needed to build a
 
 
 ## Architecture Overview:
+- The System follows a layered architecture:
+  Client(React) -> API(Express) -> Service Layer -> PostgreSQL
+- JWT-base authentication
+- Modular services for jobs, applications, companies
+- File storage via Supabase
+
 <p align="center">
   <picture>
       <img src="backend/assets/supabase-schema.png" alt="Database Schema" width="250" height='250'>
   </picture>
 </p>
-
-- The Project is built on top of the PERN stack with a layered architecture where I've used React for the UI state and Node/Express for backend (API, auth logic), PostgreSQL (data logic).
-- with REST API **layers**, JWT for auth, and modular services for handling jobs, applications, companies, resume parsing, profile picture upload.
-- With total more than **40** API endpoints with **proper** validation on both client and server side
-- i've to make sure to add the diagram of the  architecture. 
-  - with also add the how frontend backend and db is interact
 
 
 ## Folder Structure
@@ -248,7 +249,7 @@ vim .env
 
 
 ## Api Documentation:
-- example with: post/api/v1/auth/login
+- Swagger UI: `https://yeti-jobs.render.com/api/v1/swagger`
 
 
 ## Database Design:
@@ -274,7 +275,7 @@ vim .env
 - with the routes of: `admin` which only accessible to the role of the admin.
 
 ### Email Verified Table:
-- for track the email verified users, and also have the when user is try a forget password i've also store on the email verified tables.
+- for track the email verified users, and also have the when user is try a forget password store a  on the database table of: `email_verified`.
 - with the enum type whether email verify or forget password with link to the user id and the random code and relevent other information.
 
 ### Jobs Table:
@@ -285,7 +286,7 @@ vim .env
 - with user have the option to bookmark a any jobs.
 - on the bookmark with foreign relation of the jobs and the user id and other relevent info.
 ### User Companies Follow or Followers Table:
-- with i've add the lately of the following and the followers system for the following only company and by only the users.
+- Following and followers features to only the guest role users can follow to the companies, and also only the `employees` can view all the followers list of the companies.
 
 ### Users Table:
 - with the user info and also the role whehter the user is guest, admin or the recruiter.
@@ -316,6 +317,9 @@ vim .env
 
 ## Deployment:
 - for the deployment i'm plan to use the `vercel` for the both frontend and the backend project.
+- `render` for backend deployment with allow a connection pooler of ipv6 address.
+- add a: `vercel.json` to make a serverlesss function.
+
 ### Database Migration:
 - For Migrating to the `localhost` to the `supabase` it's done with only two steps.
 - Where on the supabase we can get the: `DATABASE_URL` and where we can insert our project password on there.
@@ -360,8 +364,8 @@ vim .env
 - on the client valdiation guest can't visit the page of the admin dashboard and the other admin restricted page and also the employee restricted page.
 - while the employees only restrict to perform a employee can't apply to the jobs or can't perform and also neither a guest or the admin action.
 - admin which have little bit of the freedom but also enforce data on control integrity can't visit the page of the guest or the employee action.
-#### Server MIddleware:
-- i've more than the 9 middleware for the server validation.
+#### Server MIddleware:-
+- More than: 9+ middleware for server validation of custom middleware.
 - With make the controller user action to the only isJobSekkker, companies contoller to the isEmployee and the admin contoller to the isAdmin.
 - with i also valdiation whether the use is logged in or not, and also whether the user logged in but not verified, whether the user is owner of that routes or not, whether the user given a correct `uuid` which i also validaion that also save some time for invalid ui to check from the database.
 
@@ -392,26 +396,26 @@ vim .env
 - check the multiple command such as join, group by, nested query with the : `explain analyze` for the performance analysis which can have the faster query.
 
 ## Known Issue:
-- The Major Issue i've only faced on only on the ui design.
+- UI alignment issues (Tailwind CSS)
+- Email Sending lacks a proper failure handling
+- Token resend logic needs a improvment
+- Making a token send mail: asynchrounous mail with have to wait rather i make just synchrounous
 - with only the minor patch issue face on the backend.
 - while on the frontend especially Tailwind CSS has known issues specifically with position and display.
 - Sometimes PostgreSQL `$1` placeholder doesn't work as expected, requiring template literals, but this has SQL injection risks which I prevent by validating user input.
-- during a building a email template for the backend i've also face a lot of issue on there.
-- One Issue that i sitll have is, for sending a mail, i'vee the synchronous, mean i'm not waiting for that request, as but when the email is invalid it's trying to send a mail that still a issue.
  - i can use the `promise.all` which i'm plan to use for the better perofmace 
--  during the email resend token, i've to make sure send the updated token, rather i'm sending a old token.
 - With i make sure to send the: `withCredntiatils` from the frontend on the every request which i use the axios create function for sending at oncee.
-- for sending a file i've to mandatory to send a file on the: `formData` which sometmes it becmoe a silent error.
+- For sending a file earlier it's sending from the state later, send a file to the: `formData`.
 
 
 ## Limitation:
-- as i'm using a everywher the free tier for database/MAU at one time, which is efficient for the smaller student level projects.
+- Have the Monthly Active Users on free tier database and the server and client which just efficient for student level project.
+- Take a time to load our backend server when our sytem goes to sleep which is also the the downside of the system.
 - Other Limitation as of now that it can't connect to the job sekker and hr directly just have user informatino such as email, name but not direct connection which i will be adding to it.
 
 
-## Someting Go Beyond Features:
-- i've make sure to dockerize my system with also ignore some files that dont' needed with: `.dockerignore`
-- as of now i only dockerize to the nodejs, coming days dockerize a `postgres`
+## Additional Features
+- Dockerize a entire system with to the nodejs application and also docker ignore some files: `.dockerignore`
 - also have the controller and also the abort feature if the request takes longer time dont' wat for more than  a 10 sec.
 - now on the react 19 we dont' need: `auth.provider rather it also work a auth` 
 - use the portal system for the popup of the some features.
@@ -438,9 +442,8 @@ vim .env
 > - On the edit content page if user try to submit a content without any change don't allow them which reduce a less backend request.
 > - Adding a phone number of the user that can send to hr when ur is accepted.
 > - testing even it's not complete only the important routes to test in the coming days.
-> - I've forget to implement the edit company with the strict all the validation which i will improve in the coming days.
-- with on the deployment of details production vs development setup, also 
-- have to add the 50 dummy dat for the each list
+> - with on the deployment of details production vs development setup, also 
+> - have to add the 50 dummy dat for the each list
 
 
 <div align="center">

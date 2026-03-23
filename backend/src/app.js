@@ -26,7 +26,7 @@ const limitUser=rateLimit({
   windowMs: 1000*60,
   limit: 200
 })
-
+app.set('trust proxy', 1)
 app.use(limitUser);
 app.use(helmet());
 app.use(express.json());
