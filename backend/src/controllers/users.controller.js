@@ -28,9 +28,9 @@ export const getloginUserController= async (req, res) => {
       const message=validateuser.error.issues.map(m=>m.message);
       return res.status(422).json({message: message[0]})
     }
-    const {rowCount, rows}= await connect.query("select * from users where email=$1", [email]);
-    if(rowCount===0){
-      return res.status(401).json({message: "Please Enter Correct Email Id."});
+    const {rows}= await connect.query("select exists(select 1 from users where email=$1)", [email]);
+    if(!rows[0].exists){
+      return res.status(401).json({message: "Invalid Email Id."});
     }
     const saltPassword=await bcrypt.compare(password, rows[0].password);
     if(!saltPassword){
@@ -81,8 +81,8 @@ export const postSignupUserController= async (req, res) => {
       return res.status(422).json({ message: `The email domain '${domain}' does not exist or is invalid.` });
     }
     
-    const {rowCount}=await connect.query("select email from users where email=$1", [email]);
-    if(rowCount>0){
+    const {rows: query}=await connect.query("select exists(select 1 from users where email=$1)", [email]);
+    if(query[0].exists){
       return res.status(401).json({message: `The User with same email of: ${email} already exist.`})
     }
     const hashPassword=await bcrypt.hash(password, 12);

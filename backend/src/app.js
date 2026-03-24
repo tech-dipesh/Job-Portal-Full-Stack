@@ -38,6 +38,9 @@ app.use("/api/v1/users", usersListingRouter)
 app.use("/api/v1/companies", authUserMiddleware, companyRouter)
 app.use("/api/v1/applications", authUserMiddleware,  applicationRouter)
 app.use("/api/v1/admin", authUserMiddleware,  isAdminMIddleware, adminRoutes)
+app.get("/api/v1/health", (req, res)=>{
+  return res.status(200).json({message: "Ok"})
+});
 
 app.get("/", (req, res) => {
   return res.status(201).redirect("/api/v1/jobs")
