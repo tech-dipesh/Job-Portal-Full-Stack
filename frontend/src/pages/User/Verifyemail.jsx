@@ -61,7 +61,7 @@ export default function VerifyEmail() {
       <Goback to='../login' content='Go Back To Login'/>
       <div className='bg-neutral-800 rounded-2xl p-10 w-full max-w-lg flex flex-col items-center gap-8'>
       <Errorpopup error={autherr}/>
-      <Successcomps data={resenddata || data} />
+      <Successcomps data={resenddata?.message || data?.message} />
       <div className='text-center'>
         <h1 className='text-xl font-bold '>Verify Your Mail</h1>
         <h2 className='text-sm my-1 opacity-85 justify-center'>We've sent a 6-digit code to your email</h2>

@@ -1,6 +1,5 @@
 # Yeti Jobs:
 A Scalable job portal built with the **PERN stack** that connects job seekers and recruiters with advanced search, application tracking, and role based access control.
-Full stack Job Portal **Connecting** job **seekers** to recruiters with smart search, built with PERN stack, scalable job posting, resume analysis, real-time application management.
 
 <p align="center">
   <picture>
@@ -57,20 +56,20 @@ The Project is a Job Portal Platform **with** all the features needed to build a
 
 ## Features:
 ### Job Seekers:
-- Apply/Withdraw Job, Add/Bookmark
+- Apply/Withdraw Job, Add to Bookmark/Remove To Bookmark
 - Search Jobs
 - Edit Profile And Other Credentials
-- Add a Resume, Profile Picture
+- Add a Resume/Profile Picture
 - View all jobs
-- View all applicants
+- View all applications
+- View All Bookmarks
 - All Companies List
 - Individual Company jobs and Description About Company
-- view Job
+- view Single Job
 
 ### Recruiters (Employees):
 - Company Dashboard
 - All Applicants
-- See All Jobs
 - See All employees
 - See Profile
 - Create/Delete/Edit a Job
@@ -118,58 +117,39 @@ The Project is a Job Portal Platform **with** all the features needed to build a
 
 ## Folder Structure
 
-### Backend:
-- `app.js`: Main file Which Runs Our Server
-- `controllers`: All our business Logic
-- `Middleware`: custom Middleware between two middleware for security.
-- `Models`: Data Validation
-- `routes`: All Routes
-- `services`: External Business Logic
-- `utils`: Reusable Function
-### Frontend:
-- `api`: All the Api calling to the server request
-- `assets`: Images to used on the project
-- `auth`: Validate Data
-- `components`: Reusuable components
-- `context`: UseContext central state mangment
-- `Data`: Form of array static data which used multiple places
-- `hooks`: Custom hooks such as fetching a data.
-- `lib`: Axios Default Api
-- `pages`: Final Output pages that client will see:
-- `services`: Reusuable Function.
+### Backend
+- app.js
+- controllers/
+- middleware/
+- models/
+- routes/
+- services/
+- utils/
+
+### Frontend
+- api/
+- components/
+- pages/
+- hooks/
+- context/
+- lib/
 
 
+## Environment Variables
 
-## Environement Variables:
-### Backend:
-  - Postgres: Relational Database
-    - USER
-    - PASSWORD
-    - HOST
-    - DATABASE_PORT
-    - DATABASE
-  - SUPABASE: Used to Host our Files
-    - URL_SUPABASE_CONNECT
-    - ANON_KEY_SUPABASE
-  - NODEMAILER: Send Mail To Customer
-    - NODEMAILER_MY_EMAIL  
-    - NODEMAILER_MY_PASSWORD  
-  - JWT: JSON Web Token (JWT) for securely signed tamper proof information
-    - JWT_SECRET_KEY:
-  - COMMON:  Client URL to server that only **requests** port and also **how long** our cache should **be** stored"
-    ```diff
-    + CLIENT_BASE_URL=http://localhost:5173/
-    - CLIENT_BASE_URL=https://yeti-jobs.vercel.app/
-    ```
-    - PORT
-    - MAXAGE
+### Backend
+- DATABASE_URL
+- JWT_SECRET_KEY
+- NODEMAILER_MY_EMAIL
+- NODEMAILER_MY_PASSWORD
+- SUPABASE_URL
+- SUPABASE_ANON_KEY
+- CLIENT_BASE_URL
 
-### Frontend:
-  - VITE_SERVER_URL: Server url which we'll send a request
-    ```diff
-    + VITE_SERVER_URL=http://localhost:3000/api/v1
-    - VITE_SERVER_URL=https://yeti-jobs.onrender.com/api/v1/
-    ```
+### Frontend
+- VITE_SERVER_URL
+
+
 ## 📦Libraries Used
 
 | Package | Version | Category |
@@ -390,7 +370,6 @@ vim .env
 
 ## Scalablity Consideration:
 - For scalability consideration, it's a very scalable system. - Done proper API versioning and follow the MVC pattern for building a REST architecture.
-- with done the proper api versisong and the follow the mvc (mrc) pattern for building a rest architecture.
 - With have the global error handling on the both client and server error event if it's error occured it'll catch and dont' crash a system on the both side.
 - Use PostgreSQL full text search with GIN index for searching jobs, which bypasses prefix search from ILIKE
 -  on the every request it's sending a correct message as well with also the correct status code which range from 200, 400, 500.
@@ -398,21 +377,16 @@ vim .env
 
 ## Known Issue:
 - UI alignment issues (Tailwind CSS)
-- Email Sending lacks a proper failure handling
-- Token resend logic needs a improvment
-- Making a token send mail: asynchrounous mail with have to wait rather i make just synchrounous
-- with only the minor patch issue face on the backend.
-- while on the frontend especially Tailwind CSS has known issues specifically with position and display.
-- Sometimes PostgreSQL `$1` placeholder doesn't work as expected, requiring template literals, but this has SQL injection risks which I prevent by validating user input.
- - i can use the `promise.all` which i'm plan to use for the better performance 
-- With i make sure to send the: `withCredntiatils` from the frontend on the every request which i use the axios create function for sending at oncee.
-- For sending a file earlier it's sending from the state later, send a file to the: `formData`.
+- Email sending lacks proper failure handling
+- Token resend logic needs improvement
+- PostgreSQL parameter binding inconsistency in some queries
 
 
-## Limitation:
-- Have the Monthly Active Users on free tier database and the server and client which just efficient for student level project.
-- Take a time to load our backend server when our sytem goes to sleep which is also the the downside of the system.
-- Other Limitation as of now that it can't connect to the job sekker and hr directly just have user informatino such as email, name but not direct connection which i will be adding to it.
+## Limitations
+- Free-tier hosting causes cold start delays
+- Limited MAU due to free database tier
+- No direct communication between recruiters and job seekers yet
+
 
 
 ## Additional Features

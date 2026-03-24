@@ -55,7 +55,6 @@ export const withdrawJobApplicationController= async (req, res)=>{
     await connect.query("delete from applications where job_id=$1 and user_id=$2", [job_id, uid])
     return res.status(200).json({message: 'Successfully Withdraw from applications'});
   } catch (error) {
-    console.log('error ', error)
     res.status(500).json({message: error.message})
   }
 }

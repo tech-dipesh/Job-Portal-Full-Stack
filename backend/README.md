@@ -1,7 +1,131 @@
-# Job Portal Project
-## Project Started: 2026/Feb/19
+## Yeti Jobs Backend
+Backend service for Yeti Jobs built with Node.js, Express, and PostgreSQL, providing secure REST APIs for job management, applications, authentication, and company workflows.
 
-### Phase 1: Backend
+- Project Started: 2026/Feb/19
+
+## API Overview
+
+### Users
+- POST /login
+- POST /signup
+- POST /logout
+- GET /:id
+- PATCH /:id
+- POST /upload-resume
+- POST /upload-profile-picture
+
+### Jobs
+- GET /
+- GET /search
+- GET /:id
+- POST /new
+- PATCH /:id
+- DELETE /:id
+- POST /:id/bookmark
+- DELETE /:id/remove-bookmark
+
+### Applications
+- GET /applylist
+- POST /:id/apply
+- DELETE /:id/withdraw
+- PATCH /:id/status
+
+### Companies
+- GET /all
+- POST /new
+- GET /:id/dashboard
+- GET /:id/jobs
+- GET /:id/applications
+
+### Admin
+- POST /assign-user
+- GET /search/users
+- GET /search/company
+- GET /dashboard
+
+## Core Features
+- Job management (CRUD)
+- Application system (apply, withdraw, status)
+- Company management
+- Bookmark jobs
+- Followers system
+- Email verification and password reset
+
+
+
+## Architecture
+
+- Controllers: Business logic
+- Services: Reusable logic
+- Models: Database + validation
+- Routes: API endpoints
+- Middleware: Auth, validation, ownership checks
+
+Flow:
+Client → Routes → Controllers → Services → Database
+
+
+  
+## Authentication & Security
+
+- JWT authentication (stored in HTTP-only cookies)
+- Role-based access control (user, recruiter, admin)
+- Password hashing using bcrypt
+- Zod validation (request validation)
+- Helmet for secure headers
+- Rate limiting (anti-brute-force)
+- CORS configuration
+
+
+## File Upload
+
+- Uses Supabase for storage
+- Multer with memoryStorage
+- Supports resume and profile image upload
+- Old files are deleted before new upload
+
+
+
+## Performance Optimization
+
+- PostgreSQL indexing on frequently queried fields
+- Full-text search using tsvector and GIN index
+- SELECT EXISTS optimization
+- Pagination using LIMIT and OFFSET
+- EXPLAIN ANALYZE for query optimization
+
+## Middleware
+
+- Authentication middleware
+- Role-based access middleware
+- Ownership validation
+- UUID validation
+- Error handling middleware
+
+
+## Email System
+
+- Email verification using OTP
+- Password reset workflow
+- Token expiration handling
+- Resend verification support
+
+
+## Scheduled Tasks
+
+- Daily cron job to close expired jobs
+- Runs at midnight using node-cron
+
+
+
+## Scalability Considerations
+
+- Modular MVC architecture
+- API versioning
+- Optimized database queries
+- Stateless backend design
+
+
 
 ## Database Schema
 <p align="center">
@@ -10,42 +134,12 @@
   </picture>
 </p>
 
-## All API Endpoints (2026/Feb/26)
-
-### Applications:
-- List applications, `/:id/apply`, `/:id/withdraw`
-
-### Companies:
-- `/`, `/:id/dashboard`, `/:id/employees`, `/:id/jobs`, `/:id/applications`
-- `/:id` (GET, POST, DELETE, PUT)
-
-### Jobs:
-- `saved_jobs/list`, `/:id/bookmark`, `/:id/remove-bookmark`
-- `/` (all listings), `/search`, `/:id` (single job)
-- `/:id` (new job, delete, update)
-
-### Users:
-- `/logout`, `/login`, `/signup`
-- `/` (all users), `/:id` (individual user details)
-- `/skills` (add user skills)
-- `/:id` (delete user), `/put` (update user), `/patch` (partial update)
-- `/forget-password`, `/forget-password-verify`
-- `/email-verify`, `/email-verify/resend`
-- `/upload-resume`, `/upload-profile-picture`
-
-### Admin:
-- `/verify-admin`, `/users/search`, `/company/search`, `/admin/dashboard`
+## Coming Days Features:
+- `npm audit` — check vulnerabilities
+- `npm prune` — remove unnecessary packages
 
 
-## Created Table: Users
-- Added user email (previously missing)
-- Added email, password, and role (user type)
-
-
-## Development Log
-
-- Created a common function to execute queries
-- Created a global error handler
+## Useful Features:
 - Convert string to number with `Number(value)`
 - Implemented data validation with Zod
 - Used salting and hashing for passwords
@@ -81,6 +175,35 @@
   - **Middleware** → auth, validation, ownership checks
   - **db.js** → database connection
 
+### March 1–20
+- Used `EXPLAIN ANALYZE` for performance analysis
+- Fixed Zod array validation issues
+- Added `ON DELETE CASCADE` for foreign relations
+- Used 3 JOINs to fetch all applicants for a job
+- Fixed `experience_years` field naming
+- `SELECT EXISTS(SELECT 1)` returns true/false
+- Used `z.coerce` for type coercion in Zod
+
+- Recruiters cannot apply to jobs
+- Fixed `/:all` routes being captured by `/:id`
+- Domain validation with try-catch
+- Resend token sends updated token
+- Created reusable JWT signing function
+- Added `founded_year` and `location` to companies table
+- Update the `delete` route which is not a correct logic previously for delete a job.
+- Implemented company logo upload feature
+- The Bookmark action can't perform by the non job seeker role.
+- with change the login status routes of follow rest standard.
+- create the indexing on teh verified_code which we need the multiple times so.
+
+- update the profile reset password verify with the correct logic.
+- also create the index for the companies name which we need a frequently.
+- port our local database to the supabase database.
+- Move my system to the src folder structure.
+- One really weird bug during the email confirmation is current Date is freezing and sending a old time rather we should do: `new Date()`
+- set the limit proxy to allow a render: `set proxy, 1`
+
+
 
 ## Applications Feature
 - Created applications table with: `user_id`, `job_id`, `status`, `applied_at`
@@ -92,75 +215,6 @@
 - Fixed issue where status update created new record instead of updating
 - Separated controller code from router
 - Only owner can view/edit applications
-
-
-## All The Updated Routes:
-/jobs:
-/saved_jobs/list
-/:id/bookmark_job
-/:id/remove_from_bookmark
-/
-/search
-/:id
-new
-/:id/delete
-/:id/edit
-/:id/verify-owner
-
-
-/users:
-/
-/logout
-/login
-/signup
-/all
-/forget-password
-/forget-password/verify
-/verify
-/verify/resend
-/following
-/resume
-/profile-picture
-/:id/skills
-/:id
-  : get
-  : put
-  :patch
-
-
-
-companies:
-/all
-/new
-/dashboard
-/followers
-/:id 
-  :get
-  :putKW
-  :delete
-/:id/follow
-  : post
-  :delete
-/:id/analytics
-/:id/employees
-/:id/jobs
-/:id/applications
-
-
-
-/ application
-/applylist
-/:id/applist
-/:id/apply
-/:id/status
-/:id/withdraw
-
-/admin
-/verify
-/search/company
-/search/users
-/assign-user
-/dashboard
 
 
 ## File Upload (Resume & Profile Picture)
@@ -186,26 +240,6 @@ supabase.storage.from('bucketname').getPublicUrl(pathurl)
 - Same logic applied to profile picture upload
 
 
-## Pagination
-- Used `LIMIT` and `OFFSET` with page number for large queries
-
-
-## PostgreSQL:
-
-
-**Trigger function:**
-```sql
-CREATE FUNCTION title_search_function_update() RETURNS trigger AS $$
-BEGIN
-  new.search_title := to_tsvector('english', new.title);
-  RETURN new;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER full_text_search_trigger
-BEFORE INSERT OR UPDATE ON jobs
-FOR EACH ROW EXECUTE FUNCTION title_search_function_update();
-```
 
 **tsvector & tsquery:**
 - `tsvector` — indexed search
@@ -214,12 +248,6 @@ FOR EACH ROW EXECUTE FUNCTION title_search_function_update();
 - `to_tsquery('help & right')` — both must exist
 - `to_tsquery('help | right')` — one must exist
 - `@@` is match operator
-
-
-## Saved Jobs
-- Table: `saved_jobs` with `saved_job_id`, `job_id`, `user_id`, `createdAt`
-- Only accessible to users (not admin/company)
-- Three routes: save, remove, list all
 
 
 ## Security Features (2026/02/25)
@@ -316,44 +344,7 @@ FOR EACH ROW EXECUTE FUNCTION title_search_function_update();
 - Bookmark job testing and fixes
 
 
-## March 1–20
-- Used `EXPLAIN ANALYZE` for performance analysis
-- Fixed Zod array validation issues
-- Added `ON DELETE CASCADE` for foreign relations
-- Used 3 JOINs to fetch all applicants for a job
-- Fixed `experience_years` field naming
-- `SELECT EXISTS(SELECT 1)` returns true/false
-- Used `z.coerce` for type coercion in Zod
 
-- Recruiters cannot apply to jobs
-- Fixed `/:all` routes being captured by `/:id`
-- Domain validation with try-catch
-- Resend token sends updated token
-- Created reusable JWT signing function
-- Added `founded_year` and `location` to companies table
-- Update the `delete` route which is not a correct logic previously for delete a job.
-- Implemented company logo upload feature
-- The Bookmark action can't perform by the non job seeker role.
-- with change the login status routes of follow rest standard.
-- create the indexing on teh verified_code which we need the multiple times so.
-
-- update the profile reset password verify with the correct logic.
-- also create the index for the companies name which we need a frequently.
-- port our local database to the supabase database.
-- Move my system to the src folder structure.
-- One really weird bug during the email confirmation is current Date is freezing and sending a old time rather we should do: `new Date()`
-- set the limit proxy to allow a render: `set proxy, 1`
-
-
-
-## Admin Routes
-- Added 3 admin routes: assign user to company, search users, search companies
-- Added database constraint: if user has `company_id`, role must be `recruiter` (not admin or guest)
-
-
-## Pagination (March)
-- Implemented load more with limit and offset
-- Send total count to frontend
 
 
 ## Application Enhancements
@@ -367,18 +358,7 @@ FOR EACH ROW EXECUTE FUNCTION title_search_function_update();
 ## Backend Project Completed: 2026/Feb/26
 
 
-## Followers System
-- Created followers table: `uid`, `user_id`, `company_id`, `created_at`
-- Unique constraint on `(user_id, company_id)` — one follow per user-company pair
-- Foreign key references
-- Follow/unfollow logic implemented
-
-
 ## Docker Setup (March 19)
 - Used `npm ci` instead of `npm i` for smaller, faster image
 - Added `.dockerignore` to exclude: `node_modules`, `.env`, `Dockerfile`, etc.
 - Build command: `docker build -t job_portal .`
-
-## Important Commands
-- `npm audit` — check vulnerabilities
-- `npm prune` — remove unnecessary packages

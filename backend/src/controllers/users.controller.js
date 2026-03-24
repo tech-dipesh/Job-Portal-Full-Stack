@@ -28,20 +28,20 @@ export const getloginUserController= async (req, res) => {
       const message=validateuser.error.issues.map(m=>m.message);
       return res.status(422).json({message: message[0]})
     }
-    const {rows}= await connect.query("select exists(select 1 from users where email=$1)", [email]);
-    if(!rows[0].exists){
+    const {rows}= await connect.query("select email, password, uid, company_id from users where email=$1", [email]);
+    if(rows.length==0){
       return res.status(401).json({message: "Invalid Email Id."});
     }
     const saltPassword=await bcrypt.compare(password, rows[0].password);
     if(!saltPassword){
       return res.status(404).json({message: "Please Enter a Correct Password."})
     }
-    const {uid, role, company_id=null}=rows[0];
+    let {uid, role, company_id=null}=rows[0];
     if(!role)role='guest'
     const userVerified=await isUserVerifiedEmail(uid)
    const content={uid, role, company_id, userVerified};
    VerifyJwt(res, content)
-    return res.status(200).json(rows[0]);
+    return res.status(200).json({message: "Succssfully Logged In"});
   } catch (error) {
     return res.status(500).json({message: error.message}) 
   }

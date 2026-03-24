@@ -30,10 +30,11 @@ export default function Login() {
     const err = validateLogin(value);
     if (err) return setError(err);
    const res= await execute(value)
-  if(apierror) setError(apierror)
-  if(data || res){
-    navigate("/")
-    await reexecute()
+  if(res){
+    navigate(state?.from || "/")
+  }
+  else{
+    setError(apierror || "Login Failed")
   }
   };
 

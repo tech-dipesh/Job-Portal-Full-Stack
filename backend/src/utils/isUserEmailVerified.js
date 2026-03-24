@@ -16,7 +16,6 @@ async function isUserVerifiedEmail(uid) {
       return false;
     }
   } catch (error) {
-    console.log('er', error)
     return false;
   }
 }

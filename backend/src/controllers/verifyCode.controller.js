@@ -29,7 +29,6 @@ async function verifyEmailConfirmation(req, res) {
   await connect.query(`update email_verified set is_verified=true where user_id=$1 and verified_code=$2 and verified_type='verify_mail'`, [uid, code]);
   return res.json({message: "Verification Code Have Been Succssfully Verified"})
   } catch (error) {
-    console.log(error)
     return res.status(500).json({message: error.message})
   }
 }
@@ -42,7 +41,6 @@ export const resendVerificationCode=async (req, res)=>{
   return res.status(404).json({message: "You've Already Verified"})
   }
   try {
-
     const {rows:query}=await connect.query("select exists(select 1 from email_verified where is_verified=true and user_id=$1)", [uid])
     if(query[0].exists){
       return res.status(403).json({message: "You've Already Verified Your Code."});

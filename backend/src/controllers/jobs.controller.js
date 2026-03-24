@@ -77,7 +77,6 @@ export const deleteListingController= async (req, res) => {
   const {id}=req.params;
   try {
     const {rows:query}=await client.query("select exists(select 1 from jobs where uid=$1)", [id]);
-    console.log('exist', query)
     if(!query[0].exists){
         return res.json({message: "Id Doesn't exist"})
     }
@@ -85,7 +84,6 @@ export const deleteListingController= async (req, res) => {
     const data= await tableDataFetch('jobs')
    return res.status(200).json({data})
   } catch (error) {
-    (error)
     return res.json({message: error.message})
   }
 };
@@ -110,7 +108,6 @@ export const putListingController= async (req, res) => {
     }
    return res.status(200).json({message: rows[0]})
   } catch (error) {
-    console.log(error)
    return res.json({message: error.message})
   }
 };

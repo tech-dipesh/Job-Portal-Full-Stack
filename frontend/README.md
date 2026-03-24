@@ -1,100 +1,106 @@
-## Frontend Project:
-- The project started on: **2026/02/26**
+## Yeti Jobs Frontend:
+- Frontend of the Yeti Jobs platform built with React and Tailwind CSS, providing a responsive UI for job seekers, recruiters, and admins with role-based navigation and application management.
+- The Frontend project started on: **2026/02/26**
+
+## Features: 
+- Authentication UI (login, signup, email verification)
+- Role-based UI (job seeker, recruiter, admin)
+- Job search with debounce
+- Apply / withdraw applications
+- Bookmark jobs
+- Profile management (skills, resume, image upload)
+- Company dashboard (jobs, applicants, employees)
+- Pagination and lazy loading
+- Responsive design (mobile-friendly)
+
+
+## Techincal Highlights:
+- Centralized API handling using Axios instance
+- Custom hooks for data fetching
+- Request cancellation using AbortController
+- Debounce for optimized search
+- Context API for global auth state
+- FormData handling for file uploads
+- Route protection based on user roles
+
+## Ui Features:
+
+- Responsive design for mobile and desktop
+- Dynamic navigation based on user role
+- Modal and popup system using React Portal
+- Toast notifications for user feedback
+- Pagination and search UI improvements
+
+
+## State Managment:
+## State Management
+
+- React Context API for authentication state
+- Custom hooks for shared logic
+- Centralized state to reduce prop drilling
+
+
+## Performance Optimization:
+
+- Debounced search queries
+- Request cancellation using AbortController
+- Lazy loading components
+- Pagination for large datasets
+
+
+## Routing & Access Control:
+
+- Protected routes for authenticated users
+- Role-based route access (admin, recruiter, user)
+- Redirect to original page after login
+
+
+
+
+## API:
+Uses backend APIs available at:
+https://yeti-jobs.onrender.com/api/v1
+
+
+## Setup:
+- cd frontend  
+npm install  
+npm run dev  
+
+App runs on: http://localhost:5173
+
 
 ### Frontend Setup:
-- When using the children property, I must use the `Outlet` component in App.
-- Another concept I learned: to access `.env` content, it must start with `VITE` (capitalized).
-- I made sure it only re-renders when the job ID changes.
-- I started implementing the login/signup flow.
-- GET methods don't send a body, so for login I used POST routes.
+
+
+## UseFul NOtes That I Learneed:
+- - Another concept I learned: to access `.env` content, it must start with `VITE` (capitalized).
+- - GET methods don't send a body, so for login I used POST routes.
 - I used `withCredentials` to store the token from the backend.
-- I set up all signup features.
-- One major issue: I was sending a request to `login` instead of `verify`.
-
-- I used an Axios instance in the `services` folder.
-- I created all user-related API routes.
-- I moved App.jsx homepage content to another page.
-- Created separate pages like profile picture upload.
-- Added user skills setup.
-
----
-
-## Backend Routes:
-- **Applications:** list, `/:id/apply`, `/:id/withdraw`
-- **Companies:** `/:id/dashboard`, `/:id/employees`, `/:id/jobs`, `/:id/applications`, `/:id` (GET, POST, DELETE, PUT)
-- **Jobs:** saved jobs list, `/:id/bookmark`, `/:id/remove-bookmark`, all listings, search, single job, create, delete, update
-- **Users:** logout, login, signup, all users, individual user, add skills, delete user, update user, patch, forget-password, forget-password-verify, verify, resend-verify, upload-resume, upload-profile-picture
-
----
-
-## 2026/02/28:
-- Created a `lib` folder with an Axios instance to use everywhere.
 - Created custom `useFetchData` hook for Axios.
 - Used `AbortController` to cancel requests.
   - Pass `{ signal: controller.signal }` to request.
   - Check with `!axios.isCancel(error)` for cleanup.
 - For IIFE functions, used `;` to separate.
-
----
-
-## 02/29:
 - For page navigation backward: `navigate(-1)`
 - For resume upload, sent content via `FormData` (Axios didn't handle it properly initially).
-- On the API, had to wrap in object to avoid errors.
-- After creating resume upload, I added a link tag.
-
 - Used custom hooks for both each job and all jobs.
-- Fixed minor spelling error: `bookmars` → `bookmarks`.
-
 - Added `isUserLoggedIn` and `isOwner` middleware.
-- **Note:** Should not set initial values directly; use `useEffect` to avoid too many re-renders.
-- Used spread operator `...` to receive data properly.
 - Implemented update job with skills feature.
 - Implemented delete and new job features.
-
----
-
-## Input Component:
-- If sending as group, I included name prop; otherwise omitted.
-- Implemented debounce/throttle.
 - In React 19, don't need `Auth.Provider` — directly use `Auth`.
-
-- Navigation logic: track where user left off to return later.
+- If sending as group, I included name prop; otherwise omitted during input component
 - Used custom hook with useContext (for auth data fetching).
-- Added all 4 application features: apply, withdraw, see all applications.
-
----
-
-## Login System:
-- Better approach: store output data but can't update instantly; redirect to homepage and refresh.
-
 - Used Link and iframe for resume and profile photo upload.
 - For company dashboard, removed explicit ID — direct navigation.
-
----
-
-## Election Day:
-- Added FontAwesome icons with `@fortawesome/react-fontawesome` and `@fortawesome/free-solid-svg-icons`.
-- Added 2 extra fields for companies: location and founded_year.
-- Added loading feature across all pages.
-- Altered PostgreSQL table: added `recruiter` role type.
-
----
-
-## More:
 - For text truncation: used `line-clamp-2`.
-- Added pagination and debounce for search.
-- Implemented `assignUserToCompanies` with 3 API interactions.
-- Added middleware for route protection: `isAdmin`, `isOwner`, `isLoggedInUser`.
-- Basic responsive design — mobile-friendly.
+-  
 
-- Next features planned:
-  1. Company can change applicant status
-  2. Socket.io for real-time notifications
+## Future Features:
+1. Company can change applicant status
+2. Socket.io for real-time notifications
 
-- Added route for admin dashboard.
 
----
 
 ## Card Styling:
 ```html
