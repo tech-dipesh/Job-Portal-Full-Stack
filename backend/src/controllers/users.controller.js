@@ -195,6 +195,11 @@ export const litOfAllFollowingCompanies=async(req, res)=>{
 
 
 export const userLoggedOutcontroller=async(req, res)=>{
-  res.clearCookie("token");
+  const httpOptions={
+  httpOnly: true,
+  secure: true,
+  sameSite: "none"
+  }
+  res.clearCookie("token", httpOptions);
   return res.status(200).json({message: 'Logged Out Succssfully'});
 }

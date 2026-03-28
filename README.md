@@ -37,7 +37,6 @@ A Scalable job portal built with the **PERN stack** that connects job seekers an
 
 ## Overview:
 The Project is a Job Portal Platform **with** all the features needed to build a job portal platform, such as CRUD operations, **role-based** access control, jobs, companies, apply, withdraw, create a job, create a new company, admin controller, and a cron queue.
-- The Project can be **built** as a production level project with some minor things to do.
 ## Screenshots:
 <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;">
     <img src="frontend/public/Documents/homepage.png" style="border-radius: 20px;" alt="Homepage" width="200" height="150">
@@ -138,13 +137,17 @@ The Project is a Job Portal Platform **with** all the features needed to build a
 ## Environment Variables
 
 ### Backend
-- DATABASE_URL
+- DATABASE_PASSWORD
 - JWT_SECRET_KEY
 - NODEMAILER_MY_EMAIL
 - NODEMAILER_MY_PASSWORD
+- NODEMAILER_MY_host
 - SUPABASE_URL
 - SUPABASE_ANON_KEY
 - CLIENT_BASE_URL
+- PORT
+- MAXAGE
+
 
 ### Frontend
 - VITE_SERVER_URL
@@ -223,7 +226,7 @@ vim .env
   ```
 - Now Run the Docker Container:
   ``` bash
-  docker run -it 3000:3000 -d yeti-jobs-backend: # Run's on the backgound
+  docker run -d -p 3000:3000 --name yeti-jobs-backend: # Run's on the backgound
   ```
 
 
@@ -233,53 +236,115 @@ vim .env
 
 
 
-## Database Design:
-- For the Database Design, I made sure to have separation of concerns with only single tables doing a single task, not multiple.
-<details>
+## Database Design
 
-<summary> Database Tables:</summary>
-- applications
-- companies
-- email_verified
-- jobs
-- saved_jobs
-- user_companies_follows
-- users
+The database follows a strict **Separation of Concerns** principle — each table is normalized to handle a single responsibility with high data integrity.
 
+- **Enums** enforce fixed value sets at the database level for fields like `role`, `education`, `job_type`, `application_status`, and `email_verification_type`.
+- **Indexes** are applied on frequently queried columns — a GIN index on `jobs.search_title` for full-text search, and btree indexes on `companies.name` and `email_verified.verified_code`.
+- **Constraints & checks** validate data at three levels — client, server, and database — ensuring integrity even if upper layers are bypassed.
+- **Triggers** automate internal operations such as populating the `search_title` tsvector column on job insert/update.
+- **Referential integrity** is handled via `ON DELETE CASCADE` (e.g. deleting a user removes their email verifications and follows) and `ON DELETE RESTRICT` where linked data must be preserved before deletion is allowed.
 
-### Application Table:
-- The Table is mainly for **tracking** all **applied** jobs which have mostly user id and job id as a **foreign** key.
-- with other relevant information such as: cover letter, notice period, expected salary, why we should hire you. **Two are mandatory** (cover letter, notice period) and the other two are optional
+## Visual Diagram:
+``` mermaid
+erDiagram
+  USERS {
+    uuid uid PK
+    text fname
+    text lname
+    enum education "Basic|Matrix|Undergraduation|Postgraduation|High School"
+    text email
+    text password
+    enum role "guest|admin|recruiter"
+    uuid company_id FK
+    text resume_url
+    text profile_pic_url
+    text[] skills
+    int experience
+  }
 
-### Companies Table:
-- all the list of the companies which exist on the platform with their relvent other information.
-- with the routes of: `admin` which only accessible to the role of the admin.
+  COMPANIES {
+    uuid uid PK
+    text name
+    text description
+    text website
+    timestamptz created_at
+    int2 founded_year
+    text location
+    text logo_url
+  }
 
-### Email Verified Table:
-- for track the email verified users, and also have the when user is try a forget password store a  on the database table of: `email_verified`.
-- with the enum type whether email verify or forget password with link to the user id and the random code and relevent other information.
+  JOBS {
+    uuid uid PK
+    text title
+    text description
+    int8 salary
+    enum job_type "Remote|Onsite|Hybrid"
+    enum is_job_open "active|closed"
+    uuid company_id FK
+    uuid created_by FK
+    tsvector search_title
+    text[] skills
+    int8 total_job_views
+    date created_at
+    int experience_years
+    text location
+    date expired_at
+  }
 
-### Jobs Table:
-- jobs is one of the most importatn table, which content lot of column on the single table.
-- with the company id to the user id who created and other basic jobs such as title, desc, salary, type and lot more.
+  APPLICATIONS {
+    uuid uid PK
+    uuid user_id FK
+    uuid job_id FK
+    enum status "applied|rejected|hired|shortlisted"
+    timestamptz applied_at
+    text cover_letter
+    int4 notice_period
+    int8 expected_salary
+    text why_hire
+  }
 
-### Saved jobs Table:
-- with user have the option to bookmark a any jobs.
-- on the bookmark with foreign relation of the jobs and the user id and other relevent info.
-### User Companies Follow or Followers Table:
-- Following and followers features to only the guest role users can follow to the companies, and also only the `employees` can view all the followers list of the companies.
+  SAVED_JOBS {
+    uuid uid PK
+    uuid users_id FK
+    uuid job_id FK
+    uuid company_id FK
+    timestamptz created_at
+  }
 
-### Users Table:
-- with the user info and also the role whehter the user is guest, admin or the recruiter.
-- with the profile pic and also the resume have.
-- education skills and the company id which only be valid for the enum recruiter.
-- and lot of other information.
-### Extra
-- have a trigger and also the index operation on the database
-- with the enum for the education, role and other information.
-- Have the Muliple level of constraint/check to validate a inserted data with the data integrity.
-- with also i use the `on delete cascase or on delete restrict` on the foreign relation if the foreign relation data is delete dshould we allow that linked data to be deleted or what.
-</details>
+  USER_COMPANIES_FOLLOWS {
+    uuid uid PK
+    uuid user_id FK
+    uuid company_id FK
+    timestamptz created_at
+  }
+
+  EMAIL_VERIFIED {
+    uuid uid PK
+    uuid user_id FK
+    enum verified_type "verify_mail|forget_password"
+    timestamptz created_at
+    timestamptz expired_at
+    int4 verified_code
+    bool is_verified
+  }
+
+  USERS }o--o| COMPANIES : "belongs to"
+  USERS ||--o{ JOBS : "creates"
+  USERS ||--o{ APPLICATIONS : "submits"
+  USERS ||--o{ SAVED_JOBS : "bookmarks"
+  USERS ||--o{ USER_COMPANIES_FOLLOWS : "follows"
+  USERS ||--o{ EMAIL_VERIFIED : "has"
+
+  COMPANIES ||--o{ JOBS : "posts"
+  COMPANIES ||--o{ SAVED_JOBS : "referenced in"
+  COMPANIES ||--o{ USER_COMPANIES_FOLLOWS : "followed by"
+
+  JOBS ||--o{ APPLICATIONS : "receives"
+  JOBS ||--o{ SAVED_JOBS : "saved in"
+```
+
 
 ## Cron Task:
 - The cron task mean it'll run on that particular time which we've specified.
@@ -296,28 +361,31 @@ vim .env
 - Focus on critical routes (auth, jobs, companies)
 
 
-## Deployment:
-- for the deployment i'm plan to use the `vercel` for the both frontend and the backend project.
-- `render` for backend deployment with allow a connection pooler of ipv6 address.
-- add a: `vercel.json` to make a serverlesss function.
+## Deployment
+### Frontend — Vercel
+The React app is deployed on Vercel, which auto-detects the Vite setup with no complex configuration needed.
 
-### Database Migration:
-- For Migrating to the `localhost` to the `supabase` it's done with only two steps.
-- Where on the supabase we can get the: `DATABASE_URL` and where we can insert our project password on there.
-- rather then giving port, user we only need to add the: `connectionString`
-- And Also for unauthorized Access mean allow all our request we can allow to: `  ssl: {rejectUnauthorized: false}`
-- which also the file uploades already integrated to the supabase.
+- Add `VITE_SERVER_URL` in Vercel's environment variables dashboard.
+- Every push to `main` triggers an automatic redeploy.
 
-### Backend:
-- which for the backend previously only run's on our local server.
-- Vercel also nowdays support the `express` framework with less steps and faster compare to the render.
-- We've to add the: `vercel.json` for integrating also the backend
+### Backend — Render
+The Node.js/Express server is deployed as a Web Service on Render.
 
-### Frontend:
-- For the Frontend i will also use the: `vercel`.
-- which doesn't have the complex structure easy to do it.
+> **Note:** Vercel does support Express via serverless functions and a `vercel.json` config — it was explored but Render was chosen for its persistent server model, which fits Express better than a serverless environment.
 
+- Uses an IPv6-compatible connection pooler to connect to Supabase PostgreSQL.
+- **Cold start:** Render's free tier sleeps after 15 minutes of inactivity. A cron job pings the server every 15 minutes to keep it alive.
+- Add all backend environment variables in Render's dashboard before deploying.
 
+### Database & Storage — Supabase
+PostgreSQL database and file storage (resumes, profile pictures) are both hosted on Supabase.
+
+**Migrating from localhost to Supabase:**
+1. Get the `DATABASE_URL` connection string from Supabase → Settings → Database.
+2. Replace the local `host`, `port`, and `user` config with the single `connectionString`.
+3. Add `ssl: { rejectUnauthorized: false }` to allow incoming connections from Render.
+
+File uploads are handled via the `@supabase/supabase-js` SDK — files go directly into Supabase Storage buckets and the returned public URL is saved to the database.
 ## Security:
 - use **Helmet** for the response purpose which removes **X-Powered-By** so the client will not know which framework we've built with.
 ### validation Security:
@@ -351,8 +419,7 @@ vim .env
 - with i also validation whether the use is logged in or not, and also whether the user logged in but not verified, whether the user is owner of that routes or not, whether the user given a correct `uuid` which i also validaion that also save some time for invalid ui to check from the database.
 
 
-## >:white_check_mark: Performance Optimization
-
+## Performance Optimization
 ### Database
 >:white_check_mark: Added **indexing** on frequently queried columns for faster data retrieval
 >:white_check_mark: Used `SELECT EXISTS(SELECT 1 ...)` instead of full `SELECT` statements for condition checks — returns `true/false` without fetching rows
@@ -368,12 +435,17 @@ vim .env
 
 
 
-## Scalablity Consideration:
-- For scalability consideration, it's a very scalable system. - Done proper API versioning and follow the MVC pattern for building a REST architecture.
-- With have the global error handling on the both client and server error event if it's error occured it'll catch and dont' crash a system on the both side.
-- Use PostgreSQL full text search with GIN index for searching jobs, which bypasses prefix search from ILIKE
--  on the every request it's sending a correct message as well with also the correct status code which range from 200, 400, 500.
-- check the multiple command such as join, group by, nested query with the : `explain analyze` for the performance analysis which can have the faster query.
+## Scalability Considerations
+
+The system is built with scalability in mind from the ground up — not as an afterthought.
+
+- **API versioning** (`/api/v1`) and **MVC pattern** keep the codebase modular and easy to extend.
+- **Global error handling** on both client and server prevents crashes — every error is caught and returned with a proper status code (`2xx`, `4xx`, `5xx`) and message.
+- **PostgreSQL full-text search** with a GIN index on `jobs.search_title` replaces slow `ILIKE` prefix queries for job searching.
+- **Query optimization** — joins, group bys, and nested queries are tested with `EXPLAIN ANALYZE` to catch slow plans before they hit production.
+- **Rate limiting** (200 req/min globally, 2 req/min on reset password) prevents abuse and protects the server from being overloaded by a single user.
+- **Caching** is not yet implemented but the architecture is ready for it — currently comfortable handling up to ~10k MAU.
+- **Monitoring & observability** is planned for when the user base grows — not a priority at the current scale but will be added before hitting 10k+ users.
 
 ## Known Issue:
 - UI alignment issues (Tailwind CSS)
@@ -391,6 +463,7 @@ vim .env
 
 ## Additional Features
 - Dockerize a entire system with to the nodejs application and also docker ignore some files: `.dockerignore`
+- Only Install a system settings where it required on the production not on the development.
 - also have the controller and also the abort feature if the request takes longer time dont' wat for more than  a 10 sec.
 - now on the react 19 we dont' need: `auth.provider rather it also work a auth` 
 - use the portal system for the popup of the some features.
@@ -417,8 +490,8 @@ vim .env
 > - On the edit content page if user try to submit a content without any change don't allow them which reduce a less backend request.
 > - Adding a phone number of the user that can send to hr when ur is accepted.
 > - testing even it's not complete only the important routes to test in the coming days.
-> - with on the deployment of details production vs development setup, also 
-> - have to add the 50 dummy dat for the each list
+> - Adding a CDN to cache our static assets that never changed
+> - Move Our Asynchronous operation to the background queue with use services such as: Kafka.
 
 
 <div align="center">

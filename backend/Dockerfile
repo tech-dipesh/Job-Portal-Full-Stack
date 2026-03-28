@@ -4,10 +4,8 @@ WORKDIR /backend
 
 # Containerize our All folder content Except the Node Modules
 COPY package*.json ./
-RUN npm ci
+RUN npm ci --only=production
 COPY . .
-
-
 
 EXPOSE 3000
 
