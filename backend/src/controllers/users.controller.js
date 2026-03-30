@@ -27,7 +27,6 @@ export const getloginUserController= async (req, res) => {
       const message=validateuser.error.issues.map(m=>m.message);
       return res.status(422).json({message: message[0]})
     }
-    const {rows}= await connect.query("select email, password, uid, company_id from users where email=$1", [email]);
     if(rows.length==0){
       return res.status(401).json({message: "Invalid Email Id."});
     }
@@ -35,8 +34,7 @@ export const getloginUserController= async (req, res) => {
     if(!saltPassword){
       return res.status(404).json({message: "Please Enter a Correct Password."})
     }
-    let {uid, role, company_id=null}=rows[0];
-    if(!role)role='guest'
+    let {uid, role, company_id=null}=rows[0] ?? {};
     const userVerified=await isUserVerifiedEmail(uid)
    const content={uid, role, company_id, userVerified};
    VerifyJwt(res, content)

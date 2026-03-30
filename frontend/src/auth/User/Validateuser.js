@@ -5,7 +5,6 @@ const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{8,}$/;
   if(password.length<6) return "Password Must be at least 6 digit Letter."
   if(password.length>25) return "Password Max can be a 25 digit Letter."
-  if (!emailRegex.test(email)) return "Email Format is Invalid.";
   if (!passwordRegex.test(password)) return "Invalid password format.";
   return null;
 };

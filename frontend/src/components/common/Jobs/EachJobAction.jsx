@@ -66,7 +66,7 @@ export default function EachJobAction({ setAction, data, }) {
           {skills?.map((skill, i) => <span key={i} className=' px-3 py-1 bg-slate-700 rounded-full justify-center flex align-middle  text-sm'>{skill}</span>)}
         </div>
       </div>
-      <div className='mt-auto flex flex-wrap items-center justify-between  bg-slate-700 rounded-lg lg:min-h-16'>
+      <div className='mt-8 lg:mt-auto flex flex-wrap items-center justify-between  bg-slate-700 rounded-lg lg:min-h-16'>
         {is_owner ?
           <div className='flex items-center justify-between w-full'>
             <Link to={`/companies/${company_id}/applications`} className='flex-1'>

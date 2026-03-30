@@ -24,7 +24,7 @@ export default function Companycomps({ uid, name, description, website, created_
               Visit Website:  <CgWebsite className='mt-1'/>
             </span>
           }
-          to={`https://${website}`}
+          to={website}
         />
         <div className='flex gap-3 '>
         <Buttoncomps values={<Linkcomps content={'Jobs'} to={`/companies/${uid}/jobs`} />} />

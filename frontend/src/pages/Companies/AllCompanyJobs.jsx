@@ -13,14 +13,13 @@ export default function AllCompanyJobs() {
   useEffect(() => {
     ; (async () => await execute(id))()
   }, [id])
-  const { message } = data || {};
   return (
     <div>
-      <Goback to={`../${id}`}/>
+      <Goback to={`/jobs`} content='Go Back To All Jobs'/>
       <Errorloading data={{ error, loading }} />
       <Emptycomps data={data?.message} type={'Jobs'}/>
       <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 p-8'>
-        {message && message.map(({ uid, title, description, salary, job_type, experience_years, total_job_views, founded_year, location, expired_at, company_name }) => (
+        {data?.message && data?.message.map(({ uid, title, description, salary, job_type, experience_years, total_job_views, expired_at, company_name }) => (
           <Jobcomps key={uid} title={title} description={description} salary={salary} job_type={job_type} experience_years={experience_years} total_job_views={total_job_views} company_name={company_name} expired_at={expired_at}/>
         ))}
       </div>
