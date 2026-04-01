@@ -23,7 +23,6 @@ export default function VerifyEmail() {
   const { state } = useLocation();
   const { error: apierror, loading, data, execute } = useFetchData(verifyUser);
   const { error: apiresend, loading: loadresend, data: resenddata, execute: resendexecute } = useFetchData(resendVerificationCode);
-  console.log('is user', isUser)
   useEffect(() => {
     if(isUser?.isVerified===true || data){
       navigate(state?.from || "/")

@@ -4,7 +4,7 @@ export default function Emptycomps({ data, type }) {
   return (
     <main className='grid grid-cols-1 gap-6 lg:inline'>
       <div className='flex flex-col lg:flex-row lg:items-center justify-between gap-6 py-6 border-b border-slate-700/60 mb-8'>
-        <div className='mx-4'>
+        <div className='mx-4 '>
           <h1 className='text-3xl font-bold text-white tracking-tight'>All {type}</h1>
           <p className='text-neutral-400 mt-1 text-sm'>View All {type}</p>
         </div>
