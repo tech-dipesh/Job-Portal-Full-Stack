@@ -5,7 +5,7 @@ import { getIndividualUser, uploadResume } from "../../api/auth.user"
 import validateFileUpload from "../../auth/User/validateFileUpload"
 import { useEffect } from 'react'
 import useFetchData from '../../hooks/useFetchData'
-import { useLocation, useNavigate, useParams } from 'react-router'
+import { useParams } from 'react-router'
 import Errorloading from '../../components/common/Errorloading'
 import { faFileArrowUp } from '@fortawesome/free-solid-svg-icons'
 import Loading from '../../components/Loading'
@@ -16,8 +16,6 @@ import Goback from '../../components/common/Goback'
 
 export default function Addresume() {
   const { id } = useParams()
-  const navigate = useNavigate()
-  const {state}=useLocation()
   const [file, setFile] = useState()
   const [content, setContent] = useState()
   const [error, setError] = useState()
@@ -56,7 +54,7 @@ export default function Addresume() {
     formData.append('resume', content);
     await execute(formData);
     if (data) {
-      window.location.href = state?.from || "../profile"; 
+      window.location.href =  "../profile"; 
       return;
     }
   }

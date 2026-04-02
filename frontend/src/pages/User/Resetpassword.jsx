@@ -45,38 +45,47 @@ export default function Resetpassword() {
       return;
     }
     const res = await resetexec({ code: value, email, newpassword: password })
-    if (res) {
+    if (res || resetdata) {
       navigate("../login")
     }
   }
   const { message } = data ?? '';
   return (
     <>
-
-      <Link to='../login' className='relative align-middle justify-items-center'><Goback content='Go Back To Login' to='../login' /></Link>
+      <div className='absolute top-4 left-4'>
+        <Goback content='Go Back To Login' to='../login' />
+      </div>
       <article className='min-h-screen flex items-center justify-center px-4'>
-        <div className='w-full max-w-md bg-slate-700 border border-slate-600 rounded-2xl flex flex-col gap-6 p-8'>
+        <div className='w-full max-w-xl bg-slate-700 border border-slate-600 rounded-2xl flex flex-col gap-6 p-10'>
           <Success data={message} />
           {!isOpen ?
             <>
-              <div className='flex flex-col gap-2'>
-                <h1 className='text-2xl font-bold text-white'>Reset your Password.</h1>
-                <p className='text-sm text-slate-400'>Enter your email and we'll send you a reset code.</p>
+              <div className='flex flex-col gap-1 text-wrap lg:text-nowrap'>
+                <h1 className='text-md lg:text-xl font-bold text-white text-wr'>Reset your Password.</h1>
+                <p className='text-sm text-slate-400'>Enter your email and we'll send you a Code To Verify.</p>
               </div>
               <Errorloading data={{ loading, error: apierror }} />
-              <form onSubmit={butSubmit} className='flex flex-col gap-4'>
-                <InputComps type='text' placeholder='Email' click={setEmail} value={email} error={setError} />
+              <form onSubmit={butSubmit} className='flex flex-col gap-3'>
+                <InputComps
+                  type='text'
+                  placeholder='Email' 
+                  click={setEmail} 
+                  value={email} 
+                  error={setError} 
+                />
                 <Buttomcomps values='Send Reset Code' color={'bg-neutral-700'} />
               </form>
-              <div className="border-t border-slate-700" />
-              <div className='flex flex-col items-center gap-2'>
+              <div className="border-t border-slate-600" />
+              <div className='flex flex-col items-center gap-3'>
                 <p className='text-sm text-slate-400'>Already have a code?</p>
-                <div onClick={() => setIsOpen(true)} className='w-full'>
-                  <Buttomcomps  values={
-                      <div>
-                        <span>Enter Code Instead</span>
-                        <FontAwesomeIcon icon={faArrowRight}/>
-                      </div>} color={'bg-neutral-700'} />
+                <div onClick={() => setIsOpen(true)} >
+                  <Buttomcomps
+                  className='w-full'
+                  values={
+                    <span className='flex items-center justify-center gap-2'>
+                      <span>Enter Code Instead</span>
+                      <FontAwesomeIcon icon={faArrowRight} />
+                    </span>} color={'bg-neutral-700'} />
                 </div>
               </div>
             </> :
@@ -90,7 +99,13 @@ export default function Resetpassword() {
               <form onSubmit={verifyCode} className='flex flex-col gap-4'>
                 <div className='flex flex-col gap-1'>
                   <label className='text-xs text-slate-400'>Your Email</label>
-                  <InputComps placeholder='Email' type='text' click={setEmail} value={email} error={setError} />
+                  <InputComps
+                   placeholder='Email' 
+                   type='text' 
+                   click={setEmail} 
+                   value={email} 
+                   error={setError} 
+                  />
                 </div>
                 <div className='flex flex-col gap-1'>
                   <label className='text-xs text-slate-400'>Reset Code</label>
@@ -100,22 +115,23 @@ export default function Resetpassword() {
                   <label className='text-xs text-slate-400'>New Password</label>
                   <InputComps placeholder='New Password' type='password' click={setPassword} value={password} error={setError} />
                 </div>
-                <Buttomcomps values='Submit Code' color={'bg-neutral-700'} />
+                <Buttomcomps values='Submit Code' color={'bg-neutral-600'} />
               </form>
               <Errorloading data={{ loading: resetload, error: reseterr }} />
               <Success data={resetdata?.message} />
 
               <div className='border-t border-slate-700' />
 
-              <div className='flex flex-col items-center gap-2'>
+              <div className='flex flex-col items-center gap-3'>
                 <p className='text-sm text-slate-400'>Need to resend the code?</p>
-                <div onClick={() => setIsOpen(false)} className='w-full'>
+                <div onClick={() => setIsOpen(false)} >
                   <Buttomcomps
+                  className='flex items-center justify-center gap-2'
                     values={
-                      <div>
-                        <FontAwesomeIcon icon={faArrowLeft}/>
-                        <span>Back to Email</span>
-                      </div>}
+                      <span className='flex gap-2'>
+                        <FontAwesomeIcon icon={faArrowLeft} />
+                        <span>Back to Email:</span>
+                      </span>}
                     color={'bg-neutral-700'} />
                 </div>
               </div>

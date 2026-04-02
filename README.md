@@ -350,7 +350,7 @@ erDiagram
 - The cron task mean it'll run on that particular time which we've specified.
 - the operation that I'm using cron for is on jobs which have an **expiry** time of 30 days, which checks every night at **midnight**.
 - on the every noon cron node check which jobs time have expired or not if expired change the that job set to the closeed of is_job_active colum from `jobs` table.
-
+`
 
 ## Testing:
 - Only setup the basic congiguration of: `jest, supertest` and only test a all: `/api/v1/jobs`.

@@ -81,11 +81,15 @@ export const verifyForgetPassword=async (req,res)=>{
   try {
     const {rows:isEmail}=await connect.query("select exists(select 1 from users where email=$1)", [email]);
     if(!isEmail[0].exists){
-      return res.status(422).json({message: "Invalid Email Please First Logged in."})
+      return res.status(422).json({message: "Email Is Invalid."})
     }
-    const {rows: rowList}=await connect.query("select e.is_verified, e.expired_at, u.uid from users u inner join email_verified e on e.user_id=u.uid where u.email=$1 and e.verified_code=$2 order by e.expired_at desc limit 1;", [email, code])
+    const {rows: rowList}=await connect.query("select e.is_verified,e.expired_at, u.fname, u.lname, u.uid, u.password from users u inner join email_verified e on e.user_id=u.uid where u.email=$1 and e.verified_code=$2 order by e.expired_at desc limit 1;", [email, code])
     if(rowList.length==0){
       return res.status(400).json({message: "Please Enter Correct Code."})
+    }
+    const checkOldPassword=await bcrypt.compare(newpassword, rowList[0].password);
+    if(checkOldPassword){
+      return res.status(400).json({message: "Can't Add Old Password Just Login With Same Credentials."})
     }
     const {is_verified, expired_at, uid}=rowList[0] ?? {};
     if(is_verified==true){
@@ -95,10 +99,14 @@ export const verifyForgetPassword=async (req,res)=>{
       return res.status(403).json({message: "Token is Expired Please Generate new Token"})
     }
     const hashPassword=await bcrypt.hash(newpassword, 12)
-   const {rows}= await connect.query("update users set password=$1 where email=$2 returning fname, lname", [hashPassword, email])
+    await connect.query('begin');
+    await connect.query("update users set password=$1 where email=$2 returning fname, lname", [hashPassword, email])
     await connect.query("update email_verified set is_verified=true where uid=$1 and verified_code=$2 and verified_type='forget_password'", [uid, code])
-    return res.status(201).json({message: `You: ${rows[0].fname}, ${rows[0].lname} Password have been updated`})
+    await connect.query('commit');
+    return res.status(201).json({message: `You: ${rowList[0].fname}, ${rowList[0].lname} Password have been updated`})
   } catch (error) {
+    await connect.query('rollback');
+    console.log('error', error)
     return res.status(500).json({message: error.message})
   }
   }

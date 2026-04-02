@@ -24,6 +24,9 @@ export default function VerifyEmail() {
   const { error: apierror, loading, data, execute } = useFetchData(verifyUser);
   const { error: apiresend, loading: loadresend, data: resenddata, execute: resendexecute } = useFetchData(resendVerificationCode);
   useEffect(() => {
+    if(!isUser){
+      navigate("../login")
+    }
     if(isUser?.isVerified===true || data){
       navigate(state?.from || "/")
     }
