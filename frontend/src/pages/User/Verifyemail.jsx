@@ -23,11 +23,12 @@ export default function VerifyEmail() {
   const { state } = useLocation();
   const { error: apierror, loading, data, execute } = useFetchData(verifyUser);
   const { error: apiresend, loading: loadresend, data: resenddata, execute: resendexecute } = useFetchData(resendVerificationCode);
+  console.log('is user', isUser, 'err', autherr)
   useEffect(() => {
-    if(!isUser){
-      navigate("../login")
+    if(autherr=='No token Please Loged in First'){
+        navigate("../login")
     }
-    if(isUser?.isVerified===true || data){
+   else if(isUser?.isVerified===true || data){
       navigate(state?.from || "/")
     }
   }, [data, isUser, navigate, state?.from])

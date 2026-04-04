@@ -12,6 +12,7 @@
 - Company dashboard (jobs, applicants, employees)
 - Pagination and lazy loading
 - Responsive design (mobile-friendly)
+- ATS Scoring And Suggestion
 
 
 ## Techincal Highlights:
@@ -169,7 +170,8 @@ App runs on: http://localhost:5173
 - Redirect user after login back to original page.
 - Fixed 204 status on withdraw (no data response).
 - Added new logo created in Canva.
-
+- Header Profile Ui Changed a Lot
+- Improve the Add Resume Page With Better ui
 ---
 
 ## Portal:
