@@ -1,5 +1,5 @@
 # Yeti Jobs:
-A Scalable job portal built with the **PERN stack** that connects job seekers and recruiters with advanced search, application tracking, and role based access control.
+A Scalable job portal built with the **PERN stack** that connects job seekers and recruiters with advanced search, application tracking, ATS Scoring and role based access control.
 
 <p align="center">
   <picture>
@@ -65,6 +65,7 @@ The Project is a Job Portal Platform **with** all the features needed to build a
 - All Companies List
 - Individual Company jobs and Description About Company
 - View Single Job
+- ATS Scoring And Feedback for Resume
 
 ### Recruiters (Employees):
 - Company Dashboard
@@ -139,7 +140,7 @@ The Project is a Job Portal Platform **with** all the features needed to build a
 -- routes/
 -- services/
 -- utils/
-- tests
+-- tests/
 
 ### Frontend
 - api/
@@ -164,7 +165,7 @@ The Project is a Job Portal Platform **with** all the features needed to build a
 - CLIENT_BASE_URL
 - PORT
 - MAXAGE
-
+- GROK_API
 
 ### Frontend
 - VITE_SERVER_URL
@@ -195,6 +196,11 @@ The Project is a Job Portal Platform **with** all the features needed to build a
 | [![cookie-parser](https://img.shields.io/npm/v/cookie-parser.svg?label=cookie-parser)](https://npmjs.com/package/cookie-parser) | `^1.4.7` | Middleware |
 | [![dotenv](https://img.shields.io/npm/v/dotenv.svg?label=dotenv)](https://npmjs.com/package/dotenv) | `^17.3.1` | Config |
 | [![@supabase/supabase-js](https://img.shields.io/npm/v/@supabase/supabase-js.svg?label=supabase-js)](https://npmjs.com/package/@supabase/supabase-js) | `^2.97.0` | Storage |
+| [![swagger-ui-express](https://img.shields.io/npm/v/@supabase/swagger-ui-express)](https://npmjs.com/package/swagger-ui-express) | `^5.0.1` | Documentation |
+| [![yamljs](https://img.shields.io/npm/v/yamljs)](https://npmjs.com/package/yamljs) | `^0.3.0` | Documentation |
+| [![openai](https://img.shields.io/npm/v/openai)](https://npmjs.com/package/openai) | `^6.33.0` | LLM |
+| [![pdf-parse](https://img.shields.io/npm/v/pdf-parse)](https://npmjs.com/package/pdf-parse) | `^2.4.5` | Backend |
+| [![@vercel/analytics](https://img.shields.io/npm/v/@vercel/analytics)](https://npmjs.com/package/@vercel/analytics) | `^2.0.1` | Frontend |
 
 
 
