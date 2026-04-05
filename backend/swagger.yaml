@@ -1,0 +1,1065 @@
+openapi: 3.0.0
+info:
+  title: swagger
+  version: 1.0.0
+servers:
+  - url: https://yeti-jobs.onrender.com/api/v1/
+
+paths:
+  /admin/dashboard:
+    get:
+      summary: Admin Dashboard
+      operationId: adminDashoard
+      description: ""
+      tags:
+        - Admin
+      responses:
+        "200":
+          description: ""
+
+  /admin/assign-user:
+    post:
+      summary: Assign Company User
+      operationId: assignCompanyToUser
+      description: ""
+      tags:
+        - Admin
+      responses:
+        "200":
+          description: ""
+      requestBody:
+        $ref: "#/components/requestBodies/assign_company_user"
+
+  /admin/search/users:
+    get:
+      summary: Search Users
+      operationId: searchUsers
+      description: ""
+      tags:
+        - Admin
+      responses:
+        "200":
+          description: ""
+      parameters:
+        - name: q
+          in: query
+          description: ""
+          required: true
+          schema:
+            type: string
+          example: g
+  /admin/verify:
+    get:
+      summary: Verify Admin
+      operationId: verifyAdmin
+      description: ""
+      tags:
+        - Admin
+      responses:
+        "200":
+          description: ""
+
+  /companies/new:
+    post:
+      summary: Add New Company
+      operationId: addNewCompany
+      description: ""
+      tags:
+        - Companies
+      responses:
+        "200":
+          description: ""
+      requestBody:
+        $ref: "#/components/requestBodies/add_new_company"
+
+  /companies/{companyId}:
+    parameters:
+      - name: companyId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    delete:
+      summary: Delete Companies
+      operationId: deleteCompanies
+      description: ""
+      tags:
+        - Admin
+      responses:
+        "200":
+          description: ""
+    put:
+      summary: Update company list
+      operationId: updateUsers
+      description: ""
+      tags:
+        - Companies
+      responses:
+        "200":
+          description: ""
+      requestBody:
+        $ref: "#/components/requestBodies/update_company_list"
+
+  /companies/followers:
+    get:
+      summary: All Followers
+      operationId: getAllCompanyfollowers
+      description: ""
+      tags:
+        - Companies
+      responses:
+        "200":
+          description: ""
+
+  /companies/{companyId}/employees:
+    get:
+      summary: All Employees
+      operationId: allEmployees
+      description: ""
+      tags:
+        - Companies
+      responses:
+        "200":
+          description: ""
+      parameters:
+        - name: companyId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+
+  /companies/{companyId}/jobs:
+    get:
+      summary: All Jobs
+      operationId: allJobs
+      description: ""
+      tags:
+        - Companies
+      responses:
+        "200":
+          description: ""
+      parameters:
+        - name: companyId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+
+  /companies/dashboard:
+    get:
+      summary: Dashboard company
+      operationId: dashboardCompany
+      description: ""
+      tags:
+        - Companies
+      responses:
+        "200":
+          description: ""
+
+  /companies/{companyId}/applications:
+    get:
+      summary: Job Applications
+      operationId: jobApplication
+      description: ""
+      tags:
+        - Companies
+      responses:
+        "200":
+          description: ""
+      parameters:
+        - name: companyId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+
+  /companies/all:
+    get:
+      summary: Get All Companies
+      operationId: getAllcompanies
+      description: ""
+      tags:
+        - Companies
+      responses:
+        "200":
+          description: ""
+
+  /companies/{companyId}/follow:
+    parameters:
+      - name: companyId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    post:
+      summary: Follow Company
+      operationId: followcompany
+      description: ""
+      tags:
+        - Users
+      responses:
+        "200":
+          description: ""
+    delete:
+      summary: Unfollow Company
+      operationId: unfollowCompany
+      description: ""
+      tags:
+        - Users
+      responses:
+        "200":
+          description: ""
+
+  /applications/{jobId}/apply:
+    post:
+      summary: Apply to the job
+      operationId: applyJob
+      description: ""
+      tags:
+        - Applications
+      responses:
+        "200":
+          description: ""
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        $ref: "#/components/requestBodies/apply_to_the_job"
+
+  /applications/{applicationId}/status:
+    post:
+      summary: Change Applicant Status
+      operationId: changeApplicantStatus
+      description: ""
+      tags:
+        - Applications
+      responses:
+        "200":
+          description: ""
+      parameters:
+        - name: applicationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        $ref: "#/components/requestBodies/change_applicant_status"
+
+  /applications/lists:
+    get:
+      summary: Get All Applications
+      operationId: getAllApplications
+      description: ""
+      tags:
+        - Applications
+      responses:
+        "200":
+          description: ""
+
+  /applications/{jobId}/applist:
+    get:
+      summary: Single Job All the applicant
+      operationId: singleJobAlApplicant
+      description: ""
+      tags:
+        - Applications
+      responses:
+        "200":
+          description: ""
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+
+  /applications/{applicationId}/withdraw:
+    delete:
+      summary: Withdraw application
+      operationId: withdrawApplication
+      description: ""
+      tags:
+        - Applications
+      responses:
+        "200":
+          description: ""
+      parameters:
+        - name: applicationId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+
+  /jobs/saved_jobs/list:
+    get:
+      summary: All Bookmarks
+      operationId: allBookmarks
+      description: ""
+      tags:
+        - Jobs
+      responses:
+        "200":
+          description: ""
+
+  /jobs/{jobId}/bookmark_job:
+    post:
+      summary: Bookmark Job
+      operationId: bookMarkJob
+      description: ""
+      tags:
+        - Jobs
+      responses:
+        "200":
+          description: ""
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+
+  /jobs/{jobId}/remove_from_bookmark:
+    delete:
+      summary: Remove Bookmark
+      operationId: removeBookmark
+      description: ""
+      tags:
+        - Jobs
+      responses:
+        "200":
+          description: ""
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+
+  /jobs:
+    get:
+      summary: All Jobs
+      operationId: allJobsList
+      description: ""
+      tags:
+        - Jobs
+      responses:
+        "200":
+          description: ""
+      parameters:
+        - name: limit
+          in: query
+          description: ""
+          required: true
+          schema:
+            type: integer
+            format: int32
+          example: "10"
+        - name: page
+          in: query
+          description: ""
+          required: true
+          schema:
+            type: integer
+            format: int32
+          example: "1"
+        - name: sortby
+          in: query
+          description: ""
+          required: true
+          schema:
+            type: string
+          example: job_type
+
+  /jobs/new:
+    post:
+      summary: Create New Job
+      operationId: createNewJob
+      description: ""
+      tags:
+        - Jobs
+      responses:
+        "200":
+          description: ""
+      requestBody:
+        $ref: "#/components/requestBodies/create_new_job"
+
+  /jobs/{jobId}/delete:
+    delete:
+      summary: Delete Each Job
+      operationId: deleteEachJobs
+      description: ""
+      tags:
+        - Jobs
+      responses:
+        "200":
+          description: ""
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+
+  /jobs/{jobId}:
+    get:
+      summary: Individual Job
+      operationId: IndividualJobs
+      description: ""
+      tags:
+        - Jobs
+      responses:
+        "200":
+          description: ""
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+
+  /jobs/search:
+    get:
+      summary: Search Job
+      operationId: searchJobs
+      description: ""
+      tags:
+        - Jobs
+      responses:
+        "200":
+          description: ""
+      parameters:
+        - name: title
+          in: query
+          description: ""
+          required: true
+          schema:
+            type: string
+          example: data
+
+  /jobs/{jobId}/edit:
+    put:
+      summary: Update Existing Jobs
+      operationId: updateExistingJobs
+      description: ""
+      tags:
+        - Jobs
+      responses:
+        "200":
+          description: ""
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        $ref: "#/components/requestBodies/update_existing_jobs"
+
+  /jobs/{jobId}/verify-owner:
+    get:
+      summary: Verify User Routes
+      operationId: verifyUserRoutes
+      description: ""
+      tags:
+        - Jobs
+      responses:
+        "200":
+          description: ""
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+
+  /users/all:
+    get:
+      summary: All Users
+      operationId: allUsers
+      description: ""
+      tags:
+        - Users
+      responses:
+        "200":
+          description: ""
+
+  /users/{userId}:
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    patch:
+      summary: Edit User Info
+      operationId: editUserInfo
+      description: ""
+      tags:
+        - Users
+      responses:
+        "200":
+          description: ""
+      requestBody:
+        $ref: "#/components/requestBodies/edit_user_info"
+    get:
+      summary: Profiles
+      operationId: Profiles
+      description: ""
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: ""
+    put:
+      summary: Update user
+      operationId: updateUser
+      description: ""
+      tags:
+        - Users
+      responses:
+        "200":
+          description: ""
+      requestBody:
+        $ref: "#/components/requestBodies/update_user"
+
+  /users/following:
+    get:
+      summary: Following
+      operationId: followingUsers
+      description: ""
+      tags:
+        - Users
+      responses:
+        "200":
+          description: ""
+
+  /users/login:
+    post:
+      summary: Login
+      operationId: Login
+      description: ""
+      tags:
+        - Users
+      responses:
+        "200":
+          description: ""
+      requestBody:
+        $ref: "#/components/requestBodies/login"
+
+  /users/logout:
+    get:
+      summary: Logout
+      operationId: Logout
+      description: ""
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: ""
+
+  /users/forget-password:
+    post:
+      summary: Request Forget Password
+      operationId: requestForgetPassword
+      description: ""
+      tags:
+        - Users
+      responses:
+        "200":
+          description: ""
+      requestBody:
+        $ref: "#/components/requestBodies/request_forget_password"
+
+  /users/verify/resend:
+    post:
+      summary: Resend
+      operationId: resendForgetPassword
+      description: ""
+      tags:
+        - Users
+      responses:
+        "200":
+          description: ""
+
+  /users/signup:
+    post:
+      summary: Signup
+      operationId: Signup
+      description: ""
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: ""
+      requestBody:
+        $ref: "#/components/requestBodies/signup"
+
+  /users/{userId}/skills:
+    post:
+      summary: Skills Add
+      operationId: addSkills
+      description: ""
+      tags:
+        - Users
+      responses:
+        "200":
+          description: ""
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        $ref: "#/components/requestBodies/skills_add"
+
+  /users/verify:
+    post:
+      summary: Verify code
+      operationId: verifyEmailConfirm
+      description: ""
+      tags:
+        - Users
+      responses:
+        "200":
+          description: ""
+      requestBody:
+        $ref: "#/components/requestBodies/verify_code"
+
+  /users/forget-password/verify:
+    post:
+      summary: Verify Forget Password
+      operationId: verifyForgetPassword
+      description: ""
+      tags:
+        - Users
+      responses:
+        "200":
+          description: ""
+      requestBody:
+        $ref: "#/components/requestBodies/verify_forget_password"
+
+  /users/login-status:
+    get:
+      summary: Verify User Logged Status
+      operationId: verifyUserLoggedStatus
+      description: ""
+      tags:
+        - Users
+      responses:
+        "200":
+          description: ""
+
+  /users/profile-picture:
+    post:
+      summary: Profile Picture
+      operationId: addProfilePicture
+      description: ""
+      tags:
+        - Users
+      responses:
+        "200":
+          description: ""
+      requestBody:
+        $ref: "#/components/requestBodies/profile_picture"
+
+  /users/resume:
+    post:
+      summary: Upload Resume
+      operationId: uploadResume
+      description: ""
+      tags:
+        - Users
+      responses:
+        "200":
+          description: ""
+      requestBody:
+        $ref: "#/components/requestBodies/upload_resume"
+
+components:
+  schemas:
+    assign_company_user:
+      type: object
+      properties:
+        company_id:
+          type: string
+        uid:
+          type: string
+
+    search_users:
+      type: object
+      properties:
+        company_id:
+          type: string
+        uid:
+          type: string
+
+    add_new_company:
+      type: object
+      properties:
+        name:
+          type: string
+        descriptions:
+          type: string
+        company_logo:
+          type: array
+          items:
+            type: string
+          properties:
+            "0":
+              type: string
+        website:
+          type: string
+        location:
+          type: string
+        founded_year:
+          type: string
+
+    update_company_list:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        website:
+          type: string
+        location:
+          type: string
+        founded_year:
+          type: number
+
+    apply_to_the_job:
+      type: object
+      properties:
+        cover_letter:
+          type: string
+        notice_period:
+          type: number
+        why_hire:
+          type: string
+        expected_salary:
+          type: number
+
+    change_applicant_status:
+      type: object
+      properties:
+        status:
+          type: string
+        user_id:
+          type: string
+
+    create_new_job:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        job_type:
+          type: string
+        salary:
+          type: number
+        skills:
+          type: array
+          items:
+            type: string
+          properties:
+            "0":
+              type: string
+            "1":
+              type: string
+
+    update_existing_jobs:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        job_type:
+          type: string
+        salary:
+          type: number
+        company_name:
+          type: string
+        experience_years:
+          type: number
+        skills:
+          type: array
+          items:
+            type: string
+
+    edit_user_info:
+      type: object
+      properties:
+        fname:
+          type: string
+        lname:
+          type: string
+        education:
+          type: string
+        email:
+          type: string
+
+    login:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+
+    request_forget_password:
+      type: object
+      properties:
+        email:
+          type: string
+
+    signup:
+      type: object
+      properties:
+        fname:
+          type: string
+        lname:
+          type: string
+        password:
+          type: string
+        education:
+          type: string
+        email:
+          type: string
+
+    skills_add:
+      type: object
+      properties:
+        skills:
+          type: array
+          items:
+            type: string
+
+    update_user:
+      type: object
+      properties:
+        fname:
+          type: string
+        lname:
+          type: string
+        education:
+          type: string
+        email:
+          type: string
+
+    verify_code:
+      type: object
+      properties:
+        code:
+          type: number
+
+    verify_forget_password:
+      type: object
+      properties:
+        code:
+          type: number
+        email:
+          type: string
+        newpassword:
+          type: string
+
+    profile_picture:
+      type: object
+      properties:
+        profile:
+          type: string
+          format: binary
+
+    upload_resume:
+      type: object
+      properties:
+        resume:
+          type: array
+          items:
+            type: string
+          properties:
+            "0":
+              type: string
+
+  requestBodies:
+    assign_company_user:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/assign_company_user"
+      description: ""
+      required: true
+
+    search_users:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/search_users"
+      description: ""
+      required: true
+
+    add_new_company:
+      content:
+        multipart/form-data:
+          schema:
+            $ref: "#/components/schemas/add_new_company"
+      description: ""
+      required: true
+
+    update_company_list:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/update_company_list"
+      description: ""
+      required: true
+
+    apply_to_the_job:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/apply_to_the_job"
+      description: ""
+      required: true
+
+    change_applicant_status:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/change_applicant_status"
+      description: ""
+      required: true
+
+    create_new_job:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/create_new_job"
+      description: ""
+      required: true
+
+    update_existing_jobs:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/update_existing_jobs"
+      description: ""
+      required: true
+
+    edit_user_info:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/edit_user_info"
+      description: ""
+      required: true
+
+    login:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/login"
+      description: ""
+      required: true
+
+    request_forget_password:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/request_forget_password"
+      description: ""
+      required: true
+
+    signup:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/signup"
+      description: ""
+      required: true
+
+    skills_add:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/skills_add"
+      description: ""
+      required: true
+
+    update_user:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/update_user"
+      description: ""
+      required: true
+
+    verify_code:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/verify_code"
+      description: ""
+      required: true
+
+    verify_forget_password:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/verify_forget_password"
+      description: ""
+      required: true
+
+    profile_picture:
+      content:
+        multipart/form-data:
+          schema:
+            $ref: "#/components/schemas/profile_picture"
+      description: ""
+      required: true
+
+    upload_resume:
+      content:
+        multipart/form-data:
+          schema:
+            $ref: "#/components/schemas/upload_resume"
+      description: ""
+      required: true
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
