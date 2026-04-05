@@ -95,7 +95,7 @@ App runs on: http://localhost:5173
 - Used Link and iframe for resume and profile photo upload.
 - For company dashboard, removed explicit ID — direct navigation.
 - For text truncation: used `line-clamp-2`.
--  
+- Extra Validation for Weak Password
 
 ## Future Features:
 1. Company can change applicant status

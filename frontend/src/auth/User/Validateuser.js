@@ -1,6 +1,6 @@
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const phoneNumberRegex = /^\+?(?:[0-9] ?){6,14}[0-9]$/;
-
+import {allWeakPassword} from "../../Data/UserArray"
  const validateLogin = ({ email, password }) => {
   if (!email) return "Please Enter Emails";
   if (!password) return "Please Enter Password";
@@ -8,6 +8,9 @@ const phoneNumberRegex = /^\+?(?:[0-9] ?){6,14}[0-9]$/;
   if(password.length<6) return "Password Must be at least 6 digit Letter."
   if(password.length>25) return "Password Max can be a 25 digit Letter."
   if (!passwordRegex.test(password)) return "Invalid password format.";
+  if(allWeakPassword.includes(password)){
+    return "Passsword is Too Weak"
+  }
   return null;
 };
 

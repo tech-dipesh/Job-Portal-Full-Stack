@@ -46,13 +46,13 @@ export default function Edituser() {
       lname: value.lname.trim(),
       education: value.education.trim(),
       email: value.email.trim(),
-      experience: value.experience.trim(),
+      experience: value.experience.toString(),
       number: number?.trim()
     }
     const err = validateEditUser(trim, 'edit');
     if (err) return setError(err);
-    await updateUser({ id, ...trim });
-    if (data) {
+    const result=await updateUser({ id, ...trim });
+    if (result) {
         window.location.href = "../profile";
     }
   };
@@ -87,8 +87,8 @@ export default function Edituser() {
             value={number}
             onChange={setNumber}
             defaultCountry="IN"
-            className="flex items-center ring-2 ring-gray-500 focus-within:ring-sky-600 rounded-lg px-2 h-11 w-full bg-transparent dark:bg-neutral-800"
-            inputClassName="bg-transparent h-full w-full text-white placeholder-gray-400 focus:outline-none"
+            className="flex items-center ring-2 ring-gray-50 rounded-lg px-2 h-11 w-full bg-transparent dark:bg-neutral-800"
+            inputclassname="bg-transparent h-full w-full text-white placeholder-gray-400 focus:outline-none"
           />
           <h2>Experience in Years</h2>
           <InputComps placeholder='experience' name='experience' type='number' value={value.experience} click={setValue} error={setError} />

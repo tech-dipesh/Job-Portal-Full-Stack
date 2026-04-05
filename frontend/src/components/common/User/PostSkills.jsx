@@ -13,7 +13,7 @@ export default function PostSkills() {
   const {id}=useParams();
   const [isSkillsOpen, setIsSkillOpen] = useState(false)
   const [skill, setSkills] = useState()
-  const { error: skilllerr, execute: addprofile, loading } = useFetchData(postUserSkills)
+  const { error: skilllerr, data, execute: addprofile, loading } = useFetchData(postUserSkills)
   const [error, setError] = useState("")
   const submitSkill = async (e) => {
     e.preventDefault()
@@ -23,14 +23,14 @@ export default function PostSkills() {
     }
 
     const res = await addprofile({ id, skill })
-    if (res) {
-      setTimeout(() => {
-        navigate(0)
-      }, 50);
-      return;
-    }
     if (skilllerr) {
       setError(skilllerr)
+      return;
+    }
+    console.log('res is', res)
+    if (res || data) {
+      navigate(0)
+      return;
     }
   }
  if(loading){

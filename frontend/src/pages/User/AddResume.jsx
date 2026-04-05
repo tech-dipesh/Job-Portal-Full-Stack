@@ -51,7 +51,7 @@ export default function Addresume() {
     formData.append('resume', content);
     const res = await execute(formData);
     if (data || res) {
-      window.location.href = "../profile";
+      window.location.reload()
       return;
     }
   }

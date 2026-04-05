@@ -544,21 +544,21 @@ File uploads are handled via the `@supabase/supabase-js` SDK — files go direct
 - Implement the vercel analytics on client side for the get the stats about the frontend application.
 - REcruiter/Company Employee will have full control of change a status of any jobs applicant
 - With hr have the full control which use to reject which to move forward to the interview or the hired or rejected hr have full control.
+- ATS scoring for any user profile with background jobs queue.
 - Add the List of the bruno all api endpoints link to convert to the swagger ui and add the endpoints of: `api/v1/swagger`
 - Add the Phone Number In User Information.
+- Resume parsing Analysis with extract skills education from: `pdf-parser` library.
 
 > [!NOTE]
 > ## Future Improvements:
 >-  Add notification/email when a company posts a new job.
 > - Real-time chat between recruiters and applicants.
-> -  Move from useContext to Redux. 
+> - Move from useContext to Redux. 
 > - Add logging/monitoring/observability. 
 > - Socket.io for real-time features.
-> - ATS scoring for any user profile with background jobs queue.
 > - interview scheduling system with automated email reminders and video call link generation from Google Calendar API.
 > - User can add a their employment_history and shows that employment history to the user page.
 > - List of the education history with the college cgpa and degree.
-> - Resume parsing Analysis with extract skills education from: `pdf-parser` library.
 > - Alert a user only to those which user followed their company with new jobs, must be the background jobs else it'll block the main block.
 > - Add the notification page list about notified user about recent events, followed companies notification, recruiter viewed your resume.
 > - profile completneess score based on the badged applicant top skills and how much active jobs seeker.
