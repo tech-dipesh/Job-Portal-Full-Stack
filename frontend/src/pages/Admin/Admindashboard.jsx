@@ -6,6 +6,7 @@ import { useAuth } from '../../context/Authcontext';
 import ButtonComps from '../../components/common/Button';
 import { adminDashboardData } from '../../api/auth.admin';
 import { allAdminLink, allAdminStats } from '../../Data/AdminArray';
+import Loading from '../../components/Loading';
 
 export default function Admindashbaoard() {
   const navigate = useNavigate()
@@ -19,6 +20,9 @@ export default function Admindashbaoard() {
   }, [])
   const {role } = authdata ?? {};
   const { message } = data || {}
+  if(loaddata || loading){
+    return <Loading/>
+  }
   return (
     <div className='px-4'>
       <div className='px-8 pt-8 pb-4 border-b border-neutral-700 mb-6'>

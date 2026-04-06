@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router';
 import Errorloading from '../../components/common/Errorloading';
 import { useAuth } from '../../context/Authcontext';
 import ButtonComps from '../../components/common/Button';
+import Loading from '../../components/Loading';
 
 export default function Companydashboard() {
   const navigate = useNavigate()
@@ -31,7 +32,9 @@ export default function Companydashboard() {
     { bg: 'bg-purple-100', name: 'Employees', value: 'total_employees' },
     { bg: 'bg-gray-100', name: 'Followers', value: 'total_followers' }
   ]
- 
+  if(loading || loaddata){
+    return <Loading/>
+  }
   return (
     <div className='px-4'>
       <div className='px-8 pt-8 pb-4 border-b border-neutral-700 mb-6'>
