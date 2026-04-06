@@ -28,8 +28,12 @@ const validateJobs=({title, description, job_type, skills, salary, location}, ol
   if(description.length<25){
     return "Description Must be the 25 Letter Longer."
   }
-  if(description.length<25 || description.length>250){
-    return "description Can't be more than a 250 letter."
+
+  if(description.length<25){
+    return "description Can't be less than a 25 letter."
+  }
+  if(description.length>500){
+    return "description Can't be more than a 500 letter."
   }
   if(salary<10000 || salary>2500000){
     return "Please Enter a valid salary Range."

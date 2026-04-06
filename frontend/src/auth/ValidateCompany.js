@@ -34,8 +34,11 @@ const validateCompany= ({name, description, website, location, founded_year, com
   if(name.length<2 || name.length>25){
     return "Name Can't be more than a 25 and less than 2 letter."
   }
-  if(description.length<25 || description.length>250){
-    return "Description Can't be more than a 250 letter and less than 25 letter."
+  if(description.length<25){
+    return "Description Can't be less than 25 letter."
+  }
+  if(description.length>250){
+    return "Description Can't be more than a 250 letter."
   }
   if(website.length<3 || website.length>30){
     return "website Can't be more than a 30 letter and less than 3 letter."

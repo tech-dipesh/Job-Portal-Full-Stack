@@ -1,4 +1,4 @@
-import express from "express";
+import {Router} from "express";
 import { addUserSkills, getAllUserController, getloginUserController, getParticularUserController, litOfAllFollowingCompanies, patchUserController, postSignupUserController, putUserController, resumeInformation, sendUserLoggedInStatus, userLoggedOutcontroller } from "../controllers/users.controller.js";
 import {uploadResume, uploadProfilePicture} from "../controllers/uploadResume.controller.js";
 import authUserMiddleware from "../Middleware/isLoggedIn.js";
@@ -17,7 +17,7 @@ const limitUser=rateLimit({
   message: {message:"You only can send resend request twice per minute"}
 })
 
-const router = express.Router();
+const router = Router();
 
 router.get("/login-status", authUserMiddleware, sendUserLoggedInStatus)
 router.get("/logout", userLoggedOutcontroller);

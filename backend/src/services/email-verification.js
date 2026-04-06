@@ -31,13 +31,15 @@ const sendMail=async(uid, firstName, lastName, userEmail, type)=>{
     subject: `Please ${type} Your Email!`,
     html: readFile,
   });
-  {type=='verify'?
-    await connect.query("insert into email_verified(user_id, verified_type, verified_code)  values($1, 'verify_mail', $2)",[uid, random6DigitNumber]):
+  if(type=='verify'){
+    await connect.query("insert into email_verified(user_id, verified_type, verified_code)  values($1, 'verify_mail', $2)",[uid, random6DigitNumber])
+  }
+  else{
     await connect.query("insert into email_verified(user_id, verified_type, verified_code)  values($1, 'forget_password', $2)",[uid, random6DigitNumber])
   }
 } catch (error) {
   console.log(error)
-  return error;
+  return error.message;
 }
 }
 export default sendMail;

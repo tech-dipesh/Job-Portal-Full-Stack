@@ -2,6 +2,7 @@ import connect from "../db.js";
 import tableDataFetch from "../utils/Querytablehelper.js";
 import companySchema from "../Models/companies.models.js";
 import { supabase } from "../services/Supabase.js";
+import { promise } from "zod";
 
 export const getAllCompaniesList= async (req, res)=>{
   try {
@@ -111,19 +112,6 @@ export const getAllEmployeesList=async(req, res)=>{
     return res.status(500).json({message: error.message})
   }
 }
-export const companyStatsController=async (req, res)=>{
-  const {id, company_id}=req.user;
-  try {
-    const {rows}=await connect.query(`select count(*) from applications a join jobs j on a.job_id = j.uid where j.company_id = $1;`, [company_id]);
-    const {rows:rows1}=await connect.query("select count(*)  from applications a join jobs j on a.job_id=j.uid where applied_at >= date_trunc('week', NOW());", [])
-    const {count: allapplications}=rows[0];
-    const {count:  thisweekapplications}=rows1[0];
-    const {rows: totalstatus}=await connect.query("select status, round(100.0 * COUNT(*) / SUM(COUNT(*)) OVER(),2) as percentage from applications a join jobs j on j.uid=a.job_id where j.company_id=$1  group by status;", [company_id])
-    res.status(200).json({message: {allapplications, thisweekapplications, totalstatus}})
-  } catch (error) {
-    return res.status(500).json({message: error.message})
-  }
-}
 
 export const getAllJobsList=async (req, res)=>{
   const {id}=req.params;
@@ -150,7 +138,12 @@ export const getallApplicationsList=async (req, res)=>{
 export const companyDashBoard=async (req, res)=>{
   const {company_id}=req.user;
   try {
-    const {rows}=await connect.query(`select count(distinct j.uid) as total_jobs, count(distinct uc.company_id) as total_followers, count(distinct a.uid) as total_applications, count(distinct case when j.is_job_open ='active'then j.uid end) as open_jobs, count(distinct u.uid) as total_employees from jobs j left join applications a on j.uid = a.job_id left join users u on u.company_id = j.company_id inner join user_companies_follows uc on uc.company_id=$1  where j.company_id = $1;`,[company_id])
+    const {rows}=await connect.query(`select 
+      (select count(distinct uid) from jobs where company_id = $1) as total_jobs,
+      (select count(distinct company_id) from user_companies_follows where company_id = $1) as total_followers,
+      (select count(distinct a.uid) from applications a INNER JOIN jobs j ON a.job_id = j.uid where j.company_id = $1) as total_applications, (select count(distinct uid) from jobs where company_id = $1 AND is_job_open = 'active') as open_jobs, 
+      (select count(distinct uid) from users where company_id = $1) as total_employees;
+      `, [company_id])
     return res.status(200).json({message: rows[0]})
     } catch (error) {
       return res.status(500).json({message: error.message})

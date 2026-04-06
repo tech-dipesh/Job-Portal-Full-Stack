@@ -1,11 +1,11 @@
-import express from "express";
+import {Router} from "express";
 import { companyDashBoard, deleteCompanyController, followCompany, getallApplicationsList, getAllCompaniesFollowers, getAllCompaniesList, getAllEmployeesList, getAllJobsList, getCompanyController, postCompanyController, putCompanyController, unFollowCompany} from "../controllers/companies.controller.js";
 import isCompanyEmployee from "../Middleware/isCompanyEmployee.js";
 import validateCorrectUid from "../Middleware/validateCorrectUid.js";
 import upload from "../services/Multer.js";
 import isJobSeeker from "../Middleware/isJobSeeker.js";
 
-const router = express.Router();
+const router = Router();
 
 router.get("/all", getAllCompaniesList);
 router.post("/new", upload.single("company_logo"),  postCompanyController);

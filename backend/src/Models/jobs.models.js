@@ -11,7 +11,8 @@ const listingSchema=z.object({
     description:z
     .string({ error: "Description is Required" })
     .trim()
-    .min(25, {message: "Description Must be at least 25 characters"}),
+    .min(25, {message: "Description Must be at least 25 characters"})
+    .max(500, {message: "Description Can't be more than 500 characters"}),
     job_type:z
     .enum(allAvaibleJobType, {error: "Please Only Enter a Avaible Option such as, Onsite, Remote, Hybrid"}),
     experience_years:z.coerce.

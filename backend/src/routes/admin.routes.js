@@ -1,8 +1,8 @@
-import express from "express";
+import {Router} from "express";
 import { adminDashBoard, assignUsersToCompanies, searchCompany, searchUsers, verifyAdminController } from "../controllers/admin.controllers.js";
 import isAdminMIddleware from "../Middleware/isAdmin.js";
 
-const router = express.Router();
+const router = Router();
 
 router.use("/verify",  verifyAdminController)
 router.get("/search/company", isAdminMIddleware, searchCompany);

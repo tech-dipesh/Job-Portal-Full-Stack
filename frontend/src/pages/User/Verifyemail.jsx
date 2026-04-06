@@ -23,16 +23,19 @@ export default function VerifyEmail() {
   const { state } = useLocation();
   const { error: apierror, loading, data, execute } = useFetchData(verifyUser);
   const { error: apiresend, loading: loadresend, data: resenddata, execute: resendexecute } = useFetchData(resendVerificationCode);
-  console.log('is user', isUser, 'err', autherr)
   useEffect(() => {
-    if(autherr=='No token Please Loged in First'){
-        navigate("../login")
-    }
-   else if(isUser?.isVerified===true || data){
+    if(isUser?.isVerified===true || data){
       navigate(state?.from || "/")
     }
+    else if(autherr=='No token Please Loged in First'){
+        navigate("../login")
+    }
   }, [data, isUser, navigate, state?.from])
-  
+  useEffect(() => {
+  if (apiresend) {
+    setError(apiresend)
+  }
+}, [apiresend])
   const verifyYourMail = async () => {
     const err = validateVerifyMail(value);
     if (err) {
@@ -69,7 +72,7 @@ export default function VerifyEmail() {
         <h1 className='text-xl font-bold '>Verify Your Mail</h1>
         <h2 className='text-sm my-1 opacity-85 justify-center'>We've sent a 6-digit code to your email</h2>
       </div>
-      <Errorloading data={{ error: apierror || error || apiresend }} />
+      <Errorloading data={{ error: apierror || error }} />
       <div className='w-full flex-col items-center justify-center gap-4'>
         <InputComps type='number' placeholder='6 digit Code' value={value}  click={setValue} error={setError} />
         <span className='flex justify-center'>
