@@ -49,7 +49,8 @@ export default function EditJob() {
     const res = await execute(value);
     setError(errors)
     if (res) {
-      navigate(`../${res.message.uid}`)
+      const redirectURL=`../${res.message.uid}`
+      navigate(redirectURL || '/jobs')
     }
   }
 

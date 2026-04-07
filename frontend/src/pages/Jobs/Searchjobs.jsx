@@ -19,13 +19,13 @@ export default function Searchjobs() {
       execute({ title: debounce, order: sortby });
     }
   }, [debounce]);
+  const clearFilter = () => {
+    setSearch(""),
+    data.message = [];
+    setSortBy("created_at")
+  }
   if (loading) {
     return <Loading />
-  }
-  const clearFilter = (e) => {
-    setSearch(""),
-      data.message = [];
-    setSortBy("created_at")
   }
   return (
     <div className='bg-neutral-800 min-h-screen max-w-5/6 py-4 mx-auto p-6'>
@@ -35,7 +35,6 @@ export default function Searchjobs() {
         </div>
         <div className='flex flex-col items-center'>
           <span className='grid justify-items-center'>
-            {/* <InputComps placeholder='' type='text' click={setSearch} value={search} className='text-center text-gray-600 mt-2' /> */}
             <input type="text" autoFocus className={`bg-transparent h-11 w-full rounded-lg text-white placeholder-gray-400 ring px-2  ring-white focus:ring-sky-500 focus:outline-none`} placeholder="Your Search Term" value={search} onChange={(e)=>setSearch(e.target.value)}/>
           </span>
           <div className='grid justify-items-center gap-3 my-3'>

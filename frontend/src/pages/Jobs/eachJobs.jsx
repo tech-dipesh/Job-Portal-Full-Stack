@@ -75,23 +75,29 @@ export default function EachJob() {
     return <Loading />
   }
   return (
-    <article className='min-w-screen min-h-screen px-6 py-8'>
+    <article className='min-w-screen min-h-screen px-6 py-8 bg-slate-900'>
       <Goback />
       <Errorpopup error={error || removeerrbookmark || errdelete || withdrawerror || errabookmark} />
       {data?.message &&
-        <div className='bg-slate-800 p-8 max-w-5xl min-h-[90vh] mx-auto rounded-2xl flex flex-col gap-5'>
-          <span className='text-slate-400 text-xs text-center opacity-90'>Job Id: {uid}</span>
-          <div className='flex justify-between items-start'>
+        <div className='bg-slate-800 p-8 max-w-5xl min-h-[90vh] mx-auto rounded-2xl flex flex-col gap-6'>
+          <span className='text-slate-400 text-xs text-center opacity-90'>Job ID: {uid}</span>
+          <div className='flex justify-between items-center gap-4'>
             <div className='flex items-center gap-3'>
-              <img src={logo_url ? logo_url : defaultImage} alt="Logo" className='h-10 w-10 rounded-full object-cover shrink-0' />
-              <div className='flex flex-col'>
-                <p className='font-bold text-sm'>{company_name}</p>
-                <Linkcomps to={`/companies/${company_id}`} content={<>Visit Company Profile: <FontAwesomeIcon icon={faArrowRight} /></>} />
+              <img src={logo_url ? logo_url : defaultImage} alt="Logo" className='h-12 w-12 rounded-full object-cover shrink-0 border border-slate-600' />
+              <div className='flex flex-col gap-1'>
+                <p className='font-bold text-base text-white'>{company_name}</p>
+                <Linkcomps
+                  to={`/companies/${company_id}`}
+                  content={
+                    <span className='text-xs text-slate-400 hover:text-sky-400 flex items-center gap-1'>
+                      Visit Company: <FontAwesomeIcon icon={faArrowRight} /></span>
+                  }
+                />
               </div>
             </div>
             <div className='grid lg:flex items-center gap-2'>
               <div onClick={() => setOpen(!open)}>
-                < Buttoncomps values={
+                <Buttoncomps values={
                   <div className='flex items-center gap-2 p-2.5 rounded-lg border hover:bg-slate-700'
                     onClick={() => {
                       const CorrectUrl = window.location.href;
@@ -105,25 +111,38 @@ export default function EachJob() {
                 />
               </div >
               {(!is_owner && role == 'guest') &&
-                <div className='flex items-center gap-2 p-2 rounded-lg border-slate-600 text-sm cursor-pointer' onClick={() =>
-                  is_saved ? setAction("withdrawbookmark") : setAction("bookmark")
-                } >
+                <div
+                  className='flex items-center gap-2 px-3 py-2 rounded-lg border  border-slate-600 text-sm text-slate-300 hover:bg-slate-700 cursor-pointer transition'
+                  onClick={() =>
+                    is_saved ? setAction("withdrawbookmark") : setAction("bookmark")
+                  } >
                   <Buttoncomps values={valueButton}
                   />
                   <span>Save</span>
                 </div>
               }
             </div>
-
           </div>
-          <div className='flex items-start justify-between'>
-            <p className='text-3xl font-bold tracking-wide'>{title}</p>
-            <span className='text-xs p-2 bg-green-600 text-white rounded-full mt-2 bg-text-white'> {job_type}</span>
+          <div className='flex items-start justify-between gap-4'>
+            <p className='text-3xl font-bold tracking-wide text-white'>{title}</p>
+            <span className='text-xs p-2 bg-green-600 text-white rounded-full mt-2 bg-text-white whitespace-nowrap'>
+              {job_type}</span>
           </div>
-          <div className='flex gap-6 text-sm text-slate-300'>
-            <span>Salary: <strong className='text-white'>{salary || '0'}</strong></span>
-            <span>Experience: <strong className='text-white'>{experience_years || '0'} yrs</strong></span>
-            <p className='text-right text-slate-300 text-sm'>Location: <strong className='text-white'>{location || 'none'}</strong></p>
+          <div className='flex flex-wrap gap-4 text-sm bg-slate-700/50 rounded-xl p-4 text-slate-300'>
+            <div className='flex flex-col gap-1'>
+              <span className='text-slate-500 text-xs'>Salary</span>
+              <strong className='text-white'>{salary || 'Not Specified'}</strong>
+            </div>
+            <div className='w-px bg-slate-600' />
+            <div className='flex flex-col gap-1'>
+              <span className='text-slate-500 text-xs tracking-wide'>Experience</span>
+              <strong className='text-white'>{experience_years || '0'} yrs</strong>
+            </div>
+            <div className='w-px bg-slate-600' />
+            <div className='flex flex-col gap-0.5'>
+              <span className='text-slate-500 text-xs tracking-wide'>Location</span>
+              <strong className='text-white'>{location || 'Remote / Not specified'}</strong>
+            </div>
           </div>
           {action && <Confirmation type={action} confirm={confirmAnyActionPerform} cancel={() => setAction(null)} />}
           <div className='flex flex-col flex-1'>

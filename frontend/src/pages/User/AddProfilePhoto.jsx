@@ -22,7 +22,7 @@ export default function ProfilePhoto() {
   const {state}=useLocation()
   const [file, setFile] = useState(null)
   const [content, setContent] = useState()
-  const [error, setError] = useState()
+  const [error, setError] = useState("")
   const [preview, setPreview] = useState("")
   const { data: oldData, error:oldErr, execute: oldExec } = useFetchData(getIndividualUser)
   const { data, error: errState, loading, execute } = UseFetchData(uploadProfilePicture)
@@ -70,13 +70,12 @@ export default function ProfilePhoto() {
     <div className='flex flex-col max-w-2xl mx-auto'>
       <Errorpopup error={oldErr || errState}/>
       <Goback to='../profile'/>
-      <Errorloading data={{ error }} />
       <Successcomps data={data} />
       <h3 className='text-gray-100 font-medium  hover:text-white transition-colors flex justify-center my-8'>Upload Your Profile Picture</h3>
       <div className='flex items-center gap-3 my-4'>
         <div className='flex-1 border-t border-dashed border-gray-600' />
       </div>
-      <div className=' p-4 flex items-center gap-5'>
+      <div className='p-4 flex justify-center gap-5'>
         <Textcomps content={'Current Profile Picture'} />
       </div>
       {profile_pic_url ?
@@ -102,21 +101,23 @@ export default function ProfilePhoto() {
       </form>
       {preview &&
       <div className='grid justify-center align-middle my-4'>
-        <h3 className='text-xs'>Preview Image:</h3>
+        <h3 className='text-xl justify-center my-2'>Preview Image:</h3>
        <img src={preview} alt={defaultImage} className='h-32 w-32 rounded-full object-cover grid justify-items-center'/>
       </div>
        }
+      <Errorloading data={{ error }} />
       <div className='flex gap-4 justify-end w-2/4 mx-auto my-2'>
         <div
           onClick={() => {
             setPreview(null)
             setFile({})
+            setError("")
             if(refInput.current) refInput.current.value=""
           }
-          }>
+        }>
             <Buttoncomps values={'Clear'} />
         </div>
-        <button disabled={!file?.name || loading} onClick={fileUpload} className={`p-4  rounded-xl font-semibold transition-colors bg-slate-700 w-auto border-none ${file}? 'cursor-pointer': 'cursor-not-allowed'`}>Submit</button>
+        <button disabled={!file?.name || loading} onClick={fileUpload} className={` px-4 rounded-xl font-semibold transition-colors bg-slate-700 w-auto border-none ${file?.name? 'cursor-pointer': 'cursor-not-allowed'}`}>Submit</button>
       </div>
     </div>
   )
