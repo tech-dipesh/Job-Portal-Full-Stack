@@ -41,7 +41,9 @@ export default function Followinglist({ setIsFollowing, isFollowing }) {
               :
               <div>
               <p className='text-center text-slate-500 text-sm py-6'>NO Any Company You Followed Yet</p>
-              <Linkcomps to={`/jobs`} content={'See All Jobs'}/>
+              <div className='flex justify-center'>
+              <Buttoncomps values={<Linkcomps to={`/jobs`} content={'See All Jobs'}/>}/>
+              </div>
               </div>
             }
           </div>

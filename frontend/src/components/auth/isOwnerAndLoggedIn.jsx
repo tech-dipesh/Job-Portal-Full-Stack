@@ -12,6 +12,10 @@ export default function IsOwnerandloggedIn() {
     const {execute, error:fetcherrData, loading: verifyOwner}=useFetchData(isUserOwnedRoute)
     const {data, error, loading}=useAuth()
   useEffect(() => {
+      if (error.login==true && error.verify==false) {
+      navigate("/auth/verify", {state:{ from: location.pathname }, replace: true  });
+      return;
+      }
       if (error) {
       navigate("/auth/login", {state:{ from: location.pathname }, replace: true  });
       return;

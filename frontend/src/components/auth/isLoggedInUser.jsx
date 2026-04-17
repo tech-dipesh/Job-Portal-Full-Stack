@@ -8,7 +8,7 @@ export default function IsloggedinUser() {
   const navigate=useNavigate()
   const {data, error, loading}=useAuth()
   useEffect(() => {
-    if(error=='Please Verify Your verification code.'){
+    if(error?.verify==false){
       navigate("/auth/verify-email", {state: {from: location.pathname}, replace: true})
     } 
     else if(error){
@@ -16,7 +16,6 @@ export default function IsloggedinUser() {
       return;
     }
     }, [error, navigate, location])
-  
   if (loading) return <p>Checking authentication</p>; 
   return <Outlet data={data}/>;
 };
