@@ -16,7 +16,7 @@ import Loading from '../../components/Loading'
 import Textcomps from "../../components/common/Textcomps"
 export default function Singlecompany() {
   const { id } = useParams()
-  const { data: { role } } = useAuth()
+  const { data: { role } } = useAuth() ?? ''
   const navigate = useNavigate()
   const [open, setOpen] = useState(false)
   const [error, setError] = useState("")

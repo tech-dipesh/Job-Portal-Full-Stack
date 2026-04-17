@@ -8,7 +8,7 @@ import { useContext } from 'react'
 export default function AuthProvider({children}) {
   const {data, error, loading, execute } = useFetchData(isUserLoggedIn)
   useEffect(() => {
-    execute()
+    (async()=> await execute())()
   }, [])
   return (
     <authContext.Provider value={{data: data?.message, reexecute:execute, error, loading}} >

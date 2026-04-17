@@ -17,10 +17,10 @@ export default function Home() {
   useEffect(() => {
     (() => {
       execute(({page:1, limit:5}))
-      if (error === 'Please Verify Your verification code.') {
+      if(error?.login && error?.verify==false){
         setIsVerify(true);
         setIsLogin(false);
-      } else if (error === 'No token Please Loged in First') {
+      } else if (error) {
         setIsLogin(true);
         setIsVerify(false);
       } else if (data && data.uid) {

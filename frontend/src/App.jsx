@@ -14,7 +14,7 @@ function App() {
   }
   return (
     <div className='w-full min-h-screen flex flex-col overflow-x-hidden'>
-      <Header data={data} />
+      <Header />
       <Analytics/>
       <SpeedInsights/>
       <main className='flex-1'>

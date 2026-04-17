@@ -6,3 +6,4 @@ Dockerfile
 *.png
 user.sql
 sql-commands.sql
+tests

@@ -545,6 +545,7 @@ File uploads are handled via the `@supabase/supabase-js` SDK — files go direct
 - Add the List of the bruno all api endpoints link to convert to the swagger ui and add the endpoints of: `api/v1/swagger`
 - Add the Phone Number In User Information.
 - Resume parsing Analysis with extract skills education from: `pdf-parser` library.
+- The Problem that i'm facing that i must fix is that on the useAuth backeend is not correctly sending a data and frontend is also not implementing of: `useAuth` function
 
 > [!NOTE]
 > ## Future Improvements:

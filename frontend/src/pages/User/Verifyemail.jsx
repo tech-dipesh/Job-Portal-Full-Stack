@@ -24,7 +24,7 @@ export default function VerifyEmail() {
   const { error: apierror, loading, data, execute } = useFetchData(verifyUser);
   const { error: apiresend, loading: loadresend, data: resenddata, execute: resendexecute } = useFetchData(resendVerificationCode);
   useEffect(() => {
-    if(isUser?.isVerified===true || data){
+    if(data){
       navigate(state?.from || "/")
     }
     else if(autherr=='No token Please Loged in First'){
