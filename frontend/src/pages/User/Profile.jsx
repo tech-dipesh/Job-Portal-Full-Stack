@@ -88,6 +88,9 @@ export default function Individualuser() {
             <div className='flex flex-wrap justify-center gap-2 max-w-sm'>
               {skills && skills.map((u, i) => <p key={i} className='bg-gray-200 text-gray-800 px-4 py-2 rounded-lg text-sm font-medium '>{u}</p>)}
             </div>
+            <div>
+              {/* <Linkcomps to='add-education' content={<Buttoncomps values={'Add Education'} />} /> */}
+            </div>
             {!open ?
               <span onClick={() => setOpen(true)}>
                 <Buttoncomps values={'Add Skills'} />

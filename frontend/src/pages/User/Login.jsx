@@ -27,7 +27,7 @@ export default function Login() {
     if(checkuser){
         navigate(state?.from || '/')
     }
-  }, [checkUserError?.login, checkUserError?.verify, checkuser, navigate, state])
+  }, [checkuser, state])
 
   const submitForm = async (e) => {
     e.preventdefault();

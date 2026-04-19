@@ -571,7 +571,7 @@ File uploads are handled via the `@supabase/supabase-js` SDK — files go direct
 > - On the edit content page if user try to submit a content without any change don't allow them which reduce a less backend request.
 > - Adding a CDN to cache our static assets that never changed
 > - Move Our Asynchronous operation to the background queue with use services such as: `Kafka`.
-
+> - left a add of the my `user_education` table informat.
 
 <div align="center">
 

@@ -43,6 +43,7 @@ import Errorpage from './pages/Errorpage'
 import Loading from './components/Loading'
 import CompanyFollowers from './pages/Companies/CompanyFollowers'
 import Notfound from './pages/Notfound'
+import Addeducation from './pages/User/Addeducation'
 
 
 
@@ -92,6 +93,7 @@ const router = createBrowserRouter([
               { path: "profile/edit", element: <Edituser /> },
               { path: "profile/profile-picture", element: <ProfilePhoto /> },
               { path: "profile/resume", element: <Addresume /> },
+              { path: "profile/add-education", element: <Addeducation /> },
             ]
           },
         ]
