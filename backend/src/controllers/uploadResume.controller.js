@@ -5,6 +5,9 @@ import { PDFParse } from "pdf-parse";
 import gemini from "../utils/grok.js"
 const uploadResume = async (req, res) => {
   const { uid: userId } = req.user;
+  if(!req.file){
+    return res.status(404).json({message: "Please Enter a File"})
+  }
   const { fieldname, originalname, buffer } = req.file;
   if (!originalname) {
     return res.status(404).json({ message: "Please Enter a File" });

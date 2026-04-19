@@ -1,5 +1,5 @@
 import {Router} from "express";
-import { addUserSkills, getAllUserController, getloginUserController, getParticularUserController, litOfAllFollowingCompanies, patchUserController, postSignupUserController, putUserController, resumeInformation, sendUserLoggedInStatus, userLoggedOutcontroller } from "../controllers/users.controller.js";
+import { addUserSkills, getAllUserController, getloginUserController, getParticularUserController, litOfAllFollowingCompanies, patchUserController, postSignupUserController, putUserController, resumeInformation, sendUserLoggedInStatus, UserEducationAdd, userLoggedOutcontroller } from "../controllers/users.controller.js";
 import {uploadResume, uploadProfilePicture} from "../controllers/uploadResume.controller.js";
 import authUserMiddleware from "../Middleware/isLoggedIn.js";
 import verifyEmailConfirmation, { forgetEmailPassword, resendVerificationCode, verifyForgetPassword } from "../controllers/verifyCode.controller.js";
@@ -39,6 +39,7 @@ router.get("/resume", authUserMiddleware,  resumeInformation)
 
 router.post("/profile-picture", upload.single('profile'), authUserMiddleware,  uploadProfilePicture)
 
+router.post("/add-education", authUserMiddleware, UserEducationAdd)
 
 router.post("/:id/skills", validateCorrectUid, authUserMiddleware,  addUserSkills);
 

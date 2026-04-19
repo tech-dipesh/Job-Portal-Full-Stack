@@ -81,4 +81,35 @@ export const updateUserSchema = z.object({
     .optional(),
 });
 
+export const EducationUserSchema=z.object({
+  degree: z
+    .string({ error: "Degree is required" })
+    .min(5, { message: "Degree must be at least 2 characters" }),
+  university_name: z
+    .string({ error: "Univesity name is required" })
+    .min(8, { message: "Univesity name must be at least 2 characters" }),
+  start_date: z
+    .number({ error: "Please Enter a Starting Education Year" })
+    .min(1940, {message: "Education Starting Year Can't be below 1940"})
+    .max(2026, {message: "Education Starting Year Can't be above 2030"})
+  ,
+  end_date: z
+    .number({ error: "Please Enter a Ending Education Year" })
+    .min(1944, {message: "Education Ending Year Can't be below 1940"})
+    .max(2031, {message: "Education Ending Year Can't be above 2030"})
+  ,
+  grade: z
+    .number({ error: "Please Enter a Grade" })
+    .min(0, {message: "Grade Can't be below 0"})
+    .max(100, {message: "Grade Can't be above 100"})
+  ,
+}).refine((data) => data.start_date < data.end_date, {
+  message: "Start Date can't be higher than ending date",
+  path: ["start_date"], 
+})
+.refine((data) => data.end_date - data.start_date <= 6, {
+  message: "End year cannot be more than 6 years after the start year",
+  path: ["end_date"], 
+})
+
 export default userSchema;

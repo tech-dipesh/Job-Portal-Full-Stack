@@ -284,7 +284,7 @@ supabase.storage.from('bucketname').getPublicUrl(pathurl)
 - Added skills array to jobs
 - Total job views count — increments on each request
 - Dashboard access limited to authorized company owners
-
+- On the add the education of the user i've used the `.refine` method which compare the two element.
 
 ## Node Cron Task
 - Used `node-cron` for scheduled tasks

@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import connect from "../db.js";
 import tableDataFetch from "../utils/Querytablehelper.js";
-import userSchema, { loginUserSchema, updateUserSchema } from "../Models/users.models.js";
+import userSchema, { EducationUserSchema, loginUserSchema, updateUserSchema } from "../Models/users.models.js";
 import sendMail from "../services/email-verification.js";
 import isUserVerifiedEmail from "../utils/isUserEmailVerified.js";
 import dns from "dns/promises"
@@ -227,4 +227,21 @@ export const userLoggedOutcontroller=async(req, res)=>{
   }
   res.clearCookie("token", httpOptions);
   return res.status(200).json({message: 'Logged Out Succssfully'});
+}
+
+export const UserEducationAdd=async(req, res)=>{
+  const {uid}=req.user;
+  const {university_name, degree, start_date, end_date, grade}=req.body;
+  
+  try {
+    const validateuser=EducationUserSchema.safeParse(req?.body)
+      if(!validateuser.success){
+      const message=validateuser.error.issues[0].message;
+      return res.status(422).json({message: message})
+    }
+    const {rows}=await connect.query("insert into user_educations (university_name, degree, start_date, end_date, grade, user_id) values ($1, $2, $3, $4, $5, $6) returning *", [ university_name, degree, start_date, end_date, grade, uid]);
+    return res.status(201).json({message: rows[0]})
+  } catch (error) {
+    return res.status(500).json({message: error.message})
+  }
 }
