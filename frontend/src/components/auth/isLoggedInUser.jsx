@@ -8,7 +8,7 @@ export default function IsloggedinUser() {
   const navigate=useNavigate()
   const {data, error, loading}=useAuth()
   useEffect(() => {
-    if(error?.verify==false){
+    if(error?.login && error?.verify==false){
       navigate("/auth/verify-email", {state: {from: location.pathname}, replace: true})
     } 
     else if(error){

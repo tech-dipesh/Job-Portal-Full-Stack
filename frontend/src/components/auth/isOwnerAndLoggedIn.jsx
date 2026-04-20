@@ -1,44 +1,39 @@
 import { useEffect } from 'react';
-import { useParams, useNavigate, Outlet, useLocation } from 'react-router';
-import useFetchData from '../../hooks/useFetchData';
-import { isUserOwnedRoute } from '../../api/auth.admin';
+import { useParams, useNavigate, Outlet, useLocation, Navigate } from 'react-router';
 import Loading from '../Loading';
+import Errorloading from '../common/Errorloading';
 import { useAuth } from '../../context/Authcontext';
+import authUid from '../../auth/authUid';
 
-export default function IsOwnerandloggedIn() {
+export default function IsOwnerandLoggedIn() {
   const { id } = useParams();
-  const location=useLocation()
+  const location = useLocation();
   const navigate = useNavigate();
-    const {execute, error:fetcherrData, loading: verifyOwner}=useFetchData(isUserOwnedRoute)
-    const {data, error, loading}=useAuth()
+  const { user, error, loading } = useAuth();
+  const isValid = id && authUid(id);
+
   useEffect(() => {
-      if (error.login==true && error.verify==false) {
-      navigate("/auth/verify", {state:{ from: location.pathname }, replace: true  });
+    if (!user) return <Navigate to="/auth/login" />;
+    if (error?.login === true && error?.verify === false) {
+      navigate("/auth/verify-email", { state: { from: location.pathname }, replace: true });
       return;
-      }
-      if (error) {
-      navigate("/auth/login", {state:{ from: location.pathname }, replace: true  });
+    }
+    if (error) {
+      navigate("/auth/login", { state: { from: location.pathname }, replace: true });
       return;
-      }
-      execute(id);
-  }, [id]); 
+    }
+  }, [error, navigate, location]);
 
-
-  useEffect(()=>{
-  if (fetcherrData === 'Please Verify Your verification code.') {
-      //  navigate("/auth/verify-email", {   state: { from: location.pathname },  replace: true });
-    return;
-  }
- if(fetcherrData) {
-   navigate("/", { replace: true})
- }
-  }, [fetcherrData])
-
-if(loading || verifyOwner){
-    return <Loading/>
+  if (loading) {
+    return <Loading />;
   }
 
-  return <Outlet context={data}/>;
-};
+  if (id && !isValid) {
+    setTimeout(() => {
+      navigate("/");
+    }, 1000);
+    return <Errorloading data={{ error: 'Incorrect uid. Please enter correct uid. Redirecting...' }} />;
+  }
 
-
+  return <Outlet context={user} />;
+}

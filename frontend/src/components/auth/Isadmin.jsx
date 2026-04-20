@@ -3,22 +3,23 @@ import { useAuth } from '../../context/Authcontext'
 import { Outlet, useNavigate } from 'react-router'
 import Loading from '../Loading'
 import Errorloading from '../common/Errorloading'
-
 export default function Isadmin() {
-  const {data, error, loading}=useAuth()
-  const navigate=useNavigate()
-  const {role}=data || {}
+  const { data, error, loading } = useAuth()
+  const navigate = useNavigate()
   useEffect(() => {
-    if(error=='Only Admin Allowed') navigate("/", {state: {from: location.pathname}, replace: true})
-      if(error) navigate("/auth/login", { state: { from: location.pathname }, replace: true })
-      }, [error, navigate])
-    
-    if (loading) return <Loading/>;
-    if(role && role!='admin'){
-      <Errorloading data={{error: "Only Admin Allowed"}}/>
-      setTimeout(() => {
-        navigate("/")
-      }, 500);
+    if (error?.login === true && error?.verify === false) {
+      navigate("/auth/verify-email", { state: { from: location.pathname }, replace: true });
+      return;
     }
-    return <Outlet data={data}/>
+  if (error) {
+      navigate("/auth/login", { state: { from: location.pathname }, replace: true });
+      return;
+    }
+    if(data?.role!='admin'){
+    navigate("/auth/login", { state: { from: location.pathname }, replace: true });
+    return;
+  }
+  }, [error, navigate])
+  if (loading) return <Loading />;
+  return <Outlet data={data} />
 }

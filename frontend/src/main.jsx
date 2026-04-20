@@ -83,11 +83,10 @@ const router = createBrowserRouter([
       {
         path: "users",
         children: [
-          // { path: "all", element: <IsownerUser/>, children: [{index: true, element: <Alluser/>}] },
           { path: "all", element: <IsOwnerandloggedIn />, children: [{ index: true, element: <Alluser /> }] },
           {
             path: ":id",
-            element: <IsloggedinUser />,
+            element: <IsOwnerandloggedIn />,
             children: [
               { path: "profile", element: <Individualuser /> },
               { path: "profile/edit", element: <Edituser /> },
@@ -120,6 +119,10 @@ const router = createBrowserRouter([
           { path: "all", element: <Allcompanies /> },
           { path: "followers", element: <CompanyFollowers /> },
           {
+            path: ":id",
+            element: <Singlecompany/>
+          },
+          {
             path: "new",
             element: <Isadmin />,
             children: [{ index: true, element: <NewCompany /> }]
@@ -137,10 +140,6 @@ const router = createBrowserRouter([
           {
             path: ":id/jobs",
             element: <AllCompanyJobs />
-          },
-          {
-            path: ":id",
-            element: <Singlecompany/>
           },
           {
             path: ":id",

@@ -5,3 +5,4 @@ export const getSearchUsers=(query)=>api.get(`/admin/search/users?q=${query}`)
 export const assignCompaniesToUsers=(value)=>api.post("/admin/assign-user", value)
 export const isUserOwnedRoute=(id)=>api.get(`/jobs/${id}/verify-owner`);
 export const adminDashboardData=()=>api.get(`/admin/dashboard`);
+export const verifyAdminData=()=>api.get(`/admin/verify`);

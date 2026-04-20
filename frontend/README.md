@@ -74,7 +74,7 @@ App runs on: http://localhost:5173
 ### Frontend Setup:
 
 
-## UseFul NOtes That I Learneed:
+## UseFul Notes That I Learneed:
 - - Another concept I learned: to access `.env` content, it must start with `VITE` (capitalized).
 - - GET methods don't send a body, so for login I used POST routes.
 - I used `withCredentials` to store the token from the backend.
@@ -173,7 +173,7 @@ App runs on: http://localhost:5173
 - Header Profile Ui Changed a Lot
 - Improve the Add Resume Page With Better ui
 - Added a phone number on the Edit User of new ui with the new library
-- 
+- Add the Education Separate File
 
 ## Portal:
 - For popup positioning issues, used Portal.
@@ -195,3 +195,4 @@ App runs on: http://localhost:5173
 6. **react-toastify** – toast alerts
 8. **@vercel/analytics** – frontend stats and visitor count
 8. **@vercel/speed-insights/react** – frontend Speed Insights
+8. **react-select** – Select Option for the Add a Education
