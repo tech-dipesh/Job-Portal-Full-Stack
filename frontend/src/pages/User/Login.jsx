@@ -30,7 +30,7 @@ export default function Login() {
   }, [checkuser, state])
 
   const submitForm = async (e) => {
-    e.preventdefault();
+    e.preventDefault();
     setError("")
     const trim = { email: value.email.trim(), password: value.password.trim() }
     const err = validateLogin(trim);

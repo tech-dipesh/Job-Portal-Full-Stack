@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { getIndividualUser, postUserSkills } from '../../api/auth.user';
 import { useNavigate, useParams } from 'react-router';
-import authUid from "../../auth/authUid"
 import Inputcomps from "../../components/common/Input"
 import ButtonComps from '../../components/common/Button';
 import validateText from "../../auth/textValidate"
@@ -37,9 +36,6 @@ export default function Individualuser() {
     })
   }, [id])
   
-  const isValid = authUid(id);
-  if (!isValid) return <Errorloading data={{ error: 'Incorrect uid please enter correct uid' }} />
-
   const submitSkill = async () => {
     const validateErr = validateText(value);
     if (validateErr) {

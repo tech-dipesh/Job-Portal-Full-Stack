@@ -26,7 +26,7 @@ export default function Signup() {
   const { data, error, loading, execute } = useFetchData(signupUser)
 
   const submitForm = async (e) => {
-    e.preventdefault()
+    e.preventDefault()
     const trim = {
       fname: value.fname.trim(),
       lname: value.lname.trim(),
