@@ -474,7 +474,7 @@ paths:
 
   /jobs/{jobId}/verify-owner:
     get:
-      summary: Verify User Routes
+      summary: Verify Job Routes
       operationId: verifyUserRoutes
       description: ""
       tags:
@@ -701,6 +701,18 @@ paths:
           description: ""
       requestBody:
         $ref: "#/components/requestBodies/upload_resume"
+  /users/add-education:
+    post:
+      summary: Add Education
+      operationId: addEducation
+      description: ""
+      tags:
+        - Users
+      responses:
+        "200":
+          description: ""
+      requestBody:
+        $ref: "#/components/requestBodies/add-education"
 
 components:
   schemas:

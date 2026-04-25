@@ -64,10 +64,10 @@ export const getloginUserController= async (req, res) => {
 };
 
 
-export const getParticularUserController=  async (req, res) => {
+export const getUserProfile=  async (req, res) => {
   const {id, company_id}=req.params;
   try {
-    const { rows } = await connect.query("SELECT uid, profile_pic_url, phone_number, fname, lname, education, email, experience, resume_url, skills, company_id IS NOT NULL AS is_employee, uid AS job_uid FROM users WHERE uid =$1", [id]);
+    const { rows } = await connect.query("select u.uid, u.profile_pic_url, u.phone_number, u.fname, u.lname, u.education, u.email, u.experience, u.resume_url, u.skills, u.company_id IS NOT NULL AS is_employee, u.uid AS job_uid, us.degree as degree from users u left join  user_educations us on u.uid=us.user_id where u.uid=$1", [id]);
     if(rows.length==0) return res.status(404).json({message: "Please Enter Correct Uid"})
     return res.status(200).json({message: rows[0]});
   } catch (error) {
@@ -75,7 +75,7 @@ export const getParticularUserController=  async (req, res) => {
   }
 };
 
-
+// SELECT uid, profile_pic_url, phone_number, fname, lname, education, email, experience, resume_url, skills, company_id IS NOT NULL AS is_employee, uid AS job_uid FROM users inner join user_educations us WHERE uid=$1 
 
 
 export const postSignupUserController= async (req, res) => {
@@ -232,14 +232,16 @@ export const userLoggedOutcontroller=async(req, res)=>{
 export const UserEducationAdd=async(req, res)=>{
   const {uid}=req.user;
   const {university_name, degree, start_date, end_date, grade}=req.body;
-  
   try {
     const validateuser=EducationUserSchema.safeParse(req?.body)
       if(!validateuser.success){
       const message=validateuser.error.issues[0].message;
       return res.status(422).json({message: message})
     }
-    const {rows}=await connect.query("insert into user_educations (university_name, degree, start_date, end_date, grade, user_id) values ($1, $2, $3, $4, $5, $6) returning *", [ university_name, degree, start_date, end_date, grade, uid]);
+     const [{rows}]=await Promise.all([
+      connect.query("insert into user_educations (university_name, degree, start_date, end_date, grade, user_id) values ($1, $2, $3, $4, $5, $6) returning *", [ university_name, degree, start_date, end_date, grade, uid]),
+      connect.query("delete from user_educations where uid=$1", [uid])
+    ])
     return res.status(201).json({message: rows[0]})
   } catch (error) {
     return res.status(500).json({message: error.message})

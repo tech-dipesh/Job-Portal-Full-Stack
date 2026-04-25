@@ -3,6 +3,21 @@ import request from "supertest";
 import app from "../../src/app.js";
 import { connect } from "../../src/db.js";
 import { JOB_BASE_URL } from "../setup.js";
+import {loginTestUser} from "../mocks/auth.js"
+
+let cookieValue;
+beforeAll(async () => {
+  await createTestUser();
+  cookieValue = await loginTestUser();
+});
+
+
+const agent = request.agent(app);
+beforeAll(async () => {
+  await agent
+    .post("/api/v1/users/login")
+    .send({ email: "test@example.com", password: "Test@1234" });
+});
 
 describe(`GET ${JOB_BASE_URL}`, () => {
   test("Return all the Jobs with teh Pagination", async () => {
@@ -32,7 +47,7 @@ describe(`GET ${JOB_BASE_URL}`, () => {
 
 describe(`GET ${JOB_BASE_URL}/search`, () => {
   test("When there is no search", async () => {
-    const response = await request(app).get(`${JOB_BASE_URL}/search`);
+    const response = await agent.get(`${JOB_BASE_URL}/search`);
     expect(response.statusCode).toBe(404);
     expect(response.body).toHaveProperty("message");
   });

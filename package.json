@@ -1,7 +1,7 @@
 {
   "name": "yeti-jobs",
   "private": true,
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A Scalable job portal built with the **PERN stack** that connects job seekers and recruiters with advanced search, application tracking, ATS Scoring and role based access control.",
   "repository": {
     "type": "git",
@@ -18,5 +18,5 @@
   "bugs": {
     "url": "https://github.com/tech-dipesh/Job-Portal-Full-Stack/issues"
   },
-  "homepage": "https://github.com/tech-dipesh/Job-Portal-Full-Stack#readme"
+  "homepage": "https://yeti-jobs.vercel.app"
 }
