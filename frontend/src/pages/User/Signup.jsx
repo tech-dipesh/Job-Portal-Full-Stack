@@ -39,7 +39,7 @@ export default function Signup() {
       setAPIError(err)
       return;
     }
-    e.preventdefault();
+    e.preventDefault();
     const res = await execute(trim)
     if (data || res) {
       navigate("../verify-email", { state: "Please Verify Your Mail" })

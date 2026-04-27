@@ -23,7 +23,7 @@ export default function Editcompany() {
 
 
   const editForm = async (e) => {
-    e.preventdefault();
+    e.preventDefault();
     const trim={
       name: value.name.trim(),
       description: value.description.trim(),

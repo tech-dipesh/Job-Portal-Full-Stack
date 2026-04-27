@@ -31,7 +31,7 @@ export default function EachJobAction({ setAction, data, }) {
     { label: 'Why Should We Hire You?', name: 'why_hire', type: 'text' }
   ]
   const submitFormApply = async (e) => {
-    e.preventdefault()
+    e.preventDefault()
     const err = ValidateApplication(value)
     if (err) {
       setError(err)
@@ -74,17 +74,17 @@ export default function EachJobAction({ setAction, data, }) {
         </div>
       </div>
       {is_owner ?
-        <div className='bg-slate-800 rounded-2xl p-4 flex flex-wrap items-center gap-3'>
+        <div className='bg-slate-800 rounded-2xl p-4 flex flex-wrap items-center gap-3 flex-1 lg:flex-3'>
           <Link to={`/companies/${company_id}/applications`} className='flex-1'>
             <Buttoncomps values='Applicants' color='bg-slate-600' />
           </Link>
           <Link to='edit' state={data} className='flex-1'>
             <Buttoncomps values='Edit' color={'bg-slate-600'} />
           </Link>
-          <span onClick={() => setAction("delete")} className='flex-1'>
+          <span onClick={() => setAction("delete")} className='flex-1 md:left-40'>
             <Buttoncomps values='Delete' color='bg-red-600' />
           </span>
-          <div className='w-full flex justify-end'>
+          <div className='flex justify-end'>
             <p className='text-xs text-slate-500'><FontAwesomeIcon icon={faEye} />Total Views: 
               <span className='text-slate-300 font-semibold'> {total_job_views}</span>
             </p>

@@ -16,7 +16,7 @@ export default function PostSkills() {
   const { error: skilllerr, data, execute: addprofile, loading } = useFetchData(postUserSkills)
   const [error, setError] = useState("")
   const submitSkill = async (e) => {
-    e.preventdefault()
+    e.preventDefault()
     const err = validateText(skill);
     if (err) {
       return setError(err)
