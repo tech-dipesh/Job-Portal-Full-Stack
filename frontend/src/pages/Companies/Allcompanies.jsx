@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import useFetchData from '../../hooks/useFetchData'
 import { getAllCompanies } from '../../api/auth.companies'
 import Companycomps from '../../components/common/company/Companycomps'
@@ -10,9 +10,22 @@ import Loading from '../../components/Loading'
 export default function Allcompanies() {
   const [pagination, setPagination]=useState({page: 1})
   const {data, error, loading, execute}=useFetchData(getAllCompanies)
+  const [companies, setCompanies]=useState([])
+  const isTrue=useRef(false)
   useEffect(()=>{
     execute(pagination)
   }, [])
+useEffect(() => {
+  if (data?.message) {
+    if (isTrue.current) {
+      setCompanies(prev => [...(prev || []), ...data.message])
+    } else {
+      setCompanies(data.message)
+      isTrue.current = true
+    }
+  }
+}, [data?.message])
+
    const loadMore = async () => {
     setPagination((prev)=>({
       page: prev.page+1,
@@ -25,11 +38,11 @@ export default function Allcompanies() {
   return (
     <div>
       <Errorloading data={{error, loading}}/>
-      <Emptycomps data={data?.message} type={'Companies'}/>
+      <Emptycomps data={companies} type={'Companies'}/>
       
       <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 p-8'>
-      {data && data?.message.map(({uid, name, description, website, created_at, founded_year, location})=>(
-        <Companycomps key={uid} uid={uid} website={website} name={name} description={description} created_at={created_at} founded_year={founded_year} location={location}/>
+      {companies && companies.map(({uid, name, description, website, created_at, founded_year, location}, i)=>(
+        <Companycomps key={i} uid={uid} website={website} name={name} description={description} created_at={created_at} founded_year={founded_year} location={location}/>
       ))}
       </div>
       {data?.page * data?.limit < data?.total &&

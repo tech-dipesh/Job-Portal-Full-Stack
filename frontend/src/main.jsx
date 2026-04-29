@@ -72,8 +72,16 @@ const router = createBrowserRouter([
         path: "jobs",
         element: <IsloggedinUser />,
         children: [
-          { index: true, element: <Jobs /> },
-          { path: "search", element: <Searchjobs /> },
+          { index: true, element: (
+          <Suspense fallback={<Loading/>}>
+            <Jobs/>
+          </Suspense>
+        ) },
+          { path: "search", element: (
+            <Suspense fallback={<Loading/>}>
+            <Searchjobs/>
+          </Suspense>
+          ) },
           { path: ":id", element: <EachJob /> },
           { path: "new", element: <Newjob /> },
           { path: ":id/edit", element: <IsOwnerandloggedIn />, children: [{ index: true, element: <EditJob /> }] },

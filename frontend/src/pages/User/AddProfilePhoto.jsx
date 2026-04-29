@@ -61,7 +61,7 @@ export default function ProfilePhoto() {
     }
   }
 
-  const { profile_pic_url } = oldData || {}
+  const { profile_pic_url } = oldData?.message ?? {}
   if (loading) {
     return <Loading />
   }
@@ -102,7 +102,7 @@ export default function ProfilePhoto() {
       {preview &&
       <div className='grid justify-center align-middle my-4'>
         <h3 className='text-xl justify-center my-2'>Preview Image:</h3>
-       <img src={preview} alt={defaultImage} className='h-32 w-32 rounded-full object-cover grid justify-items-center'/>
+       <img src={preview} loading='lazy' alt={defaultImage} className='h-32 w-32 rounded-full object-cover grid justify-items-center'/>
       </div>
        }
       <Errorloading data={{ error }} />

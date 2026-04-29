@@ -27,7 +27,6 @@ export default function PostSkills() {
       setError(skilllerr)
       return;
     }
-    console.log('res is', res)
     if (res || data) {
       navigate(0)
       return;
@@ -39,7 +38,6 @@ export default function PostSkills() {
   return (
     <>
       <Errorloading data={{ error: error }} />
-
       <h3>Add User Skills:</h3>
       <div onClick={() => setIsSkillOpen(!isSkillsOpen)}><Buttoncomps values={isSkillsOpen ? 'Escape Skills' : 'Add Skills'} /></div>
       {isSkillsOpen &&

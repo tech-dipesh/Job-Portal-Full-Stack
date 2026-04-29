@@ -17,25 +17,25 @@ import getOriginalFileName from '../../services/getOriginalFileName';
 import Followinglist from '../../components/common/User/Followinglist';
 export default function Individualuser() {
   const [open, setOpen] = useState(false);
-  const {data:globalContext}=useAuth()
+  const { data: globalContext } = useAuth()
   const navigate = useNavigate();
   const { id } = useParams();
   const { data: user } = useAuth()
   const [value, setValue] = useState("")
   const [error, setError] = useState("")
-  const [isFollowing, setIsFollowing]=useState(false)
+  const [isFollowing, setIsFollowing] = useState(false)
   const { data, loading, error: err, execute } = useFetchData(getIndividualUser);
   const { data: skillsdata, loader, skilllerr, execute: addSkill } = useFetchData(postUserSkills)
 
   useEffect(() => {
     execute(id);
-     document.addEventListener("keydown", (e)=>{
-      if(e.key=='Escape'){
+    document.addEventListener("keydown", (e) => {
+      if (e.key == 'Escape') {
         setIsFollowing(false)
       }
     })
   }, [id])
-  
+
   const submitSkill = async () => {
     const validateErr = validateText(value);
     if (validateErr) {
@@ -49,20 +49,20 @@ export default function Individualuser() {
   }
   const { profile_pic_url, fname, lname, email, education, experience, resume_url, skills, phone_number, degree } = data?.message || {}
   const originalName = getOriginalFileName(profile_pic_url)
-  const {role}=globalContext ?? {};
-  if(loader || loading){
-    return <Loading/>
+  const { role } = globalContext ?? {};
+  if (loader || loading) {
+    return <Loading />
   }
-   if (err) {
+  if (err) {
     return navigate("/")
   }
   return (
     <div className='max-w-3xl mx-auto p-6 space-y-6'>
       {data &&
         <div className='grid'>
-          <div className='flex justify-center mb-4'>
-            <img src={profile_pic_url || defaultImage} alt='profile'
-              className='h-32 w-32 rounded-full object-cover border-4 border-gray-300 shadow-lg' />
+          <div className='flex flex-col items-center mb-4'>
+            <img src={profile_pic_url || defaultImage} loading='lazy' alt='profile' className='h-32 w-32 rounded-full object-cover border-4 border-gray-300 shadow-lg' />
+            {profile_pic_url && <span className='text-xs text-gray-400 mt-2 max-w-36 truncate text-center tracking-wide'>{originalName}</span>}
           </div>
           <span className='grid justify-center mt-4'> <Linkcomps to={'profile-picture'} content={<ButtonComps values='Change Photo' />}></Linkcomps></span>
           <div className='grid justify-center mb-4'>
@@ -74,10 +74,10 @@ export default function Individualuser() {
             <Textcomps content={`Degree: ${degree || 'N|A'}`} />
             <Textcomps content={`Experience: ${experience ?? '0'} years`} />
             <span className='my-4 justify-center grid cursor-pointer'> <Linkcomps to={'edit'} content={<ButtonComps values='Edit Profille' />}></Linkcomps></span>
-            {role=='guest' && 
-            <span className='my-4 justify-center grid cursor-pointer' onClick={()=>setIsFollowing(!isFollowing)}><ButtonComps values='Following List' /></span>
+            {role == 'guest' &&
+              <span className='my-4 justify-center grid cursor-pointer' onClick={() => setIsFollowing(!isFollowing)}><ButtonComps values='Following List' /></span>
             }
-            {isFollowing && <Followinglist setIsFollowing={setIsFollowing} isFollowing={isFollowing}/>}
+            {isFollowing && <Followinglist setIsFollowing={setIsFollowing} isFollowing={isFollowing} />}
           </div>
           <div className='grid justify-items-center'>
             <h4 className='font-bold font-sans'>Skills:</h4>
@@ -95,10 +95,10 @@ export default function Individualuser() {
               :
               <Popup setOpen={setOpen} open={open} value={value} setValue={setValue} submitFunction={submitSkill} error={error} setError={setError} fetchError={skilllerr} type={'Skills'} header={<Textcomps content={`Enter a Skills:`} />}>
                 <>
-                <Inputcomps click={setValue} value={value} type="text" error={setError} />
-                <span onClick={submitSkill} className="justify-center flex">
-                  <Buttoncomps values={`Add Skill`} color={'bg-red-500'} />
-               </span>
+                  <Inputcomps click={setValue} value={value} type="text" error={setError} />
+                  <span onClick={submitSkill} className="justify-center flex">
+                    <Buttoncomps values={`Add Skill`} color={'bg-red-500'} />
+                  </span>
                 </>
               </Popup>
             }

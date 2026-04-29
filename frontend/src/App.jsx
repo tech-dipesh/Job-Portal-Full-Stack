@@ -7,6 +7,7 @@ import Loading from './components/Loading';
 import ToastConataine from './components/Toast';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from "@vercel/speed-insights/react"
+import { Suspense } from 'react';
 function App() {
   const { data, loading } = useAuth()
   if (loading) {
@@ -18,7 +19,9 @@ function App() {
       <Analytics/>
       <SpeedInsights/>
       <main className='flex-1'>
+        <Suspense fallback={<Loading/>}>
         <Outlet />
+        </Suspense>
         <ToastConataine />
       </main>
       <Footer data={data} />
