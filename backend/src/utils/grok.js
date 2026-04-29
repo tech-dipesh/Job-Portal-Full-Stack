@@ -12,7 +12,7 @@ const gemini =async(text)=>{
         Analyze this resume and return ONLY a valid JSON object with no markdown, no backticks, no explanation.
     Strictly follow this format:
     {
-      "ats_score": <number between 0-100>,
+      "ats_scores": <number between 0-100>,
       "feedback": [
         "<feedback point 1>",
         "<feedback point 2>",
