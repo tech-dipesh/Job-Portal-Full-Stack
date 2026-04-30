@@ -1,6 +1,6 @@
 import express from "express"
 import client from "../db.js"
-import { allowAllSearchQuery } from "../utils/Querytablehelper.js";
+import { ALLOW_SEARCH_QUERY } from "../utils/data.js";
 import listingSchema from "../Models/jobs.models.js";
 const router=express.Router();
 
@@ -8,7 +8,7 @@ export const getAllJobsController=async (req, res) => {
   let {page=1, limit=10, sortby='created_at'}=req.query;
   const offset=(Number(page)-1)*Number(limit);
   try {
-    if(!allowAllSearchQuery.includes(sortby)){
+    if(!ALLOW_SEARCH_QUERY.includes(sortby)){
       return res.status(400).json({message: "Please Add Only Avaible column list"});
     }
     const {rows: countTotal}=await client.query("select count(*) as count from jobs");
@@ -24,7 +24,7 @@ export const searchJobsListing=async (req, res) => {
   if(!title){
     return res.status(404).json({message: 'Please Enter Search Term'});
   }
-  if(!allowAllSearchQuery.includes(sortby)){
+  if(!ALLOW_SEARCH_QUERY.includes(sortby)){
     return res.status(401).json({message: "Please Add Only Avaible column list"});
   }
   try {
