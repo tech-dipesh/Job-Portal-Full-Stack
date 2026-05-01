@@ -1,8 +1,9 @@
-import connect from "../db.js";
+import Pool , {connect} from "../db.js";
 import "dotenv/config";
 import { supabase } from "../services/Supabase.js";
 import { PDFParse } from "pdf-parse";
 import gemini from "../utils/grok.js"
+import { IMAGE_ALLOWED_TYPE } from "../utils/data.js";
 const uploadResume = async (req, res) => {
   const { uid: userId } = req.user;
   if(!req.file){
@@ -13,22 +14,24 @@ const uploadResume = async (req, res) => {
     return res.status(404).json({ message: "Please Enter a File" });
   }
   try {
+    const connect = await Pool.connect()
     await connect.query('begin');
     const parser = new PDFParse({ data: buffer });
-    const { rows: doesExist, rowCount } = await connect.query(
+    const { rows: doesExist, rowCount } = await Pool.query(
       "SELECT resume_url FROM users WHERE uid=$1",
       [userId],
     );
-    if (rowCount) {
+    if (rowCount && doesExist[0]?.resume_url) {
       const { resume_url: resumeUrl } = doesExist[0];
       const splitWorld = resumeUrl?.split("/");
       if (splitWorld) {
-        const removetoPath = `upload/${splitWorld[splitWorld.length - 1]}`;
-        const { error } = await supabase.storage
-          .from("resume")
-          .remove([removetoPath]);
-        if (error) {
-          return res.status(401).json({ message: error.message });
+        const removetoPath = `upload/${splitWorld.at(-1)}`;
+        const [firstError]=await Promise.all([
+           supabase.storage.from("resume").remove([removetoPath]),
+          Pool.query("delete from ats_scores where user_id=$1", [userId])
+        ])
+        if (firstError?.error) {
+          console.error(`Failed to remove old Resume, ${error}`)
         }
       }
     }
@@ -48,57 +51,62 @@ const uploadResume = async (req, res) => {
     if (error) {
       return res.status(400).json({ message: error.message });
     }
+    
     const { data: {publicUrl} } = supabase.storage.from("resume").getPublicUrl(path);
-    console.log(typeof pdfContent?.feedback)
-    const [updateResume, updateATS]=await Promise.all([
-      connect.query("update users set resume_url=$1 where uid=$2", [publicUrl,userId]),
-      connect.query("insert into ats_score (user_id, score, feedback) values($1, $2, $3)", [userId, pdfContent?.ats_score, JSON.stringify(pdfContent?.feedback)])
+    console.log('prd', pdfContent);
+     const [first, second]= await Promise.all([
+      Pool.query("update users set resume_url=$1 where uid=$2 returning *", [publicUrl,userId]),
+      Pool.query("insert into ats_scores (user_id, score, feedback) values($1, $2, $3) returning *", [userId, pdfContent?.ats_scores, JSON.stringify(pdfContent?.feedback)])
     ])
-    await connect.query('commit');
+    await Pool.query('commit');
     return res.status(201).json({ message: "Resume Uploaded Successfully" });
   } catch (error){
-    await connect.query('rollback');
+    console.log(error);
+    await Pool.query('rollback');
     return res.status(500).json({ message: error.message });
+  }
+  finally{
+    await Pool.release()
   }
 };
 
 const uploadProfilePicture = async (req, res) => {
   const { uid } = req.user;
-  const { originalname, buffer, mimetype } = req.file;
+  if(!req.file){
+    return res.status(400).json({message: "Please Enter a Profile Picture"})
+  }
+  const { originalname, buffer, mimetype, size } = req.file;
+  const KB_TO_MB=2*1024*1024;
+  if (size>KB_TO_MB) {
+    return res.status(400).json({ message: "File size exceeds 2MB" });
+  }
+  if(!IMAGE_ALLOWED_TYPE.includes(mimetype)){
+    return res.status(400).json({ message: "Invalid File Type" });
+  }
   try {
-    const { rows, rowCount } = await connect.query(
+    const { rows } = await connect.query(
       "SELECT profile_pic_url FROM users WHERE uid=$1",
       [uid],
     );
-    if (rowCount == 0) {
+    if (!rows || rows.length==0) {
       return res.status(501).json({ message: "Please Try Again Later" });
     }
     const randomUUID = crypto.randomUUID();
-    const { data, error } = await supabase.storage
-      .from("profile_pic")
-      .upload(`${randomUUID}-${originalname}`, buffer, {
+    const { data, error } = await supabase.storage.from("profile_pic").upload(`${randomUUID}-${originalname}`, buffer, {
         contentType: mimetype,
       });
-
     if (error) {
-      return res
-        .json(401)
-        .json({ message: "Please Enter below 2mb and only image type." });
+      return res.status(500).json({ message: error.message });
     }
-
-    const { data: getOutputUrl, error: errorOutputUrl } = supabase.storage
-      .from("profile_pic")
-      .getPublicUrl(data.path);
+    const { data: getOutputUrl, error: errorOutputUrl } = supabase.storage.from("profile_pic").getPublicUrl(data.path);
     if (errorOutputUrl) {
-      return res.json(401).json({ message: errorOutputUrl.message });
+      return res.status(401).json({ message: errorOutputUrl.message });
     }
     await connect.query(
       "update  users set profile_pic_url=$1 where uid=$2 returning *",
       [getOutputUrl.publicUrl, uid],
     );
-    return res
-      .status(201)
-      .json({ message: "Profile Picture Uploaded Successfully" });
+    return res.status(201).json({ message: "Profile Picture Uploaded Successfully" });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

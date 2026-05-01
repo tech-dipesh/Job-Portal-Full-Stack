@@ -173,9 +173,6 @@ export const putUserController= async(req, res) => {
 
 
 
-// const ALLOWED_BODY = ['fname', 'lname', 'education', 'email', 'password'];
-
-
 export const patchUserController= async(req, res)=>{
   const {id}=req.params;
   if(!id){
@@ -212,7 +209,7 @@ export const litOfAllFollowingCompanies=async(req, res)=>{
 export const resumeInformation=async(req, res)=>{
   const {uid}=req?.user;
   try {
-    const {rows}=await connect.query("select a.user_id, a.created_at, score, feedback, u.resume_url from ats_score a left join users u on u.uid=a.user_id where a.user_id=$1 order by a.created_at desc limit 1", [uid]);
+    const {rows}=await connect.query("select a.user_id, a.created_at, score, feedback, u.resume_url from ats_scores a left join users u on u.uid=a.user_id where a.user_id=$1 order by a.created_at desc limit 1", [uid]);
     return res.status(200).json({message: rows[0]})
   } catch (error) {
     return res.status(201).json({message: error.message})
@@ -231,19 +228,24 @@ export const userLoggedOutcontroller=async(req, res)=>{
 
 export const UserEducationAdd=async(req, res)=>{
   const {uid}=req.user;
-  const {university_name, degree, start_date, end_date, grade}=req.body;
+  const validateuser=EducationUserSchema.safeParse(req.body)
+    if(!validateuser.success){
+    const message=validateuser.error.issues[0].message;
+    return res.status(422).json({message: message})
+  }
   try {
-    const validateuser=EducationUserSchema.safeParse(req?.body)
-      if(!validateuser.success){
-      const message=validateuser.error.issues[0].message;
-      return res.status(422).json({message: message})
-    }
+     const connect=await Pool.connect()
+      await connect.query("begin")
      const [{rows}]=await Promise.all([
       connect.query("insert into user_educations (university_name, degree, start_date, end_date, grade, user_id) values ($1, $2, $3, $4, $5, $6) returning *", [ university_name, degree, start_date, end_date, grade, uid]),
       connect.query("delete from user_educations where uid=$1", [uid])
     ])
+    await connect.query("commit")
     return res.status(201).json({message: rows[0]})
   } catch (error) {
+  await connect.query("rollback")
     return res.status(500).json({message: error.message})
+  } finally{
+    await connect.release()
   }
 }

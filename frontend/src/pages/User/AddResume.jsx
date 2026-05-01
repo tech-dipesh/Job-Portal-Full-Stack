@@ -65,7 +65,6 @@ export default function Addresume() {
     return <Loading />
   }
   const { feedback, resume_url, score } = initialData?.message ?? {};
-  console.log('feed', feedback, 'sc', score)
   const originalName = getOriginalFileName(resume_url)
   return (
     <div className='flex flex-col max-w-3xl mx-auto px-4 pb-12'>
@@ -142,9 +141,10 @@ export default function Addresume() {
         </div>
       }
       <div className='flex gap-3 justify-end mt-4'>
-        <button
+        <div
           onClick={clearSelected}
-          className='px-5 py-3 rounded-lg text-sm font-medium text-neutral-300 bg-neutral-700 hover:bg-neutral-600'><Buttoncomps values={'Clear'} /></button>
+          className='px-5 py-3 rounded-lg text-sm font-medium text-neutral-300 bg-neutral-700 hover:bg-neutral-600'>
+          <Buttoncomps values={'Clear'} /></div>
         <button disabled={!file?.name || loading || error} onClick={fileUpload}
           className={`p-4  rounded-xl font-semibold transition-colors bg-slate-700 w-auto border-none ${file?.name ? 'cursor-pointer bg-blue-600 text-white' : 'cursor-not-allowed opacity-50 text-neutral-500 bg-neutral-700'}`}
         >{loading ? 'Uploading...' : 'Submit'}</button>

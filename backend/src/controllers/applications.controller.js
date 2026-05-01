@@ -1,4 +1,4 @@
-import connect from "../db.js"
+import connect, { Pool } from "../db.js"
 import applicationSchema, { validateAllInputApplicationStatus } from "../Models/applications.models.js";
 import validateFunUid from "../utils/ValidateFunUid.js";
 
@@ -77,6 +77,8 @@ export const changeApplicationStatus=async (req, res)=>{
     return res.status(422).json({message: message})
   }
   try {
+      const connect=await Pool.connect()
+      await connect.query("begin")
       const [{rows: invalid}, {rows}]=await Promise.all([
         ("select exists(select 1 from applications where job_id=$1)", [job_id]),
        ("select exists(select 1 from applicatkions where user_id=$1 and job_id=$2)", [user_id, job_id])
@@ -91,8 +93,13 @@ export const changeApplicationStatus=async (req, res)=>{
      return res.status(401).json({message: "Please Change the Application Status"})
    }
     await connect.query("update applications set status=$1 where user_id=$2 and job_id=$3", [status, user_id, job_id])
+    await connect.query("commit")
     return res.status(201).json({message: "Application Status Updated Successfully"});
   } catch (error) {
+    await connect.query("rollback")
     return res.status(500).json({message: error.message})
+  }
+  finally{
+    await connect.release()
   }
 }
