@@ -324,6 +324,7 @@ supabase.storage.from('bucketname').getPublicUrl(pathurl)
 - with One things of: `logout` i've to set teh clearCookie to give all the options, `httpOnly, secure, sameSite` which i previously only set when i set a cookies, which cause a conflict on the deployment.
 - Also one of the error on the serach instead of: `to_tsquery` which only handle the non space item, rather i can fetch with: `plainto_tsquery` which handle the also a space.
 - with it's working on the port of: `6543` perfectly not the `5432` on the database but later it's working on teh 6543
+- When using the `Pool` query on the database rather than a client query we must release that query to which never return anything on the pool, which wihout it transacation offer the zero guarrente of the data insertion
 
 ### Testing: 03/30
 - Add the Testing from the `jest, supertest` just for all the jobs routes.
@@ -375,7 +376,8 @@ supabase.storage.from('bucketname').getPublicUrl(pathurl)
 - Added `shortlisted` status for applications
 - One user can apply only once per job
 - UUID validation before database request
-
+- Data Validation with the Model with also the using some regex and the enum pattern
+- Add the user_educations table to store the user Education as of now only the client side have been done.
 
 ## Backend Project Completed: 2026/Feb/26
 
