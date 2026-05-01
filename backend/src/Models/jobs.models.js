@@ -1,7 +1,5 @@
 import {z} from "zod"
-
-const allAvaibleJobType=["Onsite", "Remote", "Hybrid"];
-
+import { AVAIBLE_JOB_TYPE } from "../utils/data.js";
 const listingSchema=z.object({
   title: z
     .string({ error: "Title is Required" })
@@ -14,7 +12,7 @@ const listingSchema=z.object({
     .min(25, {message: "Description Must be at least 25 characters"})
     .max(500, {message: "Description Can't be more than 500 characters"}),
     job_type:z
-    .enum(allAvaibleJobType, {error: "Please Only Enter a Avaible Option such as, Onsite, Remote, Hybrid"}),
+    .enum(AVAIBLE_JOB_TYPE, {error: "Please Only Enter a Avaible Option such as, Onsite, Remote, Hybrid"}),
     experience_years:z.coerce.
     number({error: "PLease Enter a experience_years"})
     .min(0, "Experience Years Can't be the negative Value.")

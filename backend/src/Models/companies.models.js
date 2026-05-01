@@ -1,6 +1,5 @@
 import {z} from "zod"
-const websitePattern=/^(https?:\/\/)?(www\.)?[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})(\/[^\s]*)?$/
-
+import { WEBSITE_PATTERN } from "../utils/data.js";
 const companiesSchema=z.object({
     name:z
     .string({ error: "Name is required" })
@@ -15,7 +14,7 @@ const companiesSchema=z.object({
     website:z
     .string({error: "Please Enter a Website Name"})
     .trim()
-    .regex(websitePattern, "Please Enter Correct Url Type Type"),
+    .regex(WEBSITE_PATTERN, "Please Enter Correct Url Type Type"),
     location:z
     .string({error: "Please Enter a Location Name"})
     .trim()

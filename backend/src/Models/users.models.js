@@ -1,17 +1,5 @@
 import { z } from "zod";
-
-const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-const passRegex =
-  /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{8,20}$/;
-const phoneNumberRegex=/^\+(?:[0-9] ?){6,14}[0-9]$/
-const allAvaibleEducationtype = [
-  "Basic",
-  "Matrix",
-  "High School",
-  "Undergraduation",
-  "Postgraduation",
-];
-
+import { AVAIBLE_EDUCATION_TYPE, PASSWORD_REGEX, PHONE_NUMBER_REGEX } from "../utils/data.js";
 const userSchema = z.object({
   fname: z
     .string({ required_error: "Name is required" })
@@ -24,10 +12,7 @@ const userSchema = z.object({
   education: z
     // .string({required_error: "Please Add a education"})
     // .enum(allAvaibleEducationtype, {error: "Please Enter All Values such as, Basic, Matrix, High School, Undergraduation, Postgraduation"}),
-    .enum(allAvaibleEducationtype, {
-      error:
-        "Please Only Enter a Avaible Option such as, Basic, Matrix, High School, Undergraduation, Postgraduation",
-    }),
+    .enum(AVAIBLE_EDUCATION_TYPE, { error: "Please Only Enter a Avaible Option such as, Basic, Matrix, High School, Undergraduation, Postgraduation",}),
   email: z
   .string({ required_error: "Please Enter a Email" })
   .trim()
@@ -35,7 +20,7 @@ const userSchema = z.object({
   password: z
   .string({ required_error: "Please Enter a Password" })
   .trim()
-    .regex(passRegex, "Please Match the Password Format"),
+    .regex(PASSWORD_REGEX, "Please Match the Password Format"),
 });
 
 export const loginUserSchema = z.object({
@@ -44,7 +29,7 @@ export const loginUserSchema = z.object({
     .regex(z.regexes.email, "Please Match the Email Format Type"),
   password: z
     .string({ required_error: "Please Enter a Password" })
-    .regex(passRegex, "Please Match the Password Format"),
+    .regex(PASSWORD_REGEX, "Please Match the Password Format"),
 });
 
 export const updateUserSchema = z.object({
@@ -59,10 +44,7 @@ export const updateUserSchema = z.object({
   education: z
     // .string({required_error: "Please Add a education"})
     // .enum(allAvaibleEducationtype, {error: "Please Enter All Values such as, Basic, Matrix, High School, Undergraduation, Postgraduation"}),
-    .enum(allAvaibleEducationtype, {
-      error:
-        "Please Only Enter a Avaible Option such as, Basic, Matrix, High School, Undergraduation, Postgraduation",
-    })
+    .enum(AVAIBLE_EDUCATION_TYPE, { error: "Please Only Enter a Avaible Option such as, Basic, Matrix, High School, Undergraduation, Postgraduation", })
     .optional(),
   email: z
     .string({ required_error: "Please Enter a Email" })
@@ -72,7 +54,7 @@ export const updateUserSchema = z.object({
     .string({ required_error: "Please Enter a Number" })
     .min(10, {message: "Phone Number Must be a Minimum 10 Length"})
     .max(15, {message: "Phone Number Must be a Maxmimum 15 Length"})
-    .regex(phoneNumberRegex, "Phone Number Must be a a International Number.")
+    .regex(PHONE_NUMBER_REGEX, "Phone Number Must be a a International Number.")
     .optional(),
   experience: z
     .string({ required_error: "Please Enter a Experience Years" })

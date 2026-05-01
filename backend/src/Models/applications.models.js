@@ -1,18 +1,14 @@
 import {z} from "zod"
+import { AVAIBLE_APPLICATION_TYPE } from "../utils/data.js";
 
-
-// user_id, job_id, status, applied_at.
 // .enum(allAvaibleEducationtype, {error: "Please Enter All Values such as, Basic, Matrix, High School, Undergraduation, Postgraduation"}),
-// .string({required_error: "Please Add a education"})
-const allAvaibleApplicationtype=["applied", "shortlisted", "rejected", "hired",];
-// cover_letter, notice_period, expected_salary, why_hire
 const applicationSchema=z.object({
   // status:z.string().toLowerCase()
-    // .pipe(z.enum(allAvaibleApplicationtype, {error: "Please Only Enter a Avaible Option such as, applied, rejected, hired"}))
+    // .pipe(z.enum(AVAIBLE_APPLICATION_TYPE, {error: "Please Only Enter a Avaible Option such as, applied, rejected, hired"}))
     status: z
     .preprocess(
       (val) => (val.toLowerCase()),
-      z.enum(allAvaibleApplicationtype, { error: "Please only enter applied, shortlisted, rejected, or hired" }),
+      z.enum(AVAIBLE_APPLICATION_TYPE, { error: "Please only enter applied, shortlisted, rejected, or hired" }),
     )
     .optional(),
   cover_letter:
@@ -45,7 +41,7 @@ export const validateAllInputApplicationStatus=z.object({
     status: z
     .preprocess(
       (val) => (val.toLowerCase()),
-      z.enum(allAvaibleApplicationtype, { error: "Please only enter applied, shortlisted, rejected, or hired" }),
+      z.enum(AVAIBLE_APPLICATION_TYPE, { error: "Please only enter applied, shortlisted, rejected, or hired" }),
     )
   })
 export default applicationSchema;
