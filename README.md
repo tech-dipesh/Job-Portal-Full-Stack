@@ -345,7 +345,7 @@ erDiagram
 
   SAVED_JOBS {
     uuid uid PK
-    uuid users_id FK
+    uuid user_id FK
     uuid job_id FK
     uuid company_id FK
     timestamptz created_at
@@ -516,7 +516,8 @@ File uploads are handled via the `@supabase/supabase-js` SDK — files go direct
 
 * **Cold start latency (backend)**
   Backend hosted on free tier (Render) experiences delays after inactivity.
-
+* **Posstgre Query**
+  * Not Release a `Pool` query after succesfuly connection which cause a silent failure.
 
 ## Limitations
 * **Free-tier infrastructure constraints**
@@ -544,6 +545,7 @@ File uploads are handled via the `@supabase/supabase-js` SDK — files go direct
   * Interview scheduling
   * Notification system
 
+
 ## Additional Features
 - Dockerize a entire system with to the nodejs application and also docker ignore some files: `.dockerignore`
 - Only Install a system settings where it required on the production not on the development.
@@ -564,7 +566,8 @@ File uploads are handled via the `@supabase/supabase-js` SDK — files go direct
 ## Updates:
 - Add the Pagination to the Companies Page
 - Move to the pooling of the database
-
+- ATS Scoring to the Resume.
+- User can add their education from backend as of now but i'll soon also add the frontend side.
 
 
 > [!NOTE]

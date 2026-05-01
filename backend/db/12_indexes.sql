@@ -25,7 +25,7 @@ create index if not exists idx_saved_jobs_job_id on saved_jobs(job_id);
 
 
 -- Mine Minor Indices:
-create index if not exists idx_verified_code_user_id on email_verified using btree(user_id);
+create index if not exists idx_email_verified_code_user_id on email_verified using btree(user_id);
 create index if not exists idx_verified_code_user_id on email_verified(verified_code);
 create index if not exists idx_user_educations_user_id on user_educations(user_id);
 create index if not exists idx_ats_scores_user_id on ats_scores(user_id);
@@ -34,19 +34,8 @@ create index if not exists idx_ats_scores_user_id on ats_scores(user_id);
 
 
 
-
--- More
-create unique index if not exists applications_pkey on applications using btree (uid)
-create unique index if not exists ats_score_pkey on ats_scores using btree (uid)
-create unique index if not exists companies_pkey on companies using btree (uid)
-create unique index if not exists email_verified_pkey on email_verified using btree (uid)
-create index if not exists idx_verified_code on email_verified using btree (verified_code)
-create unique index if not exists jobs_pkey on jobs using btree (uid)
-create index if not exists idx_saved_jobs_job_id on saved_jobs using btree (job_id)
-create unique index if not exists saved_jobs_pkey on saved_jobs using btree (uid)
-create unique index if not exists user_companies_follows_pkey on user_companies_follows using btree (uid)
-create unique index if not exists user_educations_pkey on user_educations using btree (uid)
-create unique index if not exists users_pkey on users using btree (uid)
-
 -- Comments
 COMMENT on table jobs is 'Jobs in Small List';
+
+-- Unique Index:
+create unique  index if not exists users_email_key on users using btree(email);
