@@ -6,14 +6,13 @@ import { JOB_BASE_URL } from "../setup.js";
 import {loginTestUser} from "../mocks/auth.js"
 
 let cookieValue;
-beforeAll(async () => {
-  await createTestUser();
+const LoginFunction=async () => {
   cookieValue = await loginTestUser();
-});
+};
 
 
 const agent = request.agent(app);
-beforeAll(async () => {
+LoginFunction(async () => {
   await agent
     .post("/api/v1/users/login")
     .send({ email: "test@example.com", password: "Test@1234" });
