@@ -11,10 +11,12 @@ const runMigration=async()=>{
       const filePath = join(dirname, files[i]);
       if(extname(filePath)==='.sql'){
         const command=readFileSync(filePath, "utf-8")
+        console.log(command);
         await connect.query(command)
       }
     }
     console.log('Migration Successful')
+    process.exit()
   } catch (error) {
     console.log(error)
   }finally{
