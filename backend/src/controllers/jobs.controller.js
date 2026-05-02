@@ -41,7 +41,7 @@ export const getJobsController= async (req, res) => {
   const {id}=req.params;
   const {uid, company_id}=req?.user;
   try {
-    const {rows}=await client.query("select j.*, c.name as company_name, c.logo_url, j.company_id = $3 as is_owner, s.job_id is not null as is_saved, a.user_id is not null as is_applied from jobs j left join companies c on c.uid=j.company_id left join saved_jobs s ON j.uid = s.job_id and s.users_id = $1 left join applications a ON j.uid = a.job_id and a.user_id = $1 WHERE j.uid = $2 limit 1;", [uid, id, company_id]) 
+    const {rows}=await client.query("select j.*, c.name as company_name, c.logo_url, j.company_id = $3 as is_owner, s.job_id is not null as is_saved, a.user_id is not null as is_applied from jobs j left join companies c on c.uid=j.company_id left join saved_jobs s ON j.uid = s.job_id and s.user_id = $1 left join applications a ON j.uid = a.job_id and a.user_id = $1 WHERE j.uid = $2 limit 1;", [uid, id, company_id]) 
     if(rows.length===0){
       return res.status(404).json({message: "Id Doesn't exist that you're looking for"})
     }
