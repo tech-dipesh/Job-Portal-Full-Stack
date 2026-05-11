@@ -3,7 +3,7 @@ import useFetchData from '../../hooks/useFetchData'
 import { forgetPassword, verifyForgetPassword } from '../../api/auth.user'
 import InputComps from '../../components/common/Input'
 import Buttomcomps from "../../components/common/Button"
-import { validateEmail, validatePassword } from '../../auth/User/Validatecodeemail'
+import { validateEmail, validatePassword } from '../../auth/User/Validateuser.js'
 import Errorloading from '../../components/common/Errorloading'
 import Success from '../../components/common/Success'
 import validateCode from '../../auth/User/Validatecodeemail'

@@ -1,15 +1,63 @@
-const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const phoneNumberRegex = /^\+?(?:[0-9] ?){6,14}[0-9]$/;
 import {allWeakPassword} from "../../Data/UserArray"
- const validateLogin = ({ email, password }) => {
-  if (!email) return "Please Enter Emails";
+
+export const validatePassword=(password)=>{
   if (!password) return "Please Enter Password";
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{8,}$/;
   if(password.length<6) return "Password Must be at least 6 digit Letter."
   if(password.length>25) return "Password Max can be a 25 digit Letter."
-  if (!passwordRegex.test(password)) return "Invalid password format.";
+  if (!/[A-Z]/.test(password)) {
+    return "Please Include at least one uppercase letter.";
+  }
+  if (!/[a-z]/.test(password)) {
+    return "Please Include at least one lowercase letter.";
+  }
+  if (!/\d/.test(password)) {
+    return "Please Include at least one number.";
+  }
+  if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+    return "Please Include at least one special character.";
+  }
   if(allWeakPassword.includes(password)){
-    return "Passsword is Too Weak"
+    return "Inserted Password is Commonly Used Use Another Password"
+  }
+
+  return null;
+}
+export const validateEmail = (email) => {
+  if (!email || email.trim().length === 0) {
+    return "Email is required.";
+  }
+
+  if (!email.includes("@")) {
+    return "Email must contain an @ symbol.";
+  }
+
+  const [localPart, domainPart] = email.split("@");
+
+  if (!localPart || localPart.length === 0) {
+    return "Missing username before the @ symbol.";
+  }
+
+  if (!domainPart || !domainPart.includes(".")) {
+    return "Domain part must include a extension like .com, .in, or .edu.";
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.(com|in|edu|net|org)$/;
+  if (!emailRegex.test(email)) {
+    return "Please use a valid email address (supporting .com, .in, .edu, etc.).";
+  }
+
+  return null;
+};
+
+ const validateLogin = ({ email, password }) => {
+  const emailCheck=validateEmail(email);
+   if(emailCheck){
+     return emailCheck;
+   }
+  const passwordCheck=validatePassword((password));
+  if(passwordCheck){
+     return passwordCheck
   }
   return null;
 };
@@ -34,10 +82,11 @@ export const validateEditUser= ({fname, lname, education, email, number, experie
   if(!validEducation.includes(education)){
     return "Please enter a Valid Education"
   }
-  if(!email){
-    return "Please Enter a Email"
-  }
-  if (!emailRegex.test(email)) return "Invalid email format.";
+  const emailCheck=validateEmail(email);
+   if(emailCheck){
+     return emailCheck;
+   }
+
   if(type=='edit'){
     if(!experience){
       return "Please Enter a experience Years"
@@ -48,20 +97,15 @@ export const validateEditUser= ({fname, lname, education, email, number, experie
     if(!number){
       return "Please Enter a Phone Number"
     }
-    console.log('number is', number)
-    console.log('p', phoneNumberRegex.test(number))
     if(!phoneNumberRegex.test(number)){
       return "Please Enter a Valid Internation Phone Number."
     }
   }
   else if(type=='signup'){
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    if(!password){
-      return "Please Enter a Password";
+    const Err=validatePassword(password)
+    if(Err){
+      return Err;
     }
-    if(!passwordRegex.test(password)){
-      return "Invalid password format.";
-    }      
   }
   return null;
 }
