@@ -6,6 +6,10 @@ A Scalable job portal built with the **PERN stack** that connects job seekers an
       <img src="frontend/public/logo-rounded.png" alt="Yeti Jobs" width="250" height='250'>
   </picture>
 </p>
+## System Architecture:
+  <picture>
+      <img src="assets/system-architecture.png" alt="Yeti Jobs" width="250" height='250'>
+  </picture>
 <p align="center">
   <strong>Climb your career like a Yeti climbs a mountain.</strong>
 </p>
@@ -77,7 +81,7 @@ The Project is a Job Portal Platform **with** all the features needed to build a
 - Update Company
 - Change Applicant **Status**
 - Get All **Followers** Company
-- Dashboard Stats such as: 
+- Dashboard Stats such as:
   ``` bash
     All Owned Jobs
     All Applications
@@ -89,14 +93,14 @@ The Project is a Job Portal Platform **with** all the features needed to build a
 - Assign User to companies.
 - Delete/Create/Update Company
 - Company Entire Overview dashboard
-- Company Dashboard Stats such as: 
+- Company Dashboard Stats such as:
   ``` bash
     Total Jobs
     Total Applications
     Open Jobs
     All Followers
   ```
-  
+
 ### Common:
 - Authentication (JWT)
 - Email Verification & password reset
@@ -372,14 +376,14 @@ erDiagram
     uuid user_id FK "Foreign key to USERS.uid"
     timestamptz created_at
     int4 score
-    jsonb feedback 
+    jsonb feedback
   }
   USER_EDUCATION {
     uuid uid PK
     uuid user_id FK "Foreign key to USERS.uid"
     text university_name
     text degree
-    date start_date 
+    date start_date
     date end_date
     text grade
   }
@@ -388,8 +392,8 @@ erDiagram
   USERS ||--o{ JOBS : "creates"
   USERS ||--o{ APPLICATIONS : "submits"
   USERS ||--o{ SAVED_JOBS : "bookmarks"
-  USERS ||--o{ ATS_SCORE : "has" 
-  USERS ||--o{ USER_EDUCATION : "has" 
+  USERS ||--o{ ATS_SCORE : "has"
+  USERS ||--o{ USER_EDUCATION : "has"
   USERS ||--o{ USER_COMPANIES_FOLLOWS : "follows"
   USERS ||--o{ EMAIL_VERIFIED : "has"
 
@@ -550,7 +554,7 @@ File uploads are handled via the `@supabase/supabase-js` SDK — files go direct
 - Dockerize a entire system with to the nodejs application and also docker ignore some files: `.dockerignore`
 - Only Install a system settings where it required on the production not on the development.
 - also have the controller and also the abort feature if the request takes longer time dont' wat for more than  a 10 sec.
-- now on the react 19 we dont' need: `auth.provider` rather it also work a auth 
+- now on the react 19 we dont' need: `auth.provider` rather it also work a auth
 - use the portal system for the popup of the some features.
 - for previous a page on the profile picturee of the resume to change it i can use: `createObjectURL` to print show it.
 - Implement the vercel analytics on client side for the get the stats about the frontend application.
@@ -574,8 +578,8 @@ File uploads are handled via the `@supabase/supabase-js` SDK — files go direct
 > ## Future Improvements:
 >-  Add notification/email when a company posts a new job.
 > - Real-time chat between recruiters and applicants.
-> - Move from useContext to Redux. 
-> - Add logging/monitoring/observability. 
+> - Move from useContext to Redux.
+> - Add logging/monitoring/observability.
 > - Socket.io for real-time features.
 > - interview scheduling system with automated email reminders and video call link generation from Google Calendar API.
 > - User can add a their employment_history and shows that employment history to the user page.
@@ -602,4 +606,4 @@ File uploads are handled via the `@supabase/supabase-js` SDK — files go direct
 
 ## [Go Back To Top](#yeti-jobs)
 
-## 🙏 Thanks 
+## 🙏 Thanks
