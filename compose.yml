@@ -1,46 +1,56 @@
-version: '3'
-# https://kubernetes.io/docs/concepts/services-networking/service/
-apiVersion: v1
-kind: Service
-metadata:
-  name: backend
-  namespace: backend
-spec:
-  selector:
-    app: backend
-  type: 
-  ports:
-  - name: backend
-    protocol: 
-    port: 3000
-    targetPort: 3000
-    nodePort: 30001
----
-metadata:
-  name: backend
-  namespace: backend
-spec:
-  selector:
-    app: backend
-  type: 
-  ports:
-  - name: backend
-    protocol: 
-    port: 3000
-    targetPort: 3000
-    nodePort: 30001
-metadata:
-  name: backend
-  namespace: backend
-spec:
-  selector:
-    app: backend
-  type: 
-  ports:
-  - name: backend
-    protocol: 
-    port: 3000
-    targetPort: 3000
-    nodePort: 30001
----
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: yeti-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: yeti_jobs
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - yeti-network
+    restart: unless-stopped
 
+  backend:
+    build: ./backend
+    container_name: yeti-backend
+    environment:
+      PORT: 3000
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      URL_SUPABASE_CONNECT: ${URL_SUPABASE_CONNECT}
+      ANON_KEY_SUPABASE: ${ANON_KEY_SUPABASE}
+      NODEMAILER_MY_EMAIL: ${NODEMAILER_MY_EMAIL}
+      NODEMAILER_MY_PASSWORD: ${NODEMAILER_MY_PASSWORD}
+      NODEMAILER_MY_HOST: ${NODEMAILER_MY_HOST}
+      JSON_SECRET_KEY: ${JSON_SECRET_KEY}
+      CLIENT_BASE_URL: http://localhost:5173
+      MAXAGE: ${MAXAGE}
+      GROK_API: ${GROK_API}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+    networks:
+      - yeti-network
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: yeti-frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    networks:
+      - yeti-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  yeti-network:
+    driver: bridge
